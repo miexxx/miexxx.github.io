@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://miexxx.github.io</id>
     <title>Great Wei</title>
-    <updated>2020-03-16T06:54:46.091Z</updated>
+    <updated>2020-03-16T08:36:24.788Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://miexxx.github.io"/>
     <link rel="self" href="https://miexxx.github.io/atom.xml"/>
@@ -10,6 +10,39 @@
     <logo>https://miexxx.github.io/images/avatar.png</logo>
     <icon>https://miexxx.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Great Wei</rights>
+    <entry>
+        <title type="html"><![CDATA[RabbitMQ技术调研]]></title>
+        <id>https://miexxx.github.io/post/rabbitmq-ji-zhu-diao-yan/</id>
+        <link href="https://miexxx.github.io/post/rabbitmq-ji-zhu-diao-yan/">
+        </link>
+        <updated>2020-03-16T07:09:54.000Z</updated>
+        <summary type="html"><![CDATA[<p>使用一个技术前，先研究一下优缺点。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>使用一个技术前，先研究一下优缺点。</p>
+<!-- more -->
+<h1 id="rabbitmq-与-beanstalkd之间的对比">RabbitMQ 与 Beanstalkd之间的对比</h1>
+<h2 id="beanstalkd">Beanstalkd</h2>
+<p>Beantalkd 一个轻量级消息中间件，他的最大特点是将自己定位为基于管道  (tube) 和任务 (job) 的工作队列 (work-queue)，和RabbitMQ不同的是，Beanstalkd应该是一个工作队列，任务队列。<br>
+有以下特点：</p>
+<h3 id="任务优先级-priority">任务优先级 (priority):</h3>
+<p>任务 (job) 可以有 0~2^32 个优先级, 0 代表最高优先级。 beanstalkd 采用最大最小堆 (Min-max heap) 处理任务优先级排序, 任何时刻调用 reserve 命令的消费者总是能拿到当前优先级最高的任务, 时间复杂度为 O(logn)。</p>
+<h3 id="延时任务-delay">延时任务 (delay):</h3>
+<p>有两种方式可以延时执行任务 (job): 生产者发布任务时指定延时；或者当任务处理完毕后, 消费者再次将任务放入队列延时执行 (RELEASE with )。这种机制可以实现分布式的 java.util.Timer，这种分布式定时任务的优势是：如果某个消费者节点故障，任务超时重发 (time-to-run) 能够保证任务转移到另外的节点执行。</p>
+<h3 id="任务超时重发-time-to-run">任务超时重发 (time-to-run):</h3>
+<p>Beanstalkd 把任务返回给消费者以后：消费者必须在预设的 TTR (time-to-run) 时间内发送 delete / release/ bury 改变任务状态；否则 Beanstalkd 会认为消息处理失败，然后把任务交给另外的消费者节点执行。如果消费者预计在 TTR (time-to-run) 时间内无法完成任务, 也可以发送 touch 命令, 它的作用是让 Beanstalkd 从系统时间重新计算 TTR (time-to-run)。</p>
+<h3 id="任务预留-buried">任务预留 (buried):</h3>
+<p>如果任务因为某些原因无法执行, 消费者可以把任务置为 buried 状态让 Beanstalkd 保留这些任务。管理员可以通过 peek buried 命令查询被保留的任务，并且进行人工干预。简单的, kick 能够一次性把 n 条被保留的任务踢回队列。</p>
+<h3 id="速度优势">速度优势</h3>
+<p><img src="https://pic1.zhimg.com/80/dbbd8ac979caf1400eda6974edd4d712_1440w.jpg" alt="" loading="lazy"><br>
+Beanstalkd协议基于ASCII编码运行在tcp上。客户端连接服务器并发送指令和数据，然后等待响应并关闭连接。对于每个连接，服务器按照接收命令的序列依次处理并响应。所有整型值都非负的十进制数，除非有特别声明。</p>
+<h3 id="场景优势">场景优势</h3>
+<p>延时系统，比如延迟20分钟发送短信，******，在投放的时候就设定一定的延迟时间值，让任务在延迟时间到了之后进入ready队列，等待worker预订处理。<br>
+<img src="https://pic4.zhimg.com/80/b2fe6330ac4cee0ace41e47a82bf713f_1440w.jpg" alt="" loading="lazy"></p>
+<p>轮询系统，如下图，一个被投放的任务，在延迟时间过后需要再检查一遍状态，如果不符合，继续释放（release with delay）为延迟投放状态（DELAYED），直到时间过期之后，再次进入ready队列，被worker预订，进行一些逻辑判断，比如微信银行卡退款是否成功，如果成功，删除该任务，如果没成功，继续释放（release with delay）为延迟投放状态。<br>
+<img src="https://pic1.zhimg.com/80/8add0f140c21e738f26b1ccd8d2fa892_1440w.jpg" alt="" loading="lazy"></p>
+<h2 id="rabbitmq">RabbitMQ</h2>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[计算机操作系统-进程管理]]></title>
         <id>https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-jin-cheng-guan-li/</id>
@@ -654,79 +687,6 @@ func client () {
 <p>由于索引过大，需要大量内存加载数据导致搜索失败，记得定时清理无用的日志信息。</p>
 <h2 id="其它问题">其它问题</h2>
 <p>前辈走过的坑 <a href="http://zoufeng.net/2018/07/16/cpu-of-elasticsearch-high-search-slow/">排查elasticsearch的cpu居高不下，查询慢的问题</a></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Elk日志分析系统搭建]]></title>
-        <id>https://miexxx.github.io/post/elk-ri-zhi-fen-xi-xi-tong-da-jian/</id>
-        <link href="https://miexxx.github.io/post/elk-ri-zhi-fen-xi-xi-tong-da-jian/">
-        </link>
-        <updated>2019-07-04T03:34:41.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="pm2-安装">pm2 安装</h2>
-<pre><code>npm install pm2 -g
-</code></pre>
-<h2 id="elasticsearch-731安装">elasticsearch-7.3.1安装</h2>
-<pre><code>下载地址：https://www.elastic.co/cn/downloads/elasticsearch
-修改配置文件elasticsearch-7.3.1/config/elasticsearch.yml 修改实例名称，节点名称，ip与端口。
-启动实例执行 ./bin/elasticsearch -d ( -d参数是将程序挂在后台运行)，访问ip:端口，返回结果如下图，说明已经启动成功。
-</code></pre>
-<h2 id="logstash-730安装">logstash-7.3.0安装</h2>
-<pre><code>下载地址：https://www.elastic.co/cn/downloads/logstash
-修改配置文件logstash-7.3.0/filebeat.conf, 配置内容主要是logstash通过接收filebeat传输的数据，格式化数据后，发送到es，分为三部分配置。
-
-第一部分 接收数据端口配置
-input {
-    beats {
-        port =&gt; 5044
-    }
-}
-指定logstash服务开放的端口。
-
-第二部分 格式化数据配置
-filter {
-    ...
-}
-date{
-    match =&gt; [&quot;date&quot;, &quot;yyyyMMdd HH:mm:ss&quot;]
-    target =&gt; &quot;@timestamp&quot;
-}
-这里的grok匹配根据自己项目需求修改。
-因此这里需要搭配filebeat一起使用，需要通过filebeat将日志发送到logstash。
-filebeat.conf
-
-第三部分 发送至es配置
-output {
-    elasticsearch {
-        hosts =&gt; [&quot;10.11.0.109:9200&quot;]
-        index =&gt; &quot;logstash-%{[fields][index]}-%{+YYYY.MM.dd}&quot;
-    }
-}
-
-启动实例 pm2 start ./bin/logstash
-</code></pre>
-<h2 id="kibana-730-linux-x86_64安装">kibana-7.3.0-linux-x86_64安装</h2>
-<pre><code>下载地址：https://www.elastic.co/cn/downloads/kibana
-修改配置文件kibana-7.3.0-linux-x86_64/config/kibana.yml，server.host配置kibana服务访问ip,server.port配置服务端口，默认5601，
-elasticsearch.host配置es实例地址，i18n.locale: &quot;zh-CN&quot; 配置kibana界面显示语言。
-启动 pm2 start ./bin/kibana，pm2 log kibana查看日志检查服务是否启动，检查无误访问ip:端口。
-</code></pre>
-<h2 id="filebeat-742-linux-x86_64安装">filebeat-7.4.2-linux-x86_64安装</h2>
-<pre><code>下载地址：https://www.elastic.co/cn/downloads/beats/filebeat
-修改配置文件filebeat,yml，每个模块就相当一个项目，根据自己需求配置，模块名称。索引名称.
-- type: log
-    enabled: true
-    paths:
-    - /home/q/system/atom/runtime/community/logs/access_*
-    fields:
-       index: atom_access
-        modules: community
-然后将日志发送到logstash    
-
- output.logstash:
- # The Logstash hosts
- hosts: [&quot;10.11.0.109:5044&quot;]  
-启动 pm2 start ./filebeat， pm2 log filebeat 查看日志检查服务是否启动。
-</code></pre>
 ]]></content>
     </entry>
 </feed>
