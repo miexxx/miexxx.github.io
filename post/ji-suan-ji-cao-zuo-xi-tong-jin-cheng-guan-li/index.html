@@ -1,0 +1,153 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    
+<meta charset="utf-8" >
+
+<title>计算机操作系统-进程管理 | Great Wei</title>
+<meta name="description" content="温故而知新">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1584341049614">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+      <div class="site-header-container">
+  <div class="site-header">
+    <div class="left">
+      <a href="https://miexxx.github.io">
+        <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1584341049614" alt="" width="32px" height="32px">
+      </a>
+      <a href="https://miexxx.github.io">
+        <h1 class="site-title">Great Wei</h1>
+      </a>
+    </div>
+    <div class="right">
+      <transition name="fade">
+        <i class="icon" :class="{ 'icon-close-outline': menuVisible, 'icon-menu-outline': !menuVisible }" @click="menuVisible = !menuVisible"></i>
+      </transition>
+    </div>
+  </div>
+</div>
+
+<transition name="fade">
+  <div class="menu-container" style="display: none;" v-show="menuVisible">
+    <div class="menu-list">
+      
+        
+          <a href="/" class="menu purple-link">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="menu purple-link">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="menu purple-link">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="menu purple-link">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+</transition>
+
+
+      <div class="content-container">
+        <div class="post-detail">
+          
+          <h2 class="post-title">计算机操作系统-进程管理</h2>
+          <div class="post-info post-detail-info">
+            <span><i class="icon-calendar-outline"></i> 2020-03-16</span>
+            
+          </div>
+          <div class="post-content">
+            <!-- more -->
+<h1 id="进程与线程">进程与线程</h1>
+<h2 id="进程是资源分配的基本单位">进程是资源分配的基本单位。</h2>
+<p>进程控制块（PCB）创建进程，撤销进程的操作都是由PCB进行控制。<br>
+下图显示了4个程序创建了4个进程，这4个进程能够并发的执行。<br>
+<img src="https://camo.githubusercontent.com/23a2b15842e9766a36e7a18800540c290ad15388/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f61366163326230382d333836312d346538352d626161382d3338323238376266656539662e706e67" alt="" loading="lazy"></p>
+<h2 id="线程是独立调度的基本单位">线程是独立调度的基本单位。</h2>
+<p>一个进程里可以有多个线程，他们共享资源，就像QQ与浏览器属于两个进程，但是浏览器进程中的包含事件响应线程，渲染线程等线程。</p>
+<h2 id="区别">区别</h2>
+<p>进程拥有资源</p>
+
+          </div>
+        </div>
+
+        
+          <div class="next-post">
+            <a class="purple-link" href="https://miexxx.github.io/post/qian-tan-mysql-suo-yin/">
+              <h3 class="post-title">
+                下一篇：浅谈Mysql索引
+              </h3>
+            </a>
+          </div>
+          
+      </div>
+
+      
+
+      <div class="site-footer">
+  <div class="slogan">温故而知新</div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://miexxx.github.io/atom.xml" target="_blank">RSS</a>
+</div>
+
+
+    </div>
+    <script type="application/javascript">
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+  </body>
+</html>

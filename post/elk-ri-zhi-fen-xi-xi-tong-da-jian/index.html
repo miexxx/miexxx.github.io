@@ -1,0 +1,218 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    
+<meta charset="utf-8" >
+
+<title>Elk日志分析系统搭建 | Great Wei</title>
+<meta name="description" content="温故而知新">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1584341049614">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+      <div class="site-header-container">
+  <div class="site-header">
+    <div class="left">
+      <a href="https://miexxx.github.io">
+        <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1584341049614" alt="" width="32px" height="32px">
+      </a>
+      <a href="https://miexxx.github.io">
+        <h1 class="site-title">Great Wei</h1>
+      </a>
+    </div>
+    <div class="right">
+      <transition name="fade">
+        <i class="icon" :class="{ 'icon-close-outline': menuVisible, 'icon-menu-outline': !menuVisible }" @click="menuVisible = !menuVisible"></i>
+      </transition>
+    </div>
+  </div>
+</div>
+
+<transition name="fade">
+  <div class="menu-container" style="display: none;" v-show="menuVisible">
+    <div class="menu-list">
+      
+        
+          <a href="/" class="menu purple-link">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="menu purple-link">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="menu purple-link">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="menu purple-link">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+</transition>
+
+
+      <div class="content-container">
+        <div class="post-detail">
+          
+          <h2 class="post-title">Elk日志分析系统搭建</h2>
+          <div class="post-info post-detail-info">
+            <span><i class="icon-calendar-outline"></i> 2019-07-04</span>
+            
+              <span>
+                <i class="icon-pricetags-outline"></i>
+                
+                  <a href="https://miexxx.github.io/tag/WeHHX6YLrg/">
+                    elk
+                    
+                  </a>
+                
+              </span>
+            
+          </div>
+          <div class="post-content">
+            <h2 id="pm2-安装">pm2 安装</h2>
+<pre><code>npm install pm2 -g
+</code></pre>
+<h2 id="elasticsearch-731安装">elasticsearch-7.3.1安装</h2>
+<pre><code>下载地址：https://www.elastic.co/cn/downloads/elasticsearch
+修改配置文件elasticsearch-7.3.1/config/elasticsearch.yml 修改实例名称，节点名称，ip与端口。
+启动实例执行 ./bin/elasticsearch -d ( -d参数是将程序挂在后台运行)，访问ip:端口，返回结果如下图，说明已经启动成功。
+</code></pre>
+<h2 id="logstash-730安装">logstash-7.3.0安装</h2>
+<pre><code>下载地址：https://www.elastic.co/cn/downloads/logstash
+修改配置文件logstash-7.3.0/filebeat.conf, 配置内容主要是logstash通过接收filebeat传输的数据，格式化数据后，发送到es，分为三部分配置。
+
+第一部分 接收数据端口配置
+input {
+    beats {
+        port =&gt; 5044
+    }
+}
+指定logstash服务开放的端口。
+
+第二部分 格式化数据配置
+filter {
+    ...
+}
+date{
+    match =&gt; [&quot;date&quot;, &quot;yyyyMMdd HH:mm:ss&quot;]
+    target =&gt; &quot;@timestamp&quot;
+}
+这里的grok匹配根据自己项目需求修改。
+因此这里需要搭配filebeat一起使用，需要通过filebeat将日志发送到logstash。
+filebeat.conf
+
+第三部分 发送至es配置
+output {
+    elasticsearch {
+        hosts =&gt; [&quot;10.11.0.109:9200&quot;]
+        index =&gt; &quot;logstash-%{[fields][index]}-%{+YYYY.MM.dd}&quot;
+    }
+}
+
+启动实例 pm2 start ./bin/logstash
+</code></pre>
+<h2 id="kibana-730-linux-x86_64安装">kibana-7.3.0-linux-x86_64安装</h2>
+<pre><code>下载地址：https://www.elastic.co/cn/downloads/kibana
+修改配置文件kibana-7.3.0-linux-x86_64/config/kibana.yml，server.host配置kibana服务访问ip,server.port配置服务端口，默认5601，
+elasticsearch.host配置es实例地址，i18n.locale: &quot;zh-CN&quot; 配置kibana界面显示语言。
+启动 pm2 start ./bin/kibana，pm2 log kibana查看日志检查服务是否启动，检查无误访问ip:端口。
+</code></pre>
+<h2 id="filebeat-742-linux-x86_64安装">filebeat-7.4.2-linux-x86_64安装</h2>
+<pre><code>下载地址：https://www.elastic.co/cn/downloads/beats/filebeat
+修改配置文件filebeat,yml，每个模块就相当一个项目，根据自己需求配置，模块名称。索引名称.
+- type: log
+    enabled: true
+    paths:
+    - /home/q/system/atom/runtime/community/logs/access_*
+    fields:
+       index: atom_access
+        modules: community
+然后将日志发送到logstash    
+
+ output.logstash:
+ # The Logstash hosts
+ hosts: [&quot;10.11.0.109:5044&quot;]  
+启动 pm2 start ./filebeat， pm2 log filebeat 查看日志检查服务是否启动。
+</code></pre>
+
+          </div>
+        </div>
+
+        
+          <div class="next-post">
+            <a class="purple-link" href="https://miexxx.github.io/post/nginx-jie-shao/">
+              <h3 class="post-title">
+                下一篇：Nginx
+              </h3>
+            </a>
+          </div>
+          
+      </div>
+
+      
+
+      <div class="site-footer">
+  <div class="slogan">温故而知新</div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://miexxx.github.io/atom.xml" target="_blank">RSS</a>
+</div>
+
+
+    </div>
+    <script type="application/javascript">
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+  </body>
+</html>

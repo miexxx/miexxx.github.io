@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    
+<meta charset="utf-8" >
+
+<title>图解TCP/IP | Great Wei</title>
+<meta name="description" content="温故而知新">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1584341049614">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+      <div class="site-header-container">
+  <div class="site-header">
+    <div class="left">
+      <a href="https://miexxx.github.io">
+        <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1584341049614" alt="" width="32px" height="32px">
+      </a>
+      <a href="https://miexxx.github.io">
+        <h1 class="site-title">Great Wei</h1>
+      </a>
+    </div>
+    <div class="right">
+      <transition name="fade">
+        <i class="icon" :class="{ 'icon-close-outline': menuVisible, 'icon-menu-outline': !menuVisible }" @click="menuVisible = !menuVisible"></i>
+      </transition>
+    </div>
+  </div>
+</div>
+
+<transition name="fade">
+  <div class="menu-container" style="display: none;" v-show="menuVisible">
+    <div class="menu-list">
+      
+        
+          <a href="/" class="menu purple-link">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="menu purple-link">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="menu purple-link">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="menu purple-link">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+</transition>
+
+
+      <div class="content-container">
+        <div class="post-detail">
+          
+          <h2 class="post-title">图解TCP/IP</h2>
+          <div class="post-info post-detail-info">
+            <span><i class="icon-calendar-outline"></i> 2020-02-08</span>
+            
+              <span>
+                <i class="icon-pricetags-outline"></i>
+                
+                  <a href="https://miexxx.github.io/tag/0Mirl8SzEP/">
+                    tcp/ip
+                    
+                  </a>
+                
+              </span>
+            
+          </div>
+          <div class="post-content">
+            <p>最近看了《图解TCP/IP》这本书，感觉不错，这里做了一个简单知识点概览。</p>
+<!-- more -->
+<h1 id="第一章-网络基础知识">第一章 网络基础知识</h1>
+<h2 id="计算机网络出现的背景">计算机网络出现的背景</h2>
+<h3 id="计算机的普及与多样化">计算机的普及与多样化</h3>
+<p>计算机自诞生以来，经历了一系列演变与发展，大型通用计算机，超级计算机，小型机，个人电脑，工作站，便携式电脑以及如今的智能手机终端等都是这一系列过程的产物，它们的性能逐年增强，价格却逐年下降，机体规模也正在逐渐变小。</p>
+<h3 id="从独立模式到网络互连模式">从独立模式到网络互连模式</h3>
+<p>1.什么是独立模式？<br>
+一个完整的业务逻辑需要执行A，B，C三个步骤才能够完成，然而每一个步骤只能在一台机器完成，如果当前有人使用其中一个业务，你只能等待，这就是独立模式（类似银行业务的【取票，排队，柜台处理】）。<br>
+2.什么是网络互连方式？<br>
+还是完整A，B，C三个步骤，现在完成的流程都可以在一台服务器完成，这时候用户只要使用自己的电脑连接到服务器进行业务处理，进行业务的随意切换无需等待。<br>
+3.计算机网络按照规模可区分哪几类？<br>
+WAN（广域网，由多个LAN构成），LAN（局域网，一栋楼或者大学校园中有限的，狭小的，区域内网络）。</p>
+<h3 id="从计算机通信到信息通信">从计算机通信到信息通信</h3>
+<p>最初，由管理员将特定的几台计算机相连在一起形成计算机网络，形成一种私有的网络。人们开始将这些私有网络连接在一起形成了更大的私有网络，最后形成了现在的综合信息通信网络。</p>
+<h3 id="计算机网络的作用">计算机网络的作用</h3>
+<p>信息网络如同空气般，触手可及，在信息爆炸的时代，有利有弊。</p>
+<h2 id="计算机与网络发展的7个阶段">计算机与网络发展的7个阶段</h2>
+<h3 id="批处理">批处理</h3>
+<p>1.什么是批处理？<br>
+所谓批处理，是指实现将用户程序和数据装入卡带或者磁带，并由计算按照一定的顺序读取，使用户所要执行的这些程序和数据能够一并批量得到处理的方式。批处理时代的计算机主要用于大规模计算或处理，因为那时候的计算机不是一个便于普通人使用的工具。</p>
+<h3 id="分时系统">分时系统</h3>
+<p>1.什么是分时系统？<br>
+分时系统（TSS）它是指多个终端与同一计算机连接，允许多个用户同时使用一台计算系统，实现了“一人一机”的目的，让用户感觉好像自己使用一台计算机一样，这也体现了分时系统的一个重要特性——独占性。</p>
+<h3 id="计算机之间的通信">计算机之间的通信</h3>
+<p>在计算机之间的通信技术诞生之前，想要将一台计算机的数据转移到另一台机器，需要通过存储介质，计算机通信技术诞生后，计算机之间的数据传输可通过通信线路传输。</p>
+<h3 id="计算机网络的产生">计算机网络的产生</h3>
+<p>20世纪70年代初期，人们开始实验基于分组交换技术的计算机网络，并且研究这各个计算机厂商之间的网络通信的技术，其中窗口系统的产生使人们人们可以通过一台计算机就可以享受网络各种丰富的资源。</p>
+<h3 id="互联网的普及">互联网的普及</h3>
+<p>形成了“一人一机”的环境。</p>
+<h3 id="以互联网技术为中心的时代">以互联网技术为中心的时代</h3>
+<p>随着互联网的发展，其地位也开始为IP网取代，而IP网（WWW，移动通讯网，Voip，iSCSI）本身就是互联网的产物。</p>
+<h3 id="从单纯建立连接到安全建立连接">从“单纯建立连接”到”安全建立连接“</h3>
+<p>互联网让世纪各地的电脑连接一起，然而现在已不再满足于”单纯的建立连接“，而是追求”安全建立连接“为目的而发展。</p>
+<h3 id="手握金刚钻的tcpip">手握金刚钻的TCP/IP</h3>
+<p>TCP/IP是通讯协议的统称。</p>
+<h2 id="协议">协议</h2>
+<h3 id="随处可见的协议">随处可见的协议</h3>
+<p>io,icmp,tcp,udp,http,telent,snmp,smtp...</p>
+<h3 id="协议的必要性">协议的必要性</h3>
+<p>两台计算机事先约定一规则，进行建立通信。</p>
+<h3 id="分组交换协议">分组交换协议</h3>
+<p>1.什么是分组交换协议？<br>
+分组交换是指将大数据分割为一个个叫做包（packet）的较小单位进行传输的方法，这里所说的包，如同我们平常在邮局见到的邮包，分组交换就是将这些大数据封装成一个个这样的邮包交给对方。</p>
+<p>##协议由谁规定<br>
+国际标准OSI（Open System Intercon-nection）</p>
+<h2 id="协议分层与osi参考模型">协议分层与OSI参考模型</h2>
+<h3 id="协议的分层">协议的分层</h3>
+<p>OSI将通信协议中必要的功能分成了7层，通过这些分层将那些复杂的网络协议更加简单化。上下层进行的交互时所遵守的约定叫做接口。同一层之间交互所遵循的约定叫做协议。</p>
+
+          </div>
+        </div>
+
+        
+          <div class="next-post">
+            <a class="purple-link" href="https://miexxx.github.io/post/si-wei-duan-lian/">
+              <h3 class="post-title">
+                下一篇：思维锻炼
+              </h3>
+            </a>
+          </div>
+          
+      </div>
+
+      
+
+      <div class="site-footer">
+  <div class="slogan">温故而知新</div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://miexxx.github.io/atom.xml" target="_blank">RSS</a>
+</div>
+
+
+    </div>
+    <script type="application/javascript">
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+  </body>
+</html>

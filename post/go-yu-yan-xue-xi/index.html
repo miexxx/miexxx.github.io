@@ -1,0 +1,450 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    
+<meta charset="utf-8" >
+
+<title>Go | Great Wei</title>
+<meta name="description" content="温故而知新">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1584341049614">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+      <div class="site-header-container">
+  <div class="site-header">
+    <div class="left">
+      <a href="https://miexxx.github.io">
+        <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1584341049614" alt="" width="32px" height="32px">
+      </a>
+      <a href="https://miexxx.github.io">
+        <h1 class="site-title">Great Wei</h1>
+      </a>
+    </div>
+    <div class="right">
+      <transition name="fade">
+        <i class="icon" :class="{ 'icon-close-outline': menuVisible, 'icon-menu-outline': !menuVisible }" @click="menuVisible = !menuVisible"></i>
+      </transition>
+    </div>
+  </div>
+</div>
+
+<transition name="fade">
+  <div class="menu-container" style="display: none;" v-show="menuVisible">
+    <div class="menu-list">
+      
+        
+          <a href="/" class="menu purple-link">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="menu purple-link">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="menu purple-link">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="menu purple-link">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+</transition>
+
+
+      <div class="content-container">
+        <div class="post-detail">
+          
+          <h2 class="post-title">Go</h2>
+          <div class="post-info post-detail-info">
+            <span><i class="icon-calendar-outline"></i> 2019-12-03</span>
+            
+              <span>
+                <i class="icon-pricetags-outline"></i>
+                
+                  <a href="https://miexxx.github.io/tag/7VPFU2b1dg/">
+                    go
+                    
+                  </a>
+                
+              </span>
+            
+          </div>
+          <div class="post-content">
+            <h2 id="服务端">服务端</h2>
+<pre><code class="language-gotemplate">package main
+
+import (
+    &quot;fmt&quot;
+    &quot;net&quot;
+    &quot;os&quot;
+    &quot;bufio&quot;
+    &quot;bytes&quot;
+    &quot;encoding/binary&quot;
+)
+
+var ConnMap map[string]net.Conn
+func checkError(err error){
+    if  err != nil {
+        fmt.Println(&quot;Error: %s&quot;, err.Error())
+        os.Exit(1)
+    }
+}
+
+func recvConnMsg(conn net.Conn) {
+//  var buf [50]byte
+    buf := make([]byte, 50)
+
+    defer conn.Close()
+
+    for {
+        n, err := conn.Read(buf)
+
+        if err != nil {
+            fmt.Println(&quot;conn closed&quot;)
+            return
+        }
+
+        fmt.Println(&quot;recv msg:&quot;, string(buf[0:n]))
+
+
+        boradcastMessage(conn.RemoteAddr().String() + &quot;:&quot; + string(buf[0:n]))
+    }
+}
+
+func boradcastMessage(message string) {
+     n := []byte(message)
+     for _,conn := range ConnMap {
+       conn.Write(n)
+     }
+}
+
+func Encode(message string) (*bytes.Buffer, error) {
+    // 读取消息的长度
+    var length int32 = int32(len(message))
+    var pkg *bytes.Buffer = new(bytes.Buffer)
+    // 写入消息头
+    err := binary.Write(pkg, binary.LittleEndian, length)
+    if err != nil {
+        return nil, err
+    }
+    // 写入消息实体
+    err = binary.Write(pkg, binary.LittleEndian, []byte(message))
+    if err != nil {
+        return nil, err
+    }
+
+    return pkg, nil
+}
+
+func Decode(reader *bufio.Reader) (string, error) {
+    // 读取消息的长度
+    lengthByte, _ := reader.Peek(4)
+    lengthBuff := bytes.NewBuffer(lengthByte)
+    var length int32
+    err := binary.Read(lengthBuff, binary.LittleEndian, &amp;length)
+    if err != nil {
+        return &quot;&quot;, err
+    }
+    if int32(reader.Buffered()) &lt; length+4 {
+        return &quot;&quot;, err
+    }
+
+    // 读取消息真正的内容
+    pack := make([]byte, int(4+length))
+    _, err = reader.Read(pack)
+    if err != nil {
+        return &quot;&quot;, err
+    }
+    return string(pack[4:]), nil
+}
+
+func main() {
+    ConnMap = make(map[string]net.Conn)
+    listen_sock, err := net.Listen(&quot;tcp&quot;, &quot;localhost:10000&quot;)
+    checkError(err)
+    defer listen_sock.Close()
+
+    for {
+        new_conn, err := listen_sock.Accept()
+        ConnMap[new_conn.RemoteAddr().String()] = new_conn
+        if err != nil {
+            continue
+        }
+
+        go recvConnMsg(new_conn)
+    }
+
+}
+</code></pre>
+<h2 id="客户端">客户端</h2>
+<pre><code class="language-gotemplate">package main
+
+import (
+    &quot;fmt&quot;
+    &quot;net&quot;
+    &quot;os&quot;
+    &quot;bufio&quot;
+    &quot;bytes&quot;
+    &quot;encoding/binary&quot;
+)
+
+func checkError(err error){
+    if  err != nil {
+        fmt.Println(&quot;Error: %s&quot;, err.Error())
+        os.Exit(1)
+    }
+}
+
+func Encode(message string) (*bytes.Buffer, error) {
+    // 读取消息的长度
+    var length int32 = int32(len(message))
+    var pkg *bytes.Buffer = new(bytes.Buffer)
+    // 写入消息头
+    err := binary.Write(pkg, binary.LittleEndian, length)
+    if err != nil {
+        return nil, err
+    }
+    // 写入消息实体
+    err = binary.Write(pkg, binary.LittleEndian, []byte(message))
+    if err != nil {
+        return nil, err
+    }
+
+    return pkg, nil
+}
+
+func Decode(reader *bufio.Reader) (string, error) {
+    // 读取消息的长度
+    lengthByte, _ := reader.Peek(4)
+    lengthBuff := bytes.NewBuffer(lengthByte)
+    var length int32
+    err := binary.Read(lengthBuff, binary.LittleEndian, &amp;length)
+    if err != nil {
+        return &quot;&quot;, err
+    }
+    if int32(reader.Buffered()) &lt; length+4 {
+        return &quot;&quot;, err
+    }
+
+    // 读取消息真正的内容
+    pack := make([]byte, int(4+length))
+    _, err = reader.Read(pack)
+    if err != nil {
+        return &quot;&quot;, err
+    }
+    return string(pack[4:]), nil
+}
+
+
+func onMessageRecived(conn net.Conn) {
+    reader := bufio.NewReader(conn)
+    for {
+        msg, _ := reader.ReadString('\n')
+        fmt.Println(msg)
+    }
+}
+
+func main() {
+    conn, err := net.Dial(&quot;tcp&quot;, &quot;127.0.0.1:10000&quot;)
+    checkError(err)
+    defer conn.Close()
+    go onMessageRecived(conn);
+    for {
+      var msg string
+      fmt.Scanln(&amp;msg)
+      if msg == &quot;quit&quot; {
+             break
+      }
+      message,_ := Encode(msg)
+      conn.Write(message.Bytes())
+    }
+    fmt.Println(&quot;send msg&quot;)
+}
+</code></pre>
+<h2 id="简单的语法">简单的语法</h2>
+<pre><code class="language-gotemplate">package main
+
+import (
+    &quot;fmt&quot;
+    &quot;net/http&quot;
+    &quot;net&quot;
+    &quot;io/ioutil&quot;
+)
+
+func main() {
+ x, y := 3, 4
+ z := sum(x, y)
+ fmt.Println(z)
+ n := byte('a')
+ fmt.Println(n)
+ a := []int{3, 1, 5}
+ fmt.Println(a)
+ b := make([]int, 4)
+ fmt.Println(b)
+ bs := []byte(&quot;a slice&quot;)
+ fmt.Println(bs)
+ s := []int{1, 2, 3}
+ s = append(s, []int{1, 2, 3}...)
+ fmt.Println(s)
+ p := &amp;x
+ fmt.Println(p)
+ m := map[string]int{&quot;three&quot;:3 , &quot;four&quot;:4}
+ m[&quot;one&quot;] = 1
+ fmt.Println(m)
+
+
+ if true {
+    fmt.Println(&quot;yes&quot;)
+ }
+ switch x {
+  case 0:
+       fmt.Println(&quot;xxx&quot;)
+ }
+
+ for x := 0; x &lt; 3; x++ {
+  fmt.Println(x)
+ }
+ fmt.Println(x)
+
+ for key, value := range s{
+  fmt.Println(key, value)
+ }
+
+ defer fmt.Println(1)
+ defer fmt.Println(2)
+
+ cs := make(chan string)
+
+ go func() {cs &lt;- &quot;你好&quot; }()
+
+ select {
+ case x := &lt;-cs:
+ fmt.Println(x)
+ }
+
+ client()
+}
+
+func sum(a, b int) (sum int){
+ return a + b;
+}
+
+func memory() (p *int) {
+       s := make([]int, 20)
+       s[3] = 7
+       return &amp;s[3]
+}
+
+type pair struct {
+    x, y int
+}
+
+
+func (p pair) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+
+    w.Write([]byte(&quot;Y分钟golang速成!&quot;))
+}
+
+func service() {
+    go func() {
+          err := http.ListenAndServe(&quot;:8080&quot;, pair{})
+          fmt.Println(err)
+    }()
+}
+
+func requestServer() {
+    resp, err := http.Get(&quot;http://localhost:8080&quot;)
+    fmt.Println(err)
+    defer resp.Body.Close()
+    body, err := ioutil.ReadAll(resp.Body)
+    fmt.Println(&quot;\n服务器消息： `%s`&quot;, string(body))
+}
+
+func client () {
+    conn, _ := net.Dial(&quot;tcp&quot;, &quot;127.0.0.1:9999&quot;)
+    defer conn.Close()
+    conn.Write([]byte(&quot;Hello world!&quot;))
+    fmt.Println(&quot;send msg&quot;)
+}
+</code></pre>
+
+          </div>
+        </div>
+
+        
+          <div class="next-post">
+            <a class="purple-link" href="https://miexxx.github.io/post/phabricator-zuo-wei-code-review-gong-ju/">
+              <h3 class="post-title">
+                下一篇：Phabricator作为Code Review工具
+              </h3>
+            </a>
+          </div>
+          
+      </div>
+
+      
+
+      <div class="site-footer">
+  <div class="slogan">温故而知新</div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://miexxx.github.io/atom.xml" target="_blank">RSS</a>
+</div>
+
+
+    </div>
+    <script type="application/javascript">
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+  </body>
+</html>

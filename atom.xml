@@ -1,0 +1,732 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://miexxx.github.io</id>
+    <title>Great Wei</title>
+    <updated>2020-03-16T06:44:11.755Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://miexxx.github.io"/>
+    <link rel="self" href="https://miexxx.github.io/atom.xml"/>
+    <subtitle>温故而知新</subtitle>
+    <logo>https://miexxx.github.io/images/avatar.png</logo>
+    <icon>https://miexxx.github.io/favicon.ico</icon>
+    <rights>All rights reserved 2020, Great Wei</rights>
+    <entry>
+        <title type="html"><![CDATA[计算机操作系统-进程管理]]></title>
+        <id>https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-jin-cheng-guan-li/</id>
+        <link href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-jin-cheng-guan-li/">
+        </link>
+        <updated>2020-03-16T06:42:09.000Z</updated>
+        <content type="html"><![CDATA[<!-- more -->
+<h1 id="进程与线程">进程与线程</h1>
+<h2 id="进程是资源分配的基本单位">进程是资源分配的基本单位。</h2>
+<p>进程控制块（PCB）创建进程，撤销进程的操作都是由PCB进行控制。<br>
+下图显示了4个程序创建了4个进程，这4个进程能够并发的执行。<br>
+<img src="https://camo.githubusercontent.com/23a2b15842e9766a36e7a18800540c290ad15388/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f61366163326230382d333836312d346538352d626161382d3338323238376266656539662e706e67" alt="" loading="lazy"></p>
+<h2 id="线程是独立调度的基本单位">线程是独立调度的基本单位。</h2>
+<p>一个进程里可以有多个线程，他们共享资源，就像QQ与浏览器属于两个进程，但是浏览器进程中的包含事件响应线程，渲染线程等线程。</p>
+<h2 id="区别">区别</h2>
+<p>进程拥有资源</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[浅谈Mysql索引]]></title>
+        <id>https://miexxx.github.io/post/qian-tan-mysql-suo-yin/</id>
+        <link href="https://miexxx.github.io/post/qian-tan-mysql-suo-yin/">
+        </link>
+        <updated>2020-03-09T12:31:46.000Z</updated>
+        <content type="html"><![CDATA[<hr>
+<h2 id="何为索引">何为索引</h2>
+<p>索引其实就是一种优化查询的数据结构。比如mysql的索引就是使用B+树来实现的，而B+树就是一种数据结构，可以优化查询速度，所以可以利用索引来优化慢查询，索引的定义就是优化查询的数据结构。</p>
+<hr>
+<h2 id="有哪些可以优化查询的数据结构">有哪些可以优化查询的数据结构</h2>
+<p>优化查询的数据结构有哈希表，完全平衡二叉树，B树，B+树。其中Mysql使用最多的是B+树。</p>
+<hr>
+<h2 id="hash表">hash表</h2>
+<p>存储数据，需要先获取hashcode，再将数据存储到hashTable[hashcode],这种方式容易产生hash冲突，多个数据同时落到相同下标，可以采用hashTable[hashcode]存储的数据结构变化成链表，里面存储着这些公共hashcode的数据，这种方法叫做拉链法。<a href="https://www.cs.usfca.edu/~galles/visualization/OpenHash.html">实现过程</a><br>
+优点: 适合查询单一数据，速度快。<br>
+缺点：不适合查询范围数据，相当要遍历索引。</p>
+<hr>
+<h2 id="完全平衡二叉树">完全平衡二叉树</h2>
+<p>每个节点最多只能有左右两个子节点，左子树 &lt; 节点 &lt; 右子数，左右子数的层级不能超过 1 层。<br>
+<a href="https://link.zhihu.com/?target=https%3A//www.cs.usfca.edu/~galles/visualization/AVLtree.html">实现过程</a><br>
+插入过程，判断当前数与根节点大小进行判断，如果小于根节点，向左子树继续寻找，否则向右子树继续寻找，直到叶子节点后，回溯判断，左右层级是否超过了1层，继续进行树的结构变化。<br>
+优点：支持范围查询，因为二叉树是有序的。而且也可以提高查询效率，还是因为它是有序的，而且高度相比其它二叉树更平衡，通过二分法查询。<br>
+缺点：二叉树这个定义的本身就限制了它，即一个节点只能有两个子节点，所以当插入的数据非常多时，树的深度就会非常高，树的深度非常高的话就会影响查询效率，所以没有使用二叉树来当索引的。</p>
+<hr>
+<h2 id="b树">B树</h2>
+<p>简单介绍一下就是可以一个节点可以存储多个节点的搜索树。这样就没有了二叉树的两个节点的限制，同时带有有序的特点。所以图中有个参数：MAX.Degree,即一个节点存储的最大节点数，这里设置的是3，看得比较明显。这样的话一层就可以存储很多的数据了。<br>
+<a href="https://link.zhihu.com/?target=https%3A//www.cs.usfca.edu/~galles/visualization/BTree.html">实现过程</a><br>
+优点：它有二分查找可以快速定位数据的所在位置，而且每层可以存放大量数据，所以树的高度低。感觉还是很不错的。<br>
+缺点：范围查询效率太低，因为比一个数据大的话，虽说肯定会在右子树，但是上层数据和其它子树的数据不好对比。</p>
+<hr>
+<h2 id="b树-2">B+树</h2>
+<p><a href="https://link.zhihu.com/?target=https%3A//www.cs.usfca.edu/~galles/visualization/BPlusTree.html">实现过程</a><br>
+我们对比一下B+树和B树，发现了什么？图中是有重复元素的，仔细一看，所有的非叶子节点都在叶子节点中出现了备份。也就是说，最下面的一层，也就是所有的叶子节点就包含了所有的数据。这就和前面的所有结构都不一样的地方了。然后，比起B树而言，叶子节点这层还有指向后面的指针，也就是多了指向。这就能很好地进行了范围查询，很好地解决了B树的问题。这样定位到数据后，直接在这层的指针遍历即可。<br>
+经过上述的讨论，我总结了一下，衡量一种mysql索引好不好有三个原则：<br>
+1.能不能快速定位到元素所在位置。<br>
+2.能不能较好的进行范围查询。<br>
+3.树的高度是低还是高。</p>
+<hr>
+<h2 id="局部性原理与磁盘预读">局部性原理与磁盘预读</h2>
+<p>计算机科学中著名的局部性原理:当一个数据被用到时，其附近的数据也通常会马上被使用。</p>
+<p>所以操作系统为了提高效率，读取数据时往往不是严格按需读取，而是每次都会预读，即使只需要一个字节，操作系统也会从这个位置开始，顺序向后读取一定长度的数据放入内存。这里的-定长度叫做页，也就是操作系统操作磁盘时的基本单位。一般操作系统中 一页的大小是4Kb。</p>
+<p>从上面的原理我们也能知道，固态硬盘比机械硬盘快的最根本最简单的原因就是:固态硬盘使用的电路进行读写，而机械硬盘使用的机械运动。<br>
+其实不管是机械硬盘还是固态硬盘都是存储介质,真正控制读写的是操作系统。</p>
+<p>这部分属于计算机原理和操作系统方面的知识，感觉理解一下还是很有必要的。</p>
+<p>所以，回到我们的问题，B+树中一个节点到底存多少个元素合适?，其实也可以换个角度来思考B+树中一个节点到底多大合适?</p>
+<p>答案是: B+树中一个节点为一页或页的倍数最为合适。因为如果一个节点的大小小于1页，那么读取这个节点的时候其实也会读出1页，造成资源的浪费;如果一个节点的大小大于1页，比如1.2页，那么读取这个节点的时候会读出2页，也会造成资源的浪费;所以为了不造成浪费，所以最后把一个节点的大小控制在1页、2页、3页、4页等倍数页大小最为合适。</p>
+<p>那么，Mysql中B+树的一个节点大小为多大呢?<br>
+这个问题的答案是“1页&quot;”，这里说的页&quot;是Mysq自定义的单位(其实和操作系统类似)，Mysql的Innodb引擎中一页的默认大小是16k (如果操作系统中-页大小是4k，那么Mysql中1 页=操作系统中4页)，可以使用命令SHOW GLOBAL STATUS like 'Innodb_ page size';查看。 并且还可以告诉你的是，一个节点为1页就够了。</p>
+<p>为什么一个节点为一页（16kb）就够了呢？</p>
+<p>先来看看mylsam和innodb使用B+树的情况：<br>
+<img src="https://pic2.zhimg.com/80/v2-4229f0d89c874ff6c741e9bca99887c9_1440w.jpg" alt="" loading="lazy"><br>
+通常我们认为B+树的非叶子节点不存储数据，只有叶子节点才存储数据。而B树的非叶子节点和叶子节点都会存储数据，这会导致非叶子节点存储的索引值更少，树的高度相对会比B+树高，平均的io效率会比较低，所以使用B+树作为索引的数据结构，再加上B+树的叶子节点之间会有指针相连，便于范围查询。上图的data区域两个存储引擎会有所不同，也就是聚族和非聚族索引的区别。后面详细讲解。</p>
+<p>（这里说一下我对这里的为啥B树的高度相对B+树高的理解：就如上图所见，一个节点指的是<br>
+<img src="https://pic4.zhimg.com/80/v2-1d06b9e7c77bf6fe72cd7a556ff42753_1440w.png" alt="" loading="lazy"></p>
+<p>这才是一个节点，而不是单纯的15，或者加上旁边的一个指针。这样的话，前面已知一个节点是16kb大小，那么在这固定大小中，B树的非叶子节点还要存储数据，而B+树只存储值和指针。具体一点就是，假设数据大小2kb，值大小1kb,指针大小1kb。那么B树里只能有4个值，而B+树里则有8个值，这样的话，整个索引存储相同数量的值的话，B+树明显就比B树低，这样就提高了磁盘的io效率）</p>
+<p>前面我们提到数据区域存储的东西，现在来进行详细解释：</p>
+<p>myisam中，叶子节点的数据区域存储的是数据记录的地址。这也叫非聚族索引。</p>
+<p>下面是主键索引：<br>
+<img src="https://pic3.zhimg.com/80/v2-b26ee58c1e431ffda3645448858ee7b6_1440w.jpg" alt="" loading="lazy"></p>
+<p>下面是辅助索引：<br>
+<img src="https://pic3.zhimg.com/80/v2-ce65d7629ef49b53a23971e86c362f3a_1440w.jpg" alt="" loading="lazy"></p>
+<p>从图中看得出来，叶子节点中只存储着地址（也就是此值对应的记录的所在地址），找到对应的地址，然后去地址中取出数据。并且主键索引和辅助索引并没有太多区别。</p>
+<p>然后再来看innodb中的B+树：</p>
+<p>下面是主键索引：<br>
+<img src="https://pic1.zhimg.com/80/v2-c08615d9d603ab83532b325aa250789c_1440w.jpg" alt="" loading="lazy"></p>
+<p>下面是辅助索引：<br>
+<img src="https://pic1.zhimg.com/80/v2-b27e87b97d3c33d847ae97546ba2b1b0_1440w.jpg" alt="" loading="lazy"></p>
+<p>innodb的主键索引和实际数据是绑定在一起的也就是说innodb的表一定要有一个主键索引，如果一个表没有手动创建一个主键索引，innodb会查看有没有唯一索引，如果有，则选用唯一索引作为主键，如果连唯一索引也没有，则会默认建立一个隐藏的主键索引（用户不可见）</p>
+<p>另外，innodb的主键索引要比myisam的的主键索引查询效率较高（少一次磁盘io）,并且比辅助索引也要高很多。（这里不是很理解。。。。）</p>
+<p>所以，我们在使用innodb作为存储引擎时，要注意：</p>
+<p>1.手动建立一个主键索引</p>
+<p>2.尽量利用主键索引进行查询</p>
+<p>默默表示，看到这里对主键索引，辅助索引，聚族索引，非聚族索引有点理解不过来了。。。</p>
+<p>后面慢慢缓冲。。</p>
+<p>回到我们的问题:为什么一个节点为1页(16k) 就够了?</p>
+<p>对着上面Mysql中Innodb中对B+树的实际应用(主要看主键索引)，我们可以发现，B+树中的一个节点存储的内容是:</p>
+<p>非叶子节点 : 主键+指针</p>
+<p>叶子节点 : 数据</p>
+<p>那么，假设我们一行数据大小为1K,那么一页就能存16条数据，也就是一个叶子节点能存16条数据;</p>
+<p>再看非叶子节点，假设主键ID为bigint类型, 那么长度为8B，指针大小在Innodb源码中为6B，-共就是14B,那么一页里就可以存储16K/14=1170个(主键+指针)，那么一颗高度 为2的B+树能存储的数据为:</p>
+<p>1170<em>16=18720条，一 颗高度为3的B+树能存储的数据为: 1170</em>1170*16=21902400 (千万级条)。所以在InnoDB中B+树高度一般为1-3层， 它就能满足千万级的数据存储。在查找数据时一次页的查找代表一次IO,所以通过主键索引查询通常只需要1-3次IO操作即可查找到数据。所以也就回答了我们的问题，1 页=16k这么设置是比较合适的，是适用大多数的企业的，当然这个值是可以修改的，所以也能根据业务的时间情况进行调整。</p>
+<p>接着，我们来联系这次学到的索引底层原理再来看看我常常见到的最左前辍原则：</p>
+<p>比如有下面这个B+树索引，我们建立了一个联合索引，顺序是emp_no,title,from_data.既然是联合索引，那么它们按理说应该是放在一起连续存放的。<br>
+<img src="https://pic4.zhimg.com/80/v2-f9eca981e7b76e965036c8ff2a58767f_1440w.jpg" alt="" loading="lazy"></p>
+<p>我们判断一 个查询条件能不能用到索引,我们要分析这个查询条件能不能利用某个索引缩小查询范围</p>
+<p>对于select * from employees.titles where emp_ no = 1是能用到索引的，因为它能利用上面的索引缩小所有查询范围，首先和第一个节点&quot;4-r-01&quot;比较，1&lt;4, 所以可以直接确定结果在左子树，同理，依次按顺序进行比较，逐步可以缩小查询范围。</p>
+<p>对于select * from employees. titles where title =‘1’是不能用到索引的，因为它不能用到上面的索引，和第一节点进行比较时，没有emp_ no这个字段的值，不能确定到底该去左子树还是右子树继续进行查询。</p>
+<p>对于select * from employees.titles where title =‘1’and emp_ no = 1是能用到索引，按照我们的上面的分析,先用ttle='1 这个条件和第一个节点进行比较，是没有结果的，但是mysql会对这个sql进行优化，优化之后会将emp_ no=1这个条件放到第一位，从而可以利用索引。这里是使用了mysql的查询优化器。</p>
+<p>Mysq总结</p>
+<ol>
+<li>
+<p>B+树可以更好的结合磁盘IO原理提高查询效率</p>
+</li>
+<li>
+<p>Innodb一 定要有主键，没有主键会以唯一索引为主键， 否则会建立一个隐藏主键</p>
+</li>
+<li>
+<p>Innodb的数据是和主键索引存在一起的(数据在叶子节点中，MyISAM中的叶子节点存储的数据地址)</p>
+</li>
+</ol>
+<p>4.建立索引时要考虑已有索引，一个SQL语句只会选择花费最低的一个索引执行</p>
+<p>5.索引是一种有序的数据结构(B+树) ，一个节点可以存多个有序的元素，所以要利用好最左前缀原则<br>
+6.真实场景中一颗B+树的高度通常为3</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[图解TCP/IP]]></title>
+        <id>https://miexxx.github.io/post/tu-jie-tcpip/</id>
+        <link href="https://miexxx.github.io/post/tu-jie-tcpip/">
+        </link>
+        <updated>2020-02-08T08:53:38.000Z</updated>
+        <summary type="html"><![CDATA[<p>最近看了《图解TCP/IP》这本书，感觉不错，这里做了一个简单知识点概览。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>最近看了《图解TCP/IP》这本书，感觉不错，这里做了一个简单知识点概览。</p>
+<!-- more -->
+<h1 id="第一章-网络基础知识">第一章 网络基础知识</h1>
+<h2 id="计算机网络出现的背景">计算机网络出现的背景</h2>
+<h3 id="计算机的普及与多样化">计算机的普及与多样化</h3>
+<p>计算机自诞生以来，经历了一系列演变与发展，大型通用计算机，超级计算机，小型机，个人电脑，工作站，便携式电脑以及如今的智能手机终端等都是这一系列过程的产物，它们的性能逐年增强，价格却逐年下降，机体规模也正在逐渐变小。</p>
+<h3 id="从独立模式到网络互连模式">从独立模式到网络互连模式</h3>
+<p>1.什么是独立模式？<br>
+一个完整的业务逻辑需要执行A，B，C三个步骤才能够完成，然而每一个步骤只能在一台机器完成，如果当前有人使用其中一个业务，你只能等待，这就是独立模式（类似银行业务的【取票，排队，柜台处理】）。<br>
+2.什么是网络互连方式？<br>
+还是完整A，B，C三个步骤，现在完成的流程都可以在一台服务器完成，这时候用户只要使用自己的电脑连接到服务器进行业务处理，进行业务的随意切换无需等待。<br>
+3.计算机网络按照规模可区分哪几类？<br>
+WAN（广域网，由多个LAN构成），LAN（局域网，一栋楼或者大学校园中有限的，狭小的，区域内网络）。</p>
+<h3 id="从计算机通信到信息通信">从计算机通信到信息通信</h3>
+<p>最初，由管理员将特定的几台计算机相连在一起形成计算机网络，形成一种私有的网络。人们开始将这些私有网络连接在一起形成了更大的私有网络，最后形成了现在的综合信息通信网络。</p>
+<h3 id="计算机网络的作用">计算机网络的作用</h3>
+<p>信息网络如同空气般，触手可及，在信息爆炸的时代，有利有弊。</p>
+<h2 id="计算机与网络发展的7个阶段">计算机与网络发展的7个阶段</h2>
+<h3 id="批处理">批处理</h3>
+<p>1.什么是批处理？<br>
+所谓批处理，是指实现将用户程序和数据装入卡带或者磁带，并由计算按照一定的顺序读取，使用户所要执行的这些程序和数据能够一并批量得到处理的方式。批处理时代的计算机主要用于大规模计算或处理，因为那时候的计算机不是一个便于普通人使用的工具。</p>
+<h3 id="分时系统">分时系统</h3>
+<p>1.什么是分时系统？<br>
+分时系统（TSS）它是指多个终端与同一计算机连接，允许多个用户同时使用一台计算系统，实现了“一人一机”的目的，让用户感觉好像自己使用一台计算机一样，这也体现了分时系统的一个重要特性——独占性。</p>
+<h3 id="计算机之间的通信">计算机之间的通信</h3>
+<p>在计算机之间的通信技术诞生之前，想要将一台计算机的数据转移到另一台机器，需要通过存储介质，计算机通信技术诞生后，计算机之间的数据传输可通过通信线路传输。</p>
+<h3 id="计算机网络的产生">计算机网络的产生</h3>
+<p>20世纪70年代初期，人们开始实验基于分组交换技术的计算机网络，并且研究这各个计算机厂商之间的网络通信的技术，其中窗口系统的产生使人们人们可以通过一台计算机就可以享受网络各种丰富的资源。</p>
+<h3 id="互联网的普及">互联网的普及</h3>
+<p>形成了“一人一机”的环境。</p>
+<h3 id="以互联网技术为中心的时代">以互联网技术为中心的时代</h3>
+<p>随着互联网的发展，其地位也开始为IP网取代，而IP网（WWW，移动通讯网，Voip，iSCSI）本身就是互联网的产物。</p>
+<h3 id="从单纯建立连接到安全建立连接">从“单纯建立连接”到”安全建立连接“</h3>
+<p>互联网让世纪各地的电脑连接一起，然而现在已不再满足于”单纯的建立连接“，而是追求”安全建立连接“为目的而发展。</p>
+<h3 id="手握金刚钻的tcpip">手握金刚钻的TCP/IP</h3>
+<p>TCP/IP是通讯协议的统称。</p>
+<h2 id="协议">协议</h2>
+<h3 id="随处可见的协议">随处可见的协议</h3>
+<p>io,icmp,tcp,udp,http,telent,snmp,smtp...</p>
+<h3 id="协议的必要性">协议的必要性</h3>
+<p>两台计算机事先约定一规则，进行建立通信。</p>
+<h3 id="分组交换协议">分组交换协议</h3>
+<p>1.什么是分组交换协议？<br>
+分组交换是指将大数据分割为一个个叫做包（packet）的较小单位进行传输的方法，这里所说的包，如同我们平常在邮局见到的邮包，分组交换就是将这些大数据封装成一个个这样的邮包交给对方。</p>
+<p>##协议由谁规定<br>
+国际标准OSI（Open System Intercon-nection）</p>
+<h2 id="协议分层与osi参考模型">协议分层与OSI参考模型</h2>
+<h3 id="协议的分层">协议的分层</h3>
+<p>OSI将通信协议中必要的功能分成了7层，通过这些分层将那些复杂的网络协议更加简单化。上下层进行的交互时所遵守的约定叫做接口。同一层之间交互所遵循的约定叫做协议。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[思维锻炼]]></title>
+        <id>https://miexxx.github.io/post/si-wei-duan-lian/</id>
+        <link href="https://miexxx.github.io/post/si-wei-duan-lian/">
+        </link>
+        <updated>2020-01-13T05:30:50.000Z</updated>
+        <summary type="html"><![CDATA[<p>            每天积累一些题目。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>            每天积累一些题目。</p>
+<h2 id="-more-"><!-- more --></h2>
+<h1 id="去除数组重复值">去除数组重复值</h1>
+<p>在一个长度为 n 的数组里的所有数字都在 0 到 n-1 的范围内。数组中数字是重复的，但不知道有几个数字是重复的，也不知道每个数字重复几次。请找出数组中唯一个重复的数字。</p>
+<p>Input:<br>
+0 1 2 4 2 5</p>
+<h2 id="思路一">思路一：</h2>
+<p>使用空间换时间，使用hashMap，开辟长度为n的数组空间，对输入的数作为index就行叠加，hashMap[2] = 1,第二次遇到2，hashMap[2]++ = 2， 说明重复的数字为2。<br>
+时间复杂度O(n)，空间复杂度O(n)</p>
+<h2 id="思路二">思路二：</h2>
+<p>遍历Input，将值与Input[值] 进行swap，如果交换过程中出现两次值相同则说明，当前数字是重复的。<br>
+时间复杂度O(n)，空间复杂度O(1)</p>
+<hr>
+<h1 id="二维数组中的查找">二维数组中的查找</h1>
+<p>给定一个（n * m）二维数组，其每一行从左到右递增排序，从上到下也是递增排序。给定一个数，判断这个数是否在该二维数组中。</p>
+<p>Input:<br>
+[<br>
+[1,   4,  7, 11, 15],<br>
+[2,   5,  8, 12, 19],<br>
+[3,   6,  9, 16, 22],<br>
+[10, 13, 14, 17, 24],<br>
+[18, 21, 23, 26, 30]<br>
+]</p>
+<h2 id="思路一-2">思路一：</h2>
+<p>采用二分思想，当这个数在左下角，大于这个数的都在右边，小于这个数的都在上边。当这个数在右上角，大于这个数的都在下边，小于这个数的都在左边，所以只要从这两端进行查找速度会比较快。<br>
+时间复杂度O(n + m)，空间复杂度O(1)</p>
+<hr>
+<h1 id="矩形覆盖">矩形覆盖</h1>
+<p>我们可以用 2<em>1 的小矩形横着或者竖着去覆盖更大的矩形。请问用 n 个 2</em>1 的小矩形无重叠地覆盖一个 2*n 的大矩形，总共有多少种方法？</p>
+<p>Input:<br>
+n = 5</p>
+<h2 id="思路一-3">思路一：</h2>
+<p>动态规划思想，当n=1, 覆盖的方法 = 1， 当n=2, 覆盖的方法 = 2，当n=3，可以把这个2 * 3的大局限拆分成 2 *1 与 2 * 2 的两块区域矩形，覆盖方法为 1 + 2 = 3。f(n) = f(n -1) + f(n - 2),所有结果应该是1 2 3 5 8 ，n 为5时有 8种方法，动态规划思想，将分体拆分为一个个小问题。</p>
+<hr>
+<h1 id="变态跳台阶">变态跳台阶</h1>
+<p>一只青蛙一次可以跳上 1 级台阶，也可以跳上 2 级... 它也可以跳上 n 级。求该青蛙跳上一个 n 级的台阶总共有多少种跳法。</p>
+<p>Input:<br>
+n = 5</p>
+<h2 id="思路一-4">思路一</h2>
+<p>动态规划思想，将问题拆分为登上最后一个楼梯可以采用1 - n级的方法，所以f(n) = f(n-1) + f(n - 2) + ... + f(1) =&gt; f(n) = 2 * f(n - 1)。f(1) = 1, f(2) = 2, f(3) = 2^(n - 1), f(5) = 2 ^ 4 = 16。</p>
+<hr>
+<h1 id="求100的结果有多少0">求100！的结果有多少0</h1>
+<h2 id="思路一-5">思路一：</h2>
+<p>首先分析阶层的计算都是通过乘法进行的，所以只要计算出有多少个10进行相乘就知道有多少个0了，而10能够通过2 * 5 得到，2的数量一定是足够的，所以只要计算出5的个数就能知道有多少个0，将每个数字进行质因数分解得出结果 (100/5 + 20/5 + 4/5) = 24。</p>
+<hr>
+<h1 id="二进制中1的个数">二进制中1的个数</h1>
+<p>输入一个整数，输出该数二进制表示中 1 的个数。</p>
+<h2 id="思路一-6">思路一</h2>
+<p>整数转二进制过程中统计1的个数。<br>
+时间复杂度O(n),空间复杂度O(1)。</p>
+<h2 id="思路二-2">思路二</h2>
+<p>100010001 与 100010000进行 &amp; 运算的结果每次都消耗一个1，所以只需要判断进行了多少次&amp;运算就能够知道有多少个1了。</p>
+<hr>
+<h1 id="寻找重复数个数">寻找重复数个数</h1>
+<p>输入一组递增数组arr = [1,2,2,2,2,4,5,5,7,7,8]求重复的2出现的次数，复杂度小于O(n)</p>
+<h2 id="思路一-7">思路一</h2>
+<p>使用二分算法。cnt = 0;<br>
+第一次： left = 0, right = 10, mid =( left + right)/ 2 = 5<br>
+arr[5] &gt; 2 =&gt; left = 0, right = mid - 1 = 4<br>
+第二次：left = 0, right = 4, mid = 2<br>
+arr[2] == 2 =&gt; cnt++,  这时候不清楚arr[2] 左右两端与2之间的关系。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[2019年的年度总结]]></title>
+        <id>https://miexxx.github.io/post/2019-nian-de-nian-du-zong-jie/</id>
+        <link href="https://miexxx.github.io/post/2019-nian-de-nian-du-zong-jie/">
+        </link>
+        <updated>2020-01-01T03:44:00.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="一月">一月：</h2>
+   <p> 完成了毕业论文的提交，同时也离开了我第一家实习公司。 虽然时间不长，但是很喜欢工作的氛围，不过我所向往的并不是这些。</p>
+<h2 id="二月">二月：</h2>
+   <p>春节的假期，过得并不安心，总觉得自己落后别人太多了，当我还在实习的时候，早已一些同学收到了多个公司的offe，只是对失去秋招的机会，感到遗憾，春招努力。 </p>
+<h2 id="三月">三月：</h2>
+   <p>终于来到深圳了，感觉充满激情，很快我们就发现了许多问题，深圳消费水平的确比较高，于是我们开始找工作，在boss,拉钩...等，投递的简历都了无音讯，然后我们的心态可能就发生变化了，有些着急了，虽然只是过了一周，但是却觉得时间过了很久，很快我就收到了2个offer，但是都不是很满意，感觉自己希望能够进到大厂，我的小伙伴们也是这样期待。我考虑一天后，觉得先去工作试试，不能再这样耗着了，慢慢开始忘记起初来到这里的目的，原本是打算前来春招，来的太早，春招还没开始，我们就这样走上社招了，由于还没毕业，所以每个公司提出的薪资都不是很满意，但是对技术的热情，感觉只要能够让我有所收获，这样我就赚到了，于是我有幸来到尚米网络。刚入职就与同一天入职的同学交了个朋友，虽然是不同岗位。入职的第一天总体来说，觉得工作氛围有些压抑，其实我的本性还是很活泼的，但是刚来到公司，我会毕竟内敛，总之第一天工作的确没留下好印象，同事们也在忙着各种手中工作，我开始觉得，难道这就是工作后的状态吗？和我在学校实习的氛围果然不同，开始觉得可能小团队的氛围可能的确不错。  </p>   
+<h2 id="四月">四月：</h2>
+   <p>在我沉浸在工作中，发现春招已经开始了，但是我好像已经没了什么感觉，一心工作，日常工作都是运营后台的CURD,还要写写网页原来我们公司是没有前端 ~ ~。此时我的小伙伴A觉得适应不了深圳的工作节奏回家了，之后我们就剩两个人了，恰好我们的大学舍长来广东找工作，便让他来和我们一起住，暂称为C,这样我们又是三个人了，但是我的小伙伴B不满意第一份工作，裸辞找工作快一个月了，这是我已经预感到了结果，果不其然最后离开我们，前往了厦门，他也找到自己心仪的工作，我们也对他感到开心，这样我们就剩下一只猫，两个人了。</p>
+<h2 id="五月">五月：</h2>
+   <p>五月份了，我记得春招已经完全没有了，虽然我没参加过，但是偶尔关注了一些公司公众号，提交了简历，很遗憾需要公司还要求去校园听宣讲会，单休的我根本没有时间，工作也感觉很枯燥，貌似自己都快失去了自己的灵魂了，主管看出我的异常，和我谈了几次居然要给我提前转正，而且给我一星期思考。我心想，我 刚毕业，我希望有一个好的起点，我还需要学很多东西，然后我就很荣幸来到华阅文化了，现在想想，当时的决定的确很重要。开心^ ^</p>
+<h2 id="六月">六月：</h2>
+   <p>很快到了新的工作环境，当初来面试的时候就觉得这边工作环境的确不错。重点是居然有导师了，以往都是我一个人向无头苍蝇一样这里终于有人指导我学习了，然后再不断开发过程中，发现原来我对PHP理解还是太浅了，开始更加注重基础的东西，感觉自己基础不够工作过程中，我能够学到的是经验，但是基础需要我在工作之外慢慢积累，兴趣果然是我最大的动力，对新的技术都充满好奇，它是怎么实现的对于前辈的感觉，既有耐心照顾我这样的菜鸟，同时也会指导我一些工作中需要学会的，开发不仅仅是沉浸在自己的世界中，因为我们是一个团队，做好本职工作之外，我也需要思考，我还能做些什么帮助大家，很快的也做了些版本开发，第一次了解完整的开发流程，果然以前的开发过程有些草率。在不断的开发过程中，慢慢积累，沉淀一下自己。</p>
+<h2 id="七月">七月：</h2>
+   <p>毕业了，虽然不舍，感叹自己青春一去不复返，但是也对未来充满期待。 </p>
+<h2 id="八月">八月：</h2>
+   <p>开始做一些小需求，但是主要还是不断的学习技术，望着wiki上的各种文档，感觉是可以收获到许多东西。又是码农的日常工作，由于项目已经封装了许多组件，趁着完成需求的闲暇时间，偶尔看看公司优秀的代码，看多了发现，这样的学习方式会比较慢，也可能是自己还有所不足，当看到同事遇到问题都能快速的找到问题根源并且快速的解决，我也是想成为这样的人，感觉自己的确有些急于求成,不过也意识到有些差距并不是短时间提升并超过别人，因为大家都在努力中。不过这不
+ 代表着我甘于平凡，努力加油吧。    </p>
+<h2 id="九月">九月：</h2>
+   <p>由于一些契机，有幸加入了新的项目，这对我来说真的很开心，可以从零开始搭建项目，这过程中，会遇到很多问题，我也能收获很多自己也开始慢慢加班，既然和别人有差距，通过时间可以弥补，有些遗憾，双休日的时间，有些懈怠了，自己会反省一下，不过现在有了新的项目，对我还是有很大提升。 </p>
+<h2 id="十月">十月：</h2>
+   <p>本着学习的态度，起初的学习方式偏向模仿，开始逛逛知乎，github，v2ex，果然有许多技术文章，在上下班时间打发了时间，也学到了许多技术，这样的状态也比较满意了，时间合理的利用，总之技术还是up,up，说到双休日...,依旧惭愧。 </p>
+<h2 id="十一月">十一月：</h2>
+   <p>这个月过得太快了...。 </p>
+<h2 id="十二月">十二月：</h2>
+   <p>过去的一年学到了许多技术，现在开始腾出时间看书了，立个flag，养成写博客的好习惯，2019再见，2020请好好待我。 </p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Go]]></title>
+        <id>https://miexxx.github.io/post/go-yu-yan-xue-xi/</id>
+        <link href="https://miexxx.github.io/post/go-yu-yan-xue-xi/">
+        </link>
+        <updated>2019-12-03T04:01:52.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="服务端">服务端</h2>
+<pre><code class="language-gotemplate">package main
+
+import (
+    &quot;fmt&quot;
+    &quot;net&quot;
+    &quot;os&quot;
+    &quot;bufio&quot;
+    &quot;bytes&quot;
+    &quot;encoding/binary&quot;
+)
+
+var ConnMap map[string]net.Conn
+func checkError(err error){
+    if  err != nil {
+        fmt.Println(&quot;Error: %s&quot;, err.Error())
+        os.Exit(1)
+    }
+}
+
+func recvConnMsg(conn net.Conn) {
+//  var buf [50]byte
+    buf := make([]byte, 50)
+
+    defer conn.Close()
+
+    for {
+        n, err := conn.Read(buf)
+
+        if err != nil {
+            fmt.Println(&quot;conn closed&quot;)
+            return
+        }
+
+        fmt.Println(&quot;recv msg:&quot;, string(buf[0:n]))
+
+
+        boradcastMessage(conn.RemoteAddr().String() + &quot;:&quot; + string(buf[0:n]))
+    }
+}
+
+func boradcastMessage(message string) {
+     n := []byte(message)
+     for _,conn := range ConnMap {
+       conn.Write(n)
+     }
+}
+
+func Encode(message string) (*bytes.Buffer, error) {
+    // 读取消息的长度
+    var length int32 = int32(len(message))
+    var pkg *bytes.Buffer = new(bytes.Buffer)
+    // 写入消息头
+    err := binary.Write(pkg, binary.LittleEndian, length)
+    if err != nil {
+        return nil, err
+    }
+    // 写入消息实体
+    err = binary.Write(pkg, binary.LittleEndian, []byte(message))
+    if err != nil {
+        return nil, err
+    }
+
+    return pkg, nil
+}
+
+func Decode(reader *bufio.Reader) (string, error) {
+    // 读取消息的长度
+    lengthByte, _ := reader.Peek(4)
+    lengthBuff := bytes.NewBuffer(lengthByte)
+    var length int32
+    err := binary.Read(lengthBuff, binary.LittleEndian, &amp;length)
+    if err != nil {
+        return &quot;&quot;, err
+    }
+    if int32(reader.Buffered()) &lt; length+4 {
+        return &quot;&quot;, err
+    }
+
+    // 读取消息真正的内容
+    pack := make([]byte, int(4+length))
+    _, err = reader.Read(pack)
+    if err != nil {
+        return &quot;&quot;, err
+    }
+    return string(pack[4:]), nil
+}
+
+func main() {
+    ConnMap = make(map[string]net.Conn)
+    listen_sock, err := net.Listen(&quot;tcp&quot;, &quot;localhost:10000&quot;)
+    checkError(err)
+    defer listen_sock.Close()
+
+    for {
+        new_conn, err := listen_sock.Accept()
+        ConnMap[new_conn.RemoteAddr().String()] = new_conn
+        if err != nil {
+            continue
+        }
+
+        go recvConnMsg(new_conn)
+    }
+
+}
+</code></pre>
+<h2 id="客户端">客户端</h2>
+<pre><code class="language-gotemplate">package main
+
+import (
+    &quot;fmt&quot;
+    &quot;net&quot;
+    &quot;os&quot;
+    &quot;bufio&quot;
+    &quot;bytes&quot;
+    &quot;encoding/binary&quot;
+)
+
+func checkError(err error){
+    if  err != nil {
+        fmt.Println(&quot;Error: %s&quot;, err.Error())
+        os.Exit(1)
+    }
+}
+
+func Encode(message string) (*bytes.Buffer, error) {
+    // 读取消息的长度
+    var length int32 = int32(len(message))
+    var pkg *bytes.Buffer = new(bytes.Buffer)
+    // 写入消息头
+    err := binary.Write(pkg, binary.LittleEndian, length)
+    if err != nil {
+        return nil, err
+    }
+    // 写入消息实体
+    err = binary.Write(pkg, binary.LittleEndian, []byte(message))
+    if err != nil {
+        return nil, err
+    }
+
+    return pkg, nil
+}
+
+func Decode(reader *bufio.Reader) (string, error) {
+    // 读取消息的长度
+    lengthByte, _ := reader.Peek(4)
+    lengthBuff := bytes.NewBuffer(lengthByte)
+    var length int32
+    err := binary.Read(lengthBuff, binary.LittleEndian, &amp;length)
+    if err != nil {
+        return &quot;&quot;, err
+    }
+    if int32(reader.Buffered()) &lt; length+4 {
+        return &quot;&quot;, err
+    }
+
+    // 读取消息真正的内容
+    pack := make([]byte, int(4+length))
+    _, err = reader.Read(pack)
+    if err != nil {
+        return &quot;&quot;, err
+    }
+    return string(pack[4:]), nil
+}
+
+
+func onMessageRecived(conn net.Conn) {
+    reader := bufio.NewReader(conn)
+    for {
+        msg, _ := reader.ReadString('\n')
+        fmt.Println(msg)
+    }
+}
+
+func main() {
+    conn, err := net.Dial(&quot;tcp&quot;, &quot;127.0.0.1:10000&quot;)
+    checkError(err)
+    defer conn.Close()
+    go onMessageRecived(conn);
+    for {
+      var msg string
+      fmt.Scanln(&amp;msg)
+      if msg == &quot;quit&quot; {
+             break
+      }
+      message,_ := Encode(msg)
+      conn.Write(message.Bytes())
+    }
+    fmt.Println(&quot;send msg&quot;)
+}
+</code></pre>
+<h2 id="简单的语法">简单的语法</h2>
+<pre><code class="language-gotemplate">package main
+
+import (
+    &quot;fmt&quot;
+    &quot;net/http&quot;
+    &quot;net&quot;
+    &quot;io/ioutil&quot;
+)
+
+func main() {
+ x, y := 3, 4
+ z := sum(x, y)
+ fmt.Println(z)
+ n := byte('a')
+ fmt.Println(n)
+ a := []int{3, 1, 5}
+ fmt.Println(a)
+ b := make([]int, 4)
+ fmt.Println(b)
+ bs := []byte(&quot;a slice&quot;)
+ fmt.Println(bs)
+ s := []int{1, 2, 3}
+ s = append(s, []int{1, 2, 3}...)
+ fmt.Println(s)
+ p := &amp;x
+ fmt.Println(p)
+ m := map[string]int{&quot;three&quot;:3 , &quot;four&quot;:4}
+ m[&quot;one&quot;] = 1
+ fmt.Println(m)
+
+
+ if true {
+    fmt.Println(&quot;yes&quot;)
+ }
+ switch x {
+  case 0:
+       fmt.Println(&quot;xxx&quot;)
+ }
+
+ for x := 0; x &lt; 3; x++ {
+  fmt.Println(x)
+ }
+ fmt.Println(x)
+
+ for key, value := range s{
+  fmt.Println(key, value)
+ }
+
+ defer fmt.Println(1)
+ defer fmt.Println(2)
+
+ cs := make(chan string)
+
+ go func() {cs &lt;- &quot;你好&quot; }()
+
+ select {
+ case x := &lt;-cs:
+ fmt.Println(x)
+ }
+
+ client()
+}
+
+func sum(a, b int) (sum int){
+ return a + b;
+}
+
+func memory() (p *int) {
+       s := make([]int, 20)
+       s[3] = 7
+       return &amp;s[3]
+}
+
+type pair struct {
+    x, y int
+}
+
+
+func (p pair) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+
+    w.Write([]byte(&quot;Y分钟golang速成!&quot;))
+}
+
+func service() {
+    go func() {
+          err := http.ListenAndServe(&quot;:8080&quot;, pair{})
+          fmt.Println(err)
+    }()
+}
+
+func requestServer() {
+    resp, err := http.Get(&quot;http://localhost:8080&quot;)
+    fmt.Println(err)
+    defer resp.Body.Close()
+    body, err := ioutil.ReadAll(resp.Body)
+    fmt.Println(&quot;\n服务器消息： `%s`&quot;, string(body))
+}
+
+func client () {
+    conn, _ := net.Dial(&quot;tcp&quot;, &quot;127.0.0.1:9999&quot;)
+    defer conn.Close()
+    conn.Write([]byte(&quot;Hello world!&quot;))
+    fmt.Println(&quot;send msg&quot;)
+}
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Phabricator作为Code Review工具]]></title>
+        <id>https://miexxx.github.io/post/phabricator-zuo-wei-code-review-gong-ju/</id>
+        <link href="https://miexxx.github.io/post/phabricator-zuo-wei-code-review-gong-ju/">
+        </link>
+        <updated>2019-10-01T03:59:02.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="概述">概述</h2>
+<p>Phabricator是一套基于Web的软件开发协作工具，包括代码审查工具Differential，资源库浏览器Diffusion，变更监测工具Herald，Bug跟踪工具Maniphest和维基工具Phriction。Phabricator可与Git、Mercurial、Subversion集成使用。 Phabricator是开源软件，可在Apache许可证第2版下作为自由软件分发。 Phabricator最初是Facebook的一个内部工具，主要开发者为Evan Priestley。Evan Priestley离开Facebook后，在名为Phacility的新公司继续Phabricator的开发。</p>
+<h2 id="搭建">搭建</h2>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[工具汇总]]></title>
+        <id>https://miexxx.github.io/post/gong-ju-hui-zong/</id>
+        <link href="https://miexxx.github.io/post/gong-ju-hui-zong/">
+        </link>
+        <updated>2019-07-19T04:01:04.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="elk工具">ELK工具：</h2>
+<p><a href="http://grokdebug.herokuapp.com/">Grok正则解析工具</a></p>
+<h2 id="其它">其它</h2>
+<p><a href="http://www.ischoolbar.com/EsParser/">sql语法转换ES查询语法</a><br>
+<a href="http://Json.cn">Json</a></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Es]]></title>
+        <id>https://miexxx.github.io/post/es-chang-jian-wen-ti/</id>
+        <link href="https://miexxx.github.io/post/es-chang-jian-wen-ti/">
+        </link>
+        <updated>2019-07-05T03:39:44.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="内存不足查询失败">内存不足查询失败：</h2>
+<p>在公司搭建的ELK日志分析系统，在一个月内稳定的运行中，突然有一天，日志分析工具不好使了。<br>
+发现问题是由于，ES的内存不足了，导致查询失败。</p>
+<ul>
+<li>解决方法：</li>
+</ul>
+<pre><code class="language-$xslt"> curl -XDELETE http://127.0.0.1:9200/*$format_date
+ curl -XPOST 'http://127.0.0.1:9200/*$format_date/_forcemerge?only_expunge_deletes=true'
+ curl -XPOST 'http://127.0.0.1:9200/_forcemerge?only_expunge_deletes=true'
+</code></pre>
+<p>对索引与数据进行物理删除,所以在使用这类需要占用大量磁盘，内存的程序，都应该定时监控清理。</p>
+<h2 id="索引写入失败">索引写入失败：</h2>
+<p>当服务器磁盘占用达到95%，es会自动将索引设置成只读模式。</p>
+<ul>
+<li>解决方法：</li>
+</ul>
+<pre><code class="language-$xslt">将系统磁盘清理后，注意将索引取消只读模式。
+</code></pre>
+<h2 id="单个索引过大查询失败">单个索引过大，查询失败</h2>
+<p>由于索引过大，需要大量内存加载数据导致搜索失败，记得定时清理无用的日志信息。</p>
+<h2 id="其它问题">其它问题</h2>
+<p>前辈走过的坑 <a href="http://zoufeng.net/2018/07/16/cpu-of-elasticsearch-high-search-slow/">排查elasticsearch的cpu居高不下，查询慢的问题</a></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Elk日志分析系统搭建]]></title>
+        <id>https://miexxx.github.io/post/elk-ri-zhi-fen-xi-xi-tong-da-jian/</id>
+        <link href="https://miexxx.github.io/post/elk-ri-zhi-fen-xi-xi-tong-da-jian/">
+        </link>
+        <updated>2019-07-04T03:34:41.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="pm2-安装">pm2 安装</h2>
+<pre><code>npm install pm2 -g
+</code></pre>
+<h2 id="elasticsearch-731安装">elasticsearch-7.3.1安装</h2>
+<pre><code>下载地址：https://www.elastic.co/cn/downloads/elasticsearch
+修改配置文件elasticsearch-7.3.1/config/elasticsearch.yml 修改实例名称，节点名称，ip与端口。
+启动实例执行 ./bin/elasticsearch -d ( -d参数是将程序挂在后台运行)，访问ip:端口，返回结果如下图，说明已经启动成功。
+</code></pre>
+<h2 id="logstash-730安装">logstash-7.3.0安装</h2>
+<pre><code>下载地址：https://www.elastic.co/cn/downloads/logstash
+修改配置文件logstash-7.3.0/filebeat.conf, 配置内容主要是logstash通过接收filebeat传输的数据，格式化数据后，发送到es，分为三部分配置。
+
+第一部分 接收数据端口配置
+input {
+    beats {
+        port =&gt; 5044
+    }
+}
+指定logstash服务开放的端口。
+
+第二部分 格式化数据配置
+filter {
+    ...
+}
+date{
+    match =&gt; [&quot;date&quot;, &quot;yyyyMMdd HH:mm:ss&quot;]
+    target =&gt; &quot;@timestamp&quot;
+}
+这里的grok匹配根据自己项目需求修改。
+因此这里需要搭配filebeat一起使用，需要通过filebeat将日志发送到logstash。
+filebeat.conf
+
+第三部分 发送至es配置
+output {
+    elasticsearch {
+        hosts =&gt; [&quot;10.11.0.109:9200&quot;]
+        index =&gt; &quot;logstash-%{[fields][index]}-%{+YYYY.MM.dd}&quot;
+    }
+}
+
+启动实例 pm2 start ./bin/logstash
+</code></pre>
+<h2 id="kibana-730-linux-x86_64安装">kibana-7.3.0-linux-x86_64安装</h2>
+<pre><code>下载地址：https://www.elastic.co/cn/downloads/kibana
+修改配置文件kibana-7.3.0-linux-x86_64/config/kibana.yml，server.host配置kibana服务访问ip,server.port配置服务端口，默认5601，
+elasticsearch.host配置es实例地址，i18n.locale: &quot;zh-CN&quot; 配置kibana界面显示语言。
+启动 pm2 start ./bin/kibana，pm2 log kibana查看日志检查服务是否启动，检查无误访问ip:端口。
+</code></pre>
+<h2 id="filebeat-742-linux-x86_64安装">filebeat-7.4.2-linux-x86_64安装</h2>
+<pre><code>下载地址：https://www.elastic.co/cn/downloads/beats/filebeat
+修改配置文件filebeat,yml，每个模块就相当一个项目，根据自己需求配置，模块名称。索引名称.
+- type: log
+    enabled: true
+    paths:
+    - /home/q/system/atom/runtime/community/logs/access_*
+    fields:
+       index: atom_access
+        modules: community
+然后将日志发送到logstash    
+
+ output.logstash:
+ # The Logstash hosts
+ hosts: [&quot;10.11.0.109:5044&quot;]  
+启动 pm2 start ./filebeat， pm2 log filebeat 查看日志检查服务是否启动。
+</code></pre>
+]]></content>
+    </entry>
+</feed>

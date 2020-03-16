@@ -1,0 +1,175 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    
+<meta charset="utf-8" >
+
+<title>Es | Great Wei</title>
+<meta name="description" content="温故而知新">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1584341049614">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+      <div class="site-header-container">
+  <div class="site-header">
+    <div class="left">
+      <a href="https://miexxx.github.io">
+        <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1584341049614" alt="" width="32px" height="32px">
+      </a>
+      <a href="https://miexxx.github.io">
+        <h1 class="site-title">Great Wei</h1>
+      </a>
+    </div>
+    <div class="right">
+      <transition name="fade">
+        <i class="icon" :class="{ 'icon-close-outline': menuVisible, 'icon-menu-outline': !menuVisible }" @click="menuVisible = !menuVisible"></i>
+      </transition>
+    </div>
+  </div>
+</div>
+
+<transition name="fade">
+  <div class="menu-container" style="display: none;" v-show="menuVisible">
+    <div class="menu-list">
+      
+        
+          <a href="/" class="menu purple-link">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="menu purple-link">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="menu purple-link">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="menu purple-link">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+</transition>
+
+
+      <div class="content-container">
+        <div class="post-detail">
+          
+          <h2 class="post-title">Es</h2>
+          <div class="post-info post-detail-info">
+            <span><i class="icon-calendar-outline"></i> 2019-07-05</span>
+            
+              <span>
+                <i class="icon-pricetags-outline"></i>
+                
+                  <a href="https://miexxx.github.io/tag/p4II1O4lqR/">
+                    es
+                    
+                  </a>
+                
+              </span>
+            
+          </div>
+          <div class="post-content">
+            <h2 id="内存不足查询失败">内存不足查询失败：</h2>
+<p>在公司搭建的ELK日志分析系统，在一个月内稳定的运行中，突然有一天，日志分析工具不好使了。<br>
+发现问题是由于，ES的内存不足了，导致查询失败。</p>
+<ul>
+<li>解决方法：</li>
+</ul>
+<pre><code class="language-$xslt"> curl -XDELETE http://127.0.0.1:9200/*$format_date
+ curl -XPOST 'http://127.0.0.1:9200/*$format_date/_forcemerge?only_expunge_deletes=true'
+ curl -XPOST 'http://127.0.0.1:9200/_forcemerge?only_expunge_deletes=true'
+</code></pre>
+<p>对索引与数据进行物理删除,所以在使用这类需要占用大量磁盘，内存的程序，都应该定时监控清理。</p>
+<h2 id="索引写入失败">索引写入失败：</h2>
+<p>当服务器磁盘占用达到95%，es会自动将索引设置成只读模式。</p>
+<ul>
+<li>解决方法：</li>
+</ul>
+<pre><code class="language-$xslt">将系统磁盘清理后，注意将索引取消只读模式。
+</code></pre>
+<h2 id="单个索引过大查询失败">单个索引过大，查询失败</h2>
+<p>由于索引过大，需要大量内存加载数据导致搜索失败，记得定时清理无用的日志信息。</p>
+<h2 id="其它问题">其它问题</h2>
+<p>前辈走过的坑 <a href="http://zoufeng.net/2018/07/16/cpu-of-elasticsearch-high-search-slow/">排查elasticsearch的cpu居高不下，查询慢的问题</a></p>
+
+          </div>
+        </div>
+
+        
+          <div class="next-post">
+            <a class="purple-link" href="https://miexxx.github.io/post/elk-ri-zhi-fen-xi-xi-tong-da-jian/">
+              <h3 class="post-title">
+                下一篇：Elk日志分析系统搭建
+              </h3>
+            </a>
+          </div>
+          
+      </div>
+
+      
+
+      <div class="site-footer">
+  <div class="slogan">温故而知新</div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://miexxx.github.io/atom.xml" target="_blank">RSS</a>
+</div>
+
+
+    </div>
+    <script type="application/javascript">
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+  </body>
+</html>

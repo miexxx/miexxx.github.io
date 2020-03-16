@@ -1,0 +1,214 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    
+<meta charset="utf-8" >
+
+<title>思维锻炼 | Great Wei</title>
+<meta name="description" content="温故而知新">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1584341049614">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+      <div class="site-header-container">
+  <div class="site-header">
+    <div class="left">
+      <a href="https://miexxx.github.io">
+        <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1584341049614" alt="" width="32px" height="32px">
+      </a>
+      <a href="https://miexxx.github.io">
+        <h1 class="site-title">Great Wei</h1>
+      </a>
+    </div>
+    <div class="right">
+      <transition name="fade">
+        <i class="icon" :class="{ 'icon-close-outline': menuVisible, 'icon-menu-outline': !menuVisible }" @click="menuVisible = !menuVisible"></i>
+      </transition>
+    </div>
+  </div>
+</div>
+
+<transition name="fade">
+  <div class="menu-container" style="display: none;" v-show="menuVisible">
+    <div class="menu-list">
+      
+        
+          <a href="/" class="menu purple-link">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="menu purple-link">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="menu purple-link">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="menu purple-link">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+</transition>
+
+
+      <div class="content-container">
+        <div class="post-detail">
+          
+          <h2 class="post-title">思维锻炼</h2>
+          <div class="post-info post-detail-info">
+            <span><i class="icon-calendar-outline"></i> 2020-01-13</span>
+            
+              <span>
+                <i class="icon-pricetags-outline"></i>
+                
+                  <a href="https://miexxx.github.io/tag/LWmdmK1pz3/">
+                    思维逻辑
+                    
+                  </a>
+                
+              </span>
+            
+          </div>
+          <div class="post-content">
+            <p>            每天积累一些题目。</p>
+<h2 id="-more-"><!-- more --></h2>
+<h1 id="去除数组重复值">去除数组重复值</h1>
+<p>在一个长度为 n 的数组里的所有数字都在 0 到 n-1 的范围内。数组中数字是重复的，但不知道有几个数字是重复的，也不知道每个数字重复几次。请找出数组中唯一个重复的数字。</p>
+<p>Input:<br>
+0 1 2 4 2 5</p>
+<h2 id="思路一">思路一：</h2>
+<p>使用空间换时间，使用hashMap，开辟长度为n的数组空间，对输入的数作为index就行叠加，hashMap[2] = 1,第二次遇到2，hashMap[2]++ = 2， 说明重复的数字为2。<br>
+时间复杂度O(n)，空间复杂度O(n)</p>
+<h2 id="思路二">思路二：</h2>
+<p>遍历Input，将值与Input[值] 进行swap，如果交换过程中出现两次值相同则说明，当前数字是重复的。<br>
+时间复杂度O(n)，空间复杂度O(1)</p>
+<hr>
+<h1 id="二维数组中的查找">二维数组中的查找</h1>
+<p>给定一个（n * m）二维数组，其每一行从左到右递增排序，从上到下也是递增排序。给定一个数，判断这个数是否在该二维数组中。</p>
+<p>Input:<br>
+[<br>
+[1,   4,  7, 11, 15],<br>
+[2,   5,  8, 12, 19],<br>
+[3,   6,  9, 16, 22],<br>
+[10, 13, 14, 17, 24],<br>
+[18, 21, 23, 26, 30]<br>
+]</p>
+<h2 id="思路一-2">思路一：</h2>
+<p>采用二分思想，当这个数在左下角，大于这个数的都在右边，小于这个数的都在上边。当这个数在右上角，大于这个数的都在下边，小于这个数的都在左边，所以只要从这两端进行查找速度会比较快。<br>
+时间复杂度O(n + m)，空间复杂度O(1)</p>
+<hr>
+<h1 id="矩形覆盖">矩形覆盖</h1>
+<p>我们可以用 2<em>1 的小矩形横着或者竖着去覆盖更大的矩形。请问用 n 个 2</em>1 的小矩形无重叠地覆盖一个 2*n 的大矩形，总共有多少种方法？</p>
+<p>Input:<br>
+n = 5</p>
+<h2 id="思路一-3">思路一：</h2>
+<p>动态规划思想，当n=1, 覆盖的方法 = 1， 当n=2, 覆盖的方法 = 2，当n=3，可以把这个2 * 3的大局限拆分成 2 *1 与 2 * 2 的两块区域矩形，覆盖方法为 1 + 2 = 3。f(n) = f(n -1) + f(n - 2),所有结果应该是1 2 3 5 8 ，n 为5时有 8种方法，动态规划思想，将分体拆分为一个个小问题。</p>
+<hr>
+<h1 id="变态跳台阶">变态跳台阶</h1>
+<p>一只青蛙一次可以跳上 1 级台阶，也可以跳上 2 级... 它也可以跳上 n 级。求该青蛙跳上一个 n 级的台阶总共有多少种跳法。</p>
+<p>Input:<br>
+n = 5</p>
+<h2 id="思路一-4">思路一</h2>
+<p>动态规划思想，将问题拆分为登上最后一个楼梯可以采用1 - n级的方法，所以f(n) = f(n-1) + f(n - 2) + ... + f(1) =&gt; f(n) = 2 * f(n - 1)。f(1) = 1, f(2) = 2, f(3) = 2^(n - 1), f(5) = 2 ^ 4 = 16。</p>
+<hr>
+<h1 id="求100的结果有多少0">求100！的结果有多少0</h1>
+<h2 id="思路一-5">思路一：</h2>
+<p>首先分析阶层的计算都是通过乘法进行的，所以只要计算出有多少个10进行相乘就知道有多少个0了，而10能够通过2 * 5 得到，2的数量一定是足够的，所以只要计算出5的个数就能知道有多少个0，将每个数字进行质因数分解得出结果 (100/5 + 20/5 + 4/5) = 24。</p>
+<hr>
+<h1 id="二进制中1的个数">二进制中1的个数</h1>
+<p>输入一个整数，输出该数二进制表示中 1 的个数。</p>
+<h2 id="思路一-6">思路一</h2>
+<p>整数转二进制过程中统计1的个数。<br>
+时间复杂度O(n),空间复杂度O(1)。</p>
+<h2 id="思路二-2">思路二</h2>
+<p>100010001 与 100010000进行 &amp; 运算的结果每次都消耗一个1，所以只需要判断进行了多少次&amp;运算就能够知道有多少个1了。</p>
+<hr>
+<h1 id="寻找重复数个数">寻找重复数个数</h1>
+<p>输入一组递增数组arr = [1,2,2,2,2,4,5,5,7,7,8]求重复的2出现的次数，复杂度小于O(n)</p>
+<h2 id="思路一-7">思路一</h2>
+<p>使用二分算法。cnt = 0;<br>
+第一次： left = 0, right = 10, mid =( left + right)/ 2 = 5<br>
+arr[5] &gt; 2 =&gt; left = 0, right = mid - 1 = 4<br>
+第二次：left = 0, right = 4, mid = 2<br>
+arr[2] == 2 =&gt; cnt++,  这时候不清楚arr[2] 左右两端与2之间的关系。</p>
+
+          </div>
+        </div>
+
+        
+          <div class="next-post">
+            <a class="purple-link" href="https://miexxx.github.io/post/2019-nian-de-nian-du-zong-jie/">
+              <h3 class="post-title">
+                下一篇：2019年的年度总结
+              </h3>
+            </a>
+          </div>
+          
+      </div>
+
+      
+
+      <div class="site-footer">
+  <div class="slogan">温故而知新</div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://miexxx.github.io/atom.xml" target="_blank">RSS</a>
+</div>
+
+
+    </div>
+    <script type="application/javascript">
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+  </body>
+</html>
