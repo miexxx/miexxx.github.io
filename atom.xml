@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://miexxx.github.io</id>
     <title>Great Wei</title>
-    <updated>2020-03-16T08:36:24.788Z</updated>
+    <updated>2020-03-16T10:08:11.878Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://miexxx.github.io"/>
     <link rel="self" href="https://miexxx.github.io/atom.xml"/>
@@ -40,7 +40,18 @@ Beanstalkd协议基于ASCII编码运行在tcp上。客户端连接服务器并�
 <img src="https://pic4.zhimg.com/80/b2fe6330ac4cee0ace41e47a82bf713f_1440w.jpg" alt="" loading="lazy"></p>
 <p>轮询系统，如下图，一个被投放的任务，在延迟时间过后需要再检查一遍状态，如果不符合，继续释放（release with delay）为延迟投放状态（DELAYED），直到时间过期之后，再次进入ready队列，被worker预订，进行一些逻辑判断，比如微信银行卡退款是否成功，如果成功，删除该任务，如果没成功，继续释放（release with delay）为延迟投放状态。<br>
 <img src="https://pic1.zhimg.com/80/8add0f140c21e738f26b1ccd8d2fa892_1440w.jpg" alt="" loading="lazy"></p>
+<h3 id="缺陷">缺陷</h3>
+<p>Beanstalk单点部署，不支持集群，当服务发送故障容易造成任务积压问题。</p>
+<hr>
 <h2 id="rabbitmq">RabbitMQ</h2>
+<p><a href="http://tryrabbitmq.com/">模拟器</a></p>
+<h3 id="发布订阅">发布订阅</h3>
+<p>一次发布，订阅的队列都能接收到消息进行处理，将繁琐的业务逻辑进行解耦。<br>
+<img src="https://www.rabbitmq.com/img/tutorials/exchanges.png" alt="" loading="lazy"><br>
+每个订阅者就是一个队列，虽然这场景也可以通过一个队列进行所有业务操作，但是一旦一个复杂的业务发生故障，容易导致任务积压，如果能够将业务拆分的更加小，每个队列处理自己的业务逻辑，能够很好解决这一问题，采用发布订阅模式，发布者不需要关系哪些队列关注这个任务，只要订阅了，自动回接收到任务。</p>
+<h3 id="路由">路由</h3>
+<p><img src="https://www.rabbitmq.com/img/tutorials/direct-exchange.png" alt="" loading="lazy"><br>
+在发布订阅的基础上，有些队列并不需要</p>
 ]]></content>
     </entry>
     <entry>
