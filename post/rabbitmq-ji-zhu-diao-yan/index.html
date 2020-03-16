@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1584353288924">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1584363645032">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
 
 
@@ -32,7 +32,7 @@ Beanstalkd
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://miexxx.github.io">
-        <img src="https://miexxx.github.io/images/avatar.png?v=1584353288924" class="site-logo">
+        <img src="https://miexxx.github.io/images/avatar.png?v=1584363645032" class="site-logo">
         <h1 class="site-title">Great Wei</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -131,7 +131,17 @@ Beanstalkd协议基于ASCII编码运行在tcp上。客户端连接服务器并�
 每个订阅者就是一个队列，虽然这场景也可以通过一个队列进行所有业务操作，但是一旦一个复杂的业务发生故障，容易导致任务积压，如果能够将业务拆分的更加小，每个队列处理自己的业务逻辑，能够很好解决这一问题，采用发布订阅模式，发布者不需要关系哪些队列关注这个任务，只要订阅了，自动回接收到任务。</p>
 <h3 id="路由">路由</h3>
 <p><img src="https://www.rabbitmq.com/img/tutorials/direct-exchange.png" alt="" loading="lazy"><br>
-在发布订阅的基础上，有些队列并不需要</p>
+在发布订阅的基础上，有些队列并不需要接收所有消息，而是只对自己感兴趣的内容进行订阅，这就是路由的功能，生成消息时可以添加routing-key进行绑定，发送到指定队列。</p>
+<h3 id="主题">主题</h3>
+<p>路由功能虽然解决了，订阅者只接收自己订阅的内容，但是如果用户可能想要接收到，某一类相关的消息，就需要同topic功能， 主题交流不具有任意routing-key，routing-key必须是单词列表以&quot;.&quot;分隔，单词可以使用&quot;*&quot;通配符表示，&quot;#&quot;绑定表示接收所有消息,和直接订阅效果一样。</p>
+<h3 id="rpc">RPC</h3>
+<p>有关RPC的说明<br>
+尽管RPC是计算中非常普遍的模式，但它经常受到批评。当程序员不知道函数调用是本地的还是缓慢的RPC时，就会出现问题。这样的混乱会导致系统变幻莫测，并给调试增加了不必要的复杂性。滥用RPC可能会导致无法维护的意大利面条代码，而不是简化软件。<br>
+牢记这一点，请考虑以下建议：<br>
+确保明显的是哪个函数调用是本地的，哪个是远程的。<br>
+记录您的系统。明确组件之间的依赖关系。<br>
+处理错误案例。RPC服务器长时间关闭后，客户端应如何反应？<br>
+如有疑问，请避免使用RPC。如果可以的话，应该使用异步管道-代替类似RPC的阻塞，将结果异步推送到下一个计算阶段。</p>
 
             </div>
             
