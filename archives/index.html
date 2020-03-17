@@ -1,287 +1,306 @@
-<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" >
+    
+<meta charset="utf-8" >
 
-<title>文章归档 | Great Wei</title>
+<title>Great Wei</title>
+<meta name="description" content="温故而知新">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1584427748585">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1584427865170">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
 
 
 
-<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
 
 
 
-    <meta name="description" content="温故而知新">
   </head>
   <body>
     <div id="app" class="main">
-
-      <div class="sidebar" :class="{ 'full-height': menuVisible }">
-  <div class="top-container" data-aos="fade-right">
-    <div class="top-header-container">
-      <a class="site-title-container" href="https://miexxx.github.io">
-        <img src="https://miexxx.github.io/images/avatar.png?v=1584427748585" class="site-logo">
+      <div class="site-header-container">
+  <div class="site-header">
+    <div class="left">
+      <a href="https://miexxx.github.io">
+        <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1584427865170" alt="" width="32px" height="32px">
+      </a>
+      <a href="https://miexxx.github.io">
         <h1 class="site-title">Great Wei</h1>
       </a>
-      <div class="menu-btn" @click="menuVisible = !menuVisible">
-        <div class="line"></div>
-      </div>
     </div>
-    <div>
+    <div class="right">
+      <transition name="fade">
+        <i class="icon" :class="{ 'icon-close-outline': menuVisible, 'icon-menu-outline': !menuVisible }" @click="menuVisible = !menuVisible"></i>
+      </transition>
+    </div>
+  </div>
+</div>
+
+<transition name="fade">
+  <div class="menu-container" style="display: none;" v-show="menuVisible">
+    <div class="menu-list">
       
         
-          <a href="/" class="site-nav">
+          <a href="/" class="menu purple-link">
             首页
           </a>
         
       
         
-          <a href="/archives" class="site-nav">
+          <a href="/archives" class="menu purple-link">
             归档
           </a>
         
       
         
-          <a href="/tags" class="site-nav">
+          <a href="/tags" class="menu purple-link">
             标签
           </a>
         
       
         
-          <a href="/post/about" class="site-nav">
+          <a href="/post/about" class="menu purple-link">
             关于
           </a>
         
       
     </div>
   </div>
-  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
-    <div class="social-container">
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    </div>
-    <div class="site-description">
-      温故而知新
-    </div>
-    <div class="site-footer">
-      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://miexxx.github.io/atom.xml" target="_blank">RSS</a>
-    </div>
-  </div>
-</div>
+</transition>
 
 
-      <div class="main-container">
-        <div class="content-container" data-aos="fade-up">
+        <div class="content-container">
+          
           
 
-          <h2 class="archives-title">文章归档</h2>
-          <div class="archives-container">
-            
-              <h2 class="year" data-aos="fade-in" data-aos-delay="500">2020</h2>
-              
-                
-                  <article class="post">
-                    <a href="https://miexxx.github.io/post/rabbitmq-ji-zhu-diao-yan/">
-                      <h2 class="post-title">
-                        RabbitMQ技术调研
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-jin-cheng-guan-li/">
-                      <h2 class="post-title">
-                        计算机操作系统-进程管理
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://miexxx.github.io/post/qian-tan-mysql-suo-yin/">
-                      <h2 class="post-title">
-                        浅谈Mysql索引
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://miexxx.github.io/post/tu-jie-tcpip/">
-                      <h2 class="post-title">
-                        图解TCP/IP
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://miexxx.github.io/post/si-wei-duan-lian/">
-                      <h2 class="post-title">
-                        思维锻炼
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://miexxx.github.io/post/2019-nian-de-nian-du-zong-jie/">
-                      <h2 class="post-title">
-                        2019年的年度总结
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-            
-              <h2 class="year" data-aos="fade-in" data-aos-delay="500">2019</h2>
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-                  <article class="post">
-                    <a href="https://miexxx.github.io/post/go-yu-yan-xue-xi/">
-                      <h2 class="post-title">
-                        Go
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://miexxx.github.io/post/phabricator-zuo-wei-code-review-gong-ju/">
-                      <h2 class="post-title">
-                        Phabricator作为Code Review工具
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://miexxx.github.io/post/gong-ju-hui-zong/">
-                      <h2 class="post-title">
-                        工具汇总
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://miexxx.github.io/post/es-chang-jian-wen-ti/">
-                      <h2 class="post-title">
-                        Es
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://miexxx.github.io/post/elk-ri-zhi-fen-xi-xi-tong-da-jian/">
-                      <h2 class="post-title">
-                        Elk日志分析系统搭建
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://miexxx.github.io/post/nginx-jie-shao/">
-                      <h2 class="post-title">
-                        Nginx
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://miexxx.github.io/post/mysql-chang-jian-wen-ti/">
-                      <h2 class="post-title">
-                        Mysql
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://miexxx.github.io/post/chang-guang-she-qu/">
-                      <h2 class="post-title">
-                        常逛社区
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-            
-          </div>
-
-          <div class="pagination-container">
+<div class="archives-container">
   
+    <h2 class="year">2020</h2>
+    
+      
+        <article class="post">
+          <a href="https://miexxx.github.io/post/rabbitmq-ji-zhu-diao-yan/">
+            <h2 class="post-title">
+              RabbitMQ技术调研
+              <small>2020-03-16</small>
+            </h2>
+          </a>
+        </article>
+      
+    
+      
+        <article class="post">
+          <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-jin-cheng-guan-li/">
+            <h2 class="post-title">
+              计算机操作系统-进程管理
+              <small>2020-03-16</small>
+            </h2>
+          </a>
+        </article>
+      
+    
+      
+        <article class="post">
+          <a href="https://miexxx.github.io/post/qian-tan-mysql-suo-yin/">
+            <h2 class="post-title">
+              浅谈Mysql索引
+              <small>2020-03-09</small>
+            </h2>
+          </a>
+        </article>
+      
+    
+      
+        <article class="post">
+          <a href="https://miexxx.github.io/post/tu-jie-tcpip/">
+            <h2 class="post-title">
+              图解TCP/IP
+              <small>2020-02-08</small>
+            </h2>
+          </a>
+        </article>
+      
+    
+      
+        <article class="post">
+          <a href="https://miexxx.github.io/post/si-wei-duan-lian/">
+            <h2 class="post-title">
+              思维锻炼
+              <small>2020-01-13</small>
+            </h2>
+          </a>
+        </article>
+      
+    
+      
+        <article class="post">
+          <a href="https://miexxx.github.io/post/2019-nian-de-nian-du-zong-jie/">
+            <h2 class="post-title">
+              2019年的年度总结
+              <small>2020-01-01</small>
+            </h2>
+          </a>
+        </article>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  
+    <h2 class="year">2019</h2>
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        <article class="post">
+          <a href="https://miexxx.github.io/post/go-yu-yan-xue-xi/">
+            <h2 class="post-title">
+              Go
+              <small>2019-12-03</small>
+            </h2>
+          </a>
+        </article>
+      
+    
+      
+        <article class="post">
+          <a href="https://miexxx.github.io/post/phabricator-zuo-wei-code-review-gong-ju/">
+            <h2 class="post-title">
+              Phabricator作为Code Review工具
+              <small>2019-10-01</small>
+            </h2>
+          </a>
+        </article>
+      
+    
+      
+        <article class="post">
+          <a href="https://miexxx.github.io/post/gong-ju-hui-zong/">
+            <h2 class="post-title">
+              工具汇总
+              <small>2019-07-19</small>
+            </h2>
+          </a>
+        </article>
+      
+    
+      
+        <article class="post">
+          <a href="https://miexxx.github.io/post/es-chang-jian-wen-ti/">
+            <h2 class="post-title">
+              Es
+              <small>2019-07-05</small>
+            </h2>
+          </a>
+        </article>
+      
+    
+      
+        <article class="post">
+          <a href="https://miexxx.github.io/post/elk-ri-zhi-fen-xi-xi-tong-da-jian/">
+            <h2 class="post-title">
+              Elk日志分析系统搭建
+              <small>2019-07-04</small>
+            </h2>
+          </a>
+        </article>
+      
+    
+      
+        <article class="post">
+          <a href="https://miexxx.github.io/post/nginx-jie-shao/">
+            <h2 class="post-title">
+              Nginx
+              <small>2019-05-01</small>
+            </h2>
+          </a>
+        </article>
+      
+    
+      
+        <article class="post">
+          <a href="https://miexxx.github.io/post/mysql-chang-jian-wen-ti/">
+            <h2 class="post-title">
+              Mysql
+              <small>2019-04-01</small>
+            </h2>
+          </a>
+        </article>
+      
+    
+      
+        <article class="post">
+          <a href="https://miexxx.github.io/post/chang-guang-she-qu/">
+            <h2 class="post-title">
+              常逛社区
+              <small>2019-03-05</small>
+            </h2>
+          </a>
+        </article>
+      
+    
   
 </div>
 
+
         </div>
+
+        <div class="site-footer">
+  <div class="slogan">温故而知新</div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/miexxx" target="_blank">
+          <i class="fab fa-github"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://miexxx.github.io/atom.xml" target="_blank">RSS</a>
+</div>
+
+
       </div>
-    </div>
+      <script type="application/javascript">
 
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-<script type="application/javascript">
-
-AOS.init();
+hljs.initHighlightingOnLoad()
 
 var app = new Vue({
   el: '#app',
@@ -293,14 +312,8 @@ var app = new Vue({
 </script>
 
 
-  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
-  <script>
-    hljs.initHighlightingOnLoad()
-  </script>
 
 
-
-
-
+    </div>
   </body>
 </html>
