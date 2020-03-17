@@ -1,92 +1,94 @@
-
 <!DOCTYPE html>
 <html>
   <head>
-    
-<meta charset="utf-8" >
+    <meta charset="utf-8" >
 
 <title>RabbitMQ技术调研 | Great Wei</title>
 <meta name="description" content="温故而知新">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1584427914315">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1584427865170">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
 
 
-
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
 
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
 
   </head>
   <body>
-    <div id="app" class="main">
-      <div class="site-header-container">
-  <div class="site-header">
-    <div class="left">
-      <a href="https://miexxx.github.io">
-        <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1584427865170" alt="" width="32px" height="32px">
-      </a>
-      <a href="https://miexxx.github.io">
-        <h1 class="site-title">Great Wei</h1>
-      </a>
-    </div>
-    <div class="right">
-      <transition name="fade">
-        <i class="icon" :class="{ 'icon-close-outline': menuVisible, 'icon-menu-outline': !menuVisible }" @click="menuVisible = !menuVisible"></i>
-      </transition>
-    </div>
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://miexxx.github.io">Great Wei</a></h3>
   </div>
-</div>
-
-<transition name="fade">
-  <div class="menu-container" style="display: none;" v-show="menuVisible">
-    <div class="menu-list">
-      
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
         
-          <a href="/" class="menu purple-link">
-            首页
-          </a>
-        
-      
-        
-          <a href="/archives" class="menu purple-link">
-            归档
-          </a>
-        
-      
-        
-          <a href="/tags" class="menu purple-link">
-            标签
-          </a>
-        
-      
-        
-          <a href="/post/about" class="menu purple-link">
-            关于
-          </a>
-        
-      
-    </div>
-  </div>
-</transition>
-
-
-      <div class="content-container">
-        <div class="post-detail">
-          
-          <h2 class="post-title">RabbitMQ技术调研</h2>
-          <div class="post-info post-detail-info">
-            <span><i class="icon-calendar-outline"></i> 2020-03-16</span>
+          <li>
             
-          </div>
-          <div class="post-content">
-            <p>使用一个技术前，先研究一下优缺点。</p>
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                归档
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>RabbitMQ技术调研</h1>
+            <p class="article-meta">
+              2020-03-16
+              
+            </p>
+            
+            <div class="post-content">
+              <p>使用一个技术前，先研究一下优缺点。</p>
 <!-- more -->
 <h1 id="rabbitmq-与-beanstalkd之间的对比">RabbitMQ 与 Beanstalkd之间的对比</h1>
 <h2 id="beanstalkd">Beanstalkd</h2>
@@ -133,56 +135,185 @@ Beanstalkd协议基于ASCII编码运行在tcp上。客户端连接服务器并�
 <h3 id="思维脑图">思维脑图</h3>
 <p><a href="https://naotu.baidu.com/file/407c820a7e2f189bfc7b55150ca55ffb?token=29cc096245c90973">脑图</a></p>
 
-          </div>
+            </div>
+          </article>
         </div>
-
-        
-          <div class="next-post">
-            <a class="purple-link" href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-jin-cheng-guan-li/">
-              <h3 class="post-title">
-                下一篇：计算机操作系统-进程管理
-              </h3>
-            </a>
-          </div>
+        <div class="paper" data-aos="fade-in">
           
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-jin-cheng-guan-li/">
+                <h3 class="post-title">
+                  计算机操作系统-进程管理
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
       </div>
 
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://miexxx.github.io/images/avatar.png?v=1584427914315" class="no-responsive avatar">
+    <div class="text-muted">温故而知新</div>
+    <div class="social-container">
       
-
-      <div class="site-footer">
-  <div class="slogan">温故而知新</div>
-  <div class="social-container">
-    
+        
       
-        <a href="https://github.com/miexxx" target="_blank">
-          <i class="fab fa-github"></i>
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/rabbitmq-ji-zhu-diao-yan/">RabbitMQ技术调研</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-jin-cheng-guan-li/">计算机操作系统-进程管理</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/qian-tan-mysql-suo-yin/">浅谈Mysql索引</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/tu-jie-tcpip/">图解TCP/IP</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/si-wei-duan-lian/">思维锻炼</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/2019-nian-de-nian-du-zong-jie/">2019年的年度总结</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/go-yu-yan-xue-xi/">Go</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/phabricator-zuo-wei-code-review-gong-ju/">Phabricator作为Code Review工具</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/gong-ju-hui-zong/">工具汇总</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/es-chang-jian-wen-ti/">Es</a>
+            </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+        <a href="https://miexxx.github.io/tag/70yj136M-/" class="badge secondary">
+          mysql
         </a>
       
-    
+        <a href="https://miexxx.github.io/tag/0Mirl8SzEP/" class="badge secondary">
+          tcp/ip
+        </a>
       
-    
+        <a href="https://miexxx.github.io/tag/LWmdmK1pz3/" class="badge secondary">
+          思维逻辑
+        </a>
       
-    
+        <a href="https://miexxx.github.io/tag/cf5LWl3vl/" class="badge secondary">
+          年度总结
+        </a>
       
-    
+        <a href="https://miexxx.github.io/tag/7VPFU2b1dg/" class="badge secondary">
+          go
+        </a>
       
-    
+        <a href="https://miexxx.github.io/tag/_5EQAs6GBC/" class="badge secondary">
+          tool
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/p4II1O4lqR/" class="badge secondary">
+          es
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/WeHHX6YLrg/" class="badge warning">
+          elk
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/FGearAi2Cw/" class="badge ">
+          nginx
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/ZHnK0KCAMk/" class="badge warning">
+          社区
+        </a>
+      
+    </div>
   </div>
-  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://miexxx.github.io/atom.xml" target="_blank">RSS</a>
+  <div class="paper">
+    Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://miexxx.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
 </div>
 
 
     </div>
-    <script type="application/javascript">
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
 
 hljs.initHighlightingOnLoad()
-
-var app = new Vue({
-  el: '#app',
-  data: {
-    menuVisible: false,
-  },
-})
 
 </script>
 
