@@ -1,94 +1,98 @@
-<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" >
-
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>RabbitMQ技术调研 | Great Wei</title>
-<meta name="description" content="温故而知新">
-
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1584427914315">
-
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1584427973134">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="RabbitMQ技术调研 | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
-<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
 
+    <meta name="description" content="使用一个技术前，先研究一下优缺点。
 
-<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-
-
+RabbitMQ 与 Beanstalkd之间的对比
+Beanstalkd
+Beantalkd 一个轻量级消息中间件，他的最大特点是将自己定位为基于管道  (tube) 和任务 (job) 的工作..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
   </head>
   <body>
-  
-    <nav class="navbar border fixed split-nav">
-  <div class="nav-brand">
-    <h3><a href="https://miexxx.github.io">Great Wei</a></h3>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://miexxx.github.io">
+  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1584427973134" alt="">
+  </a>
+  <h1 class="site-title">
+    Great Wei
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
   </div>
-  <div class="collapsible">
-    <input id="collapsible1" type="checkbox" name="collapsible1">
-    <button>
-      <label for="collapsible1">
-        <div class="bar1"></div>
-        <div class="bar2"></div>
-        <div class="bar3"></div>
-      </label>
-    </button>
-    <div class="collapsible-body">
-      <ul class="inline">
-        
-          <li>
-            
-              <a href="/" class="menu">
-                首页
-              </a>
-            
-          </li>
-        
-          <li>
-            
-              <a href="/archives" class="menu">
-                归档
-              </a>
-            
-          </li>
-        
-          <li>
-            
-              <a href="/tags" class="menu">
-                标签
-              </a>
-            
-          </li>
-        
-          <li>
-            
-              <a href="/post/about" class="menu">
-                关于
-              </a>
-            
-          </li>
-        
-      </ul>
-    </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
   </div>
-</nav>
+</div>
 
-    <div id="top" class="row site">
-      <div class="sm-12 md-8 col">
-        <div class="paper">
-          <article class="article">
-            <h1>RabbitMQ技术调研</h1>
-            <p class="article-meta">
-              2020-03-16
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              RabbitMQ技术调研
+            </h2>
+            <div class="post-info">
+              <span>
+                2020-03-16
+              </span>
+              <span>
+                5 min read
+              </span>
               
-            </p>
+            </div>
             
-            <div class="post-content">
-              <p>使用一个技术前，先研究一下优缺点。</p>
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>使用一个技术前，先研究一下优缺点。</p>
 <!-- more -->
 <h1 id="rabbitmq-与-beanstalkd之间的对比">RabbitMQ 与 Beanstalkd之间的对比</h1>
 <h2 id="beanstalkd">Beanstalkd</h2>
@@ -135,190 +139,102 @@ Beanstalkd协议基于ASCII编码运行在tcp上。客户端连接服务器并�
 <h3 id="思维脑图">思维脑图</h3>
 <p><a href="https://naotu.baidu.com/file/407c820a7e2f189bfc7b55150ca55ffb?token=29cc096245c90973">脑图</a></p>
 
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#rabbitmq-%E4%B8%8E-beanstalkd%E4%B9%8B%E9%97%B4%E7%9A%84%E5%AF%B9%E6%AF%94">RabbitMQ 与 Beanstalkd之间的对比</a>
+<ul>
+<li><a href="#beanstalkd">Beanstalkd</a>
+<ul>
+<li><a href="#%E4%BB%BB%E5%8A%A1%E4%BC%98%E5%85%88%E7%BA%A7-priority">任务优先级 (priority):</a></li>
+<li><a href="#%E5%BB%B6%E6%97%B6%E4%BB%BB%E5%8A%A1-delay">延时任务 (delay):</a></li>
+<li><a href="#%E4%BB%BB%E5%8A%A1%E8%B6%85%E6%97%B6%E9%87%8D%E5%8F%91-time-to-run">任务超时重发 (time-to-run):</a></li>
+<li><a href="#%E4%BB%BB%E5%8A%A1%E9%A2%84%E7%95%99-buried">任务预留 (buried):</a></li>
+<li><a href="#%E9%80%9F%E5%BA%A6%E4%BC%98%E5%8A%BF">速度优势</a></li>
+<li><a href="#%E5%9C%BA%E6%99%AF%E4%BC%98%E5%8A%BF">场景优势</a></li>
+<li><a href="#%E7%BC%BA%E9%99%B7">缺陷</a></li>
+</ul>
+</li>
+<li><a href="#rabbitmq">RabbitMQ</a>
+<ul>
+<li><a href="#%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85">发布订阅</a></li>
+<li><a href="#%E8%B7%AF%E7%94%B1">路由</a></li>
+<li><a href="#%E4%B8%BB%E9%A2%98">主题</a></li>
+<li><a href="#rpc">RPC</a></li>
+<li><a href="#%E6%80%9D%E7%BB%B4%E8%84%91%E5%9B%BE">思维脑图</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
             </div>
           </article>
         </div>
-        <div class="paper" data-aos="fade-in">
-          
-            <div class="next-post">
-              <div class="next">
-                下一篇
-              </div>
-              <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-jin-cheng-guan-li/">
-                <h3 class="post-title">
-                  计算机操作系统-进程管理
-                </h3>
-              </a>
-            </div>
-          
-        </div>
-        
-      </div>
 
-      <div class="sm-12 md-4 col sidebar">
-  <div class="paper info-container">
-    <img src="https://miexxx.github.io/images/avatar.png?v=1584427914315" class="no-responsive avatar">
-    <div class="text-muted">温故而知新</div>
-    <div class="social-container">
-      
         
-      
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-jin-cheng-guan-li/">
+              <h3 class="post-title">
+                计算机操作系统-进程管理
+              </h3>
+            </a>
+          </div>
         
-      
+
         
-      
-        
-      
-        
-      
-    </div>
-  </div>
-  <div class="paper">
-    <div class="sidebar-title">
-      最新文章
-    </div>
-    <div class="row">
-      <ul>
-        
-          
-            <li>
-              <a href="https://miexxx.github.io/post/rabbitmq-ji-zhu-diao-yan/">RabbitMQ技术调研</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-jin-cheng-guan-li/">计算机操作系统-进程管理</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://miexxx.github.io/post/qian-tan-mysql-suo-yin/">浅谈Mysql索引</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://miexxx.github.io/post/tu-jie-tcpip/">图解TCP/IP</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://miexxx.github.io/post/si-wei-duan-lian/">思维锻炼</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://miexxx.github.io/post/2019-nian-de-nian-du-zong-jie/">2019年的年度总结</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://miexxx.github.io/post/go-yu-yan-xue-xi/">Go</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://miexxx.github.io/post/phabricator-zuo-wei-code-review-gong-ju/">Phabricator作为Code Review工具</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://miexxx.github.io/post/gong-ju-hui-zong/">工具汇总</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://miexxx.github.io/post/es-chang-jian-wen-ti/">Es</a>
-            </li>
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-      </ul>
-    </div>
-  </div>
-  <div class="paper">
-    <div class="sidebar-title">
-      标签列表
-    </div>
-    <div class="row">
-      
-        <a href="https://miexxx.github.io/tag/70yj136M-/" class="badge secondary">
-          mysql
-        </a>
-      
-        <a href="https://miexxx.github.io/tag/0Mirl8SzEP/" class="badge secondary">
-          tcp/ip
-        </a>
-      
-        <a href="https://miexxx.github.io/tag/LWmdmK1pz3/" class="badge secondary">
-          思维逻辑
-        </a>
-      
-        <a href="https://miexxx.github.io/tag/cf5LWl3vl/" class="badge secondary">
-          年度总结
-        </a>
-      
-        <a href="https://miexxx.github.io/tag/7VPFU2b1dg/" class="badge secondary">
-          go
-        </a>
-      
-        <a href="https://miexxx.github.io/tag/_5EQAs6GBC/" class="badge secondary">
-          tool
-        </a>
-      
-        <a href="https://miexxx.github.io/tag/p4II1O4lqR/" class="badge secondary">
-          es
-        </a>
-      
-        <a href="https://miexxx.github.io/tag/WeHHX6YLrg/" class="badge warning">
-          elk
-        </a>
-      
-        <a href="https://miexxx.github.io/tag/FGearAi2Cw/" class="badge ">
-          nginx
-        </a>
-      
-        <a href="https://miexxx.github.io/tag/ZHnK0KCAMk/" class="badge warning">
-          社区
-        </a>
-      
-    </div>
-  </div>
-  <div class="paper">
-    Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://miexxx.github.io/atom.xml" target="_blank">RSS</a>
-  </div>
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://miexxx.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
 </div>
 
-
+      </div>
     </div>
 
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad()
 
-<script type="application/javascript">
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
 
-AOS.init();
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
 
-hljs.initHighlightingOnLoad()
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
 
-</script>
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
 
-
-
-
+    </script>
   </body>
 </html>
