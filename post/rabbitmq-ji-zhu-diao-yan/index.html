@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>RabbitMQ技术调研 | Great Wei</title>
-<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1584428992587">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1584431574557">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="RabbitMQ技术调研 | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
@@ -25,7 +25,7 @@ Beanstalkd
       <div class="main-content">
         <div class="site-header">
   <a href="https://miexxx.github.io">
-  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1584428992587" alt="">
+  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1584431574557" alt="">
   </a>
   <h1 class="site-title">
     Great Wei
@@ -89,7 +89,7 @@ Beanstalkd
                 2020-03-16
               </span>
               <span>
-                5 min read
+                6 min read
               </span>
               
             </div>
@@ -139,7 +139,16 @@ Beanstalkd协议基于ASCII编码运行在tcp上。客户端连接服务器并�
 确保明显的是哪个函数调用是本地的，哪个是远程的。<br>
 记录您的系统。明确组件之间的依赖关系。<br>
 处理错误案例。RPC服务器长时间关闭后，客户端应如何反应？<br>
-如有疑问，请避免使用RPC。如果可以的话，应该使用异步管道-代替类似RPC的阻塞，将结果异步推送到下一个计算阶段。</p>
+如有疑问，请避免使用RPC。如果可以的话，应该使用异步管道-代替类似RPC的阻塞，将结果异步推送到下一个计算阶段。<br>
+<img src="https://www.rabbitmq.com/img/tutorials/python-six.png" alt="" loading="lazy"><br>
+客户端启动时，它将创建一个匿名排他回调队列。<br>
+对于RPC请求，客户端发送一条消息，该消息具有两个属性： reply_to（设置为回调队列）和correlation_id（设置为每个请求的唯一值）。<br>
+该请求被发送到rpc_queue队列。<br>
+RPC工作程序（又名：服务器）正在等待该队列上的请求。出现请求时，它将使用reply_to字段中的队列来完成工作，并将消息和结果发送回客户端。<br>
+客户端等待回调队列上的数据。出现消息时，它将检查correlation_id属性。如果它与请求中的值匹配，则将响应返回给应用程序。<br>
+客户端将请求发送到rpc_queue队列，需要传递请求唯一id，请求的回调队列。<br>
+rpc_service服务端，消费rpc_queue队列，接收到消息后进行逻辑处理，再将数据放入回调队列中。<br>
+rpc_client客户端，需要生产消息到rpc_queue,同时消费回调队列的结果correlation_id相同时返回结果。</p>
 <h3 id="思维脑图">思维脑图</h3>
 <p><a href="https://naotu.baidu.com/file/407c820a7e2f189bfc7b55150ca55ffb?token=29cc096245c90973">脑图</a></p>
 
