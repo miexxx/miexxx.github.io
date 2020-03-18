@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://miexxx.github.io</id>
     <title>Great Wei</title>
-    <updated>2020-03-18T12:42:38.169Z</updated>
+    <updated>2020-03-18T13:15:20.626Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://miexxx.github.io"/>
     <link rel="self" href="https://miexxx.github.io/atom.xml"/>
@@ -148,6 +148,8 @@ rabbitmqctl forget_cluster_node rabbit1@localhost      //集群中移除节点</
 元数据必须至少保存在一个硬盘上，内存节点重启会去磁盘节点下载当前集群元数据拷贝，磁盘节点全挂了，那么集群就无法创建新的东西了，但是还能继续使用已有的东西。</p>
 <p>默认情况下，队列只会保存在一个节点上，其他只是保存元数据，当然消息也会投递到这个队列所在的机器上<br>
 所以我们才有了创建镜像队列的需求，镜像队列则需要队列适配了策略，当一个节点挂掉后，其他节点都会有这个节点的镜像队列，选择其中一个节点作为新的队列master。</p>
+<p>rabbitmqctl set_policy ha-all &quot;^&quot; '{&quot;ha-mode&quot;:&quot;all&quot;, &quot;ha-sync-mode&quot;:&quot;automatic&quot;}'<br>
+将所有队列都是设置为镜像队列并且自动同步，是否需要自动同步可以根据自己需求进行设置。</p>
 <h3 id="思维脑图">思维脑图</h3>
 <p><a href="https://naotu.baidu.com/file/407c820a7e2f189bfc7b55150ca55ffb?token=29cc096245c90973">脑图</a></p>
 ]]></content>

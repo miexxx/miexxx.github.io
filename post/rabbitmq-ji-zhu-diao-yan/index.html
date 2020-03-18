@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>RabbitMQ技术调研 | Great Wei</title>
-<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1584535335773">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1584537318752">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="RabbitMQ技术调研 | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
@@ -25,7 +25,7 @@ Beanstalkd
       <div class="main-content">
         <div class="site-header">
   <a href="https://miexxx.github.io">
-  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1584535335773" alt="">
+  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1584537318752" alt="">
   </a>
   <h1 class="site-title">
     Great Wei
@@ -226,6 +226,8 @@ rabbitmqctl forget_cluster_node rabbit1@localhost      //集群中移除节点</
 元数据必须至少保存在一个硬盘上，内存节点重启会去磁盘节点下载当前集群元数据拷贝，磁盘节点全挂了，那么集群就无法创建新的东西了，但是还能继续使用已有的东西。</p>
 <p>默认情况下，队列只会保存在一个节点上，其他只是保存元数据，当然消息也会投递到这个队列所在的机器上<br>
 所以我们才有了创建镜像队列的需求，镜像队列则需要队列适配了策略，当一个节点挂掉后，其他节点都会有这个节点的镜像队列，选择其中一个节点作为新的队列master。</p>
+<p>rabbitmqctl set_policy ha-all &quot;^&quot; '{&quot;ha-mode&quot;:&quot;all&quot;, &quot;ha-sync-mode&quot;:&quot;automatic&quot;}'<br>
+将所有队列都是设置为镜像队列并且自动同步，是否需要自动同步可以根据自己需求进行设置。</p>
 <h3 id="思维脑图">思维脑图</h3>
 <p><a href="https://naotu.baidu.com/file/407c820a7e2f189bfc7b55150ca55ffb?token=29cc096245c90973">脑图</a></p>
 
