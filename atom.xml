@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://miexxx.github.io</id>
     <title>Great Wei</title>
-    <updated>2020-03-18T10:07:55.837Z</updated>
+    <updated>2020-03-18T10:11:20.496Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://miexxx.github.io"/>
     <link rel="self" href="https://miexxx.github.io/atom.xml"/>
@@ -441,198 +441,187 @@ arr[2] == 2 =&gt; cnt++,  这时候不清楚arr[2] 左右两端与2之间的关�
         </link>
         <updated>2019-12-03T04:01:52.000Z</updated>
         <content type="html"><![CDATA[<h2 id="服务端">服务端</h2>
-<pre><code class="language-gotemplate">package main
+<p>``<br>
+package main</p>
+<p>import (<br>
+&quot;fmt&quot;<br>
+&quot;net&quot;<br>
+&quot;os&quot;<br>
+&quot;bufio&quot;<br>
+&quot;bytes&quot;<br>
+&quot;encoding/binary&quot;<br>
+)</p>
+<p>var ConnMap map[string]net.Conn<br>
+func checkError(err error){<br>
+if  err != nil {<br>
+fmt.Println(&quot;Error: %s&quot;, err.Error())<br>
+os.Exit(1)<br>
+}<br>
+}</p>
+<p>func recvConnMsg(conn net.Conn) {<br>
+//  var buf [50]byte<br>
+buf := make([]byte, 50)</p>
+<pre><code>defer conn.Close()
 
-import (
-    &quot;fmt&quot;
-    &quot;net&quot;
-    &quot;os&quot;
-    &quot;bufio&quot;
-    &quot;bytes&quot;
-    &quot;encoding/binary&quot;
-)
+for {
+    n, err := conn.Read(buf)
 
-var ConnMap map[string]net.Conn
-func checkError(err error){
-    if  err != nil {
-        fmt.Println(&quot;Error: %s&quot;, err.Error())
-        os.Exit(1)
-    }
-}
-
-func recvConnMsg(conn net.Conn) {
-//  var buf [50]byte
-    buf := make([]byte, 50)
-
-    defer conn.Close()
-
-    for {
-        n, err := conn.Read(buf)
-
-        if err != nil {
-            fmt.Println(&quot;conn closed&quot;)
-            return
-        }
-
-        fmt.Println(&quot;recv msg:&quot;, string(buf[0:n]))
-
-
-        boradcastMessage(conn.RemoteAddr().String() + &quot;:&quot; + string(buf[0:n]))
-    }
-}
-
-func boradcastMessage(message string) {
-     n := []byte(message)
-     for _,conn := range ConnMap {
-       conn.Write(n)
-     }
-}
-
-func Encode(message string) (*bytes.Buffer, error) {
-    // 读取消息的长度
-    var length int32 = int32(len(message))
-    var pkg *bytes.Buffer = new(bytes.Buffer)
-    // 写入消息头
-    err := binary.Write(pkg, binary.LittleEndian, length)
     if err != nil {
-        return nil, err
-    }
-    // 写入消息实体
-    err = binary.Write(pkg, binary.LittleEndian, []byte(message))
-    if err != nil {
-        return nil, err
+        fmt.Println(&quot;conn closed&quot;)
+        return
     }
 
-    return pkg, nil
-}
+    fmt.Println(&quot;recv msg:&quot;, string(buf[0:n]))
 
-func Decode(reader *bufio.Reader) (string, error) {
-    // 读取消息的长度
-    lengthByte, _ := reader.Peek(4)
-    lengthBuff := bytes.NewBuffer(lengthByte)
-    var length int32
-    err := binary.Read(lengthBuff, binary.LittleEndian, &amp;length)
-    if err != nil {
-        return &quot;&quot;, err
-    }
-    if int32(reader.Buffered()) &lt; length+4 {
-        return &quot;&quot;, err
-    }
 
-    // 读取消息真正的内容
-    pack := make([]byte, int(4+length))
-    _, err = reader.Read(pack)
-    if err != nil {
-        return &quot;&quot;, err
-    }
-    return string(pack[4:]), nil
-}
-
-func main() {
-    ConnMap = make(map[string]net.Conn)
-    listen_sock, err := net.Listen(&quot;tcp&quot;, &quot;localhost:10000&quot;)
-    checkError(err)
-    defer listen_sock.Close()
-
-    for {
-        new_conn, err := listen_sock.Accept()
-        ConnMap[new_conn.RemoteAddr().String()] = new_conn
-        if err != nil {
-            continue
-        }
-
-        go recvConnMsg(new_conn)
-    }
-
+    boradcastMessage(conn.RemoteAddr().String() + &quot;:&quot; + string(buf[0:n]))
 }
 </code></pre>
-<h2 id="客户端">客户端</h2>
-<pre><code class="language-gotemplate">package main
-
-import (
-    &quot;fmt&quot;
-    &quot;net&quot;
-    &quot;os&quot;
-    &quot;bufio&quot;
-    &quot;bytes&quot;
-    &quot;encoding/binary&quot;
-)
-
-func checkError(err error){
-    if  err != nil {
-        fmt.Println(&quot;Error: %s&quot;, err.Error())
-        os.Exit(1)
-    }
+<p>}</p>
+<p>func boradcastMessage(message string) {<br>
+n := []byte(message)<br>
+for _,conn := range ConnMap {<br>
+conn.Write(n)<br>
+}<br>
+}</p>
+<p>func Encode(message string) (*bytes.Buffer, error) {<br>
+// 读取消息的长度<br>
+var length int32 = int32(len(message))<br>
+var pkg *bytes.Buffer = new(bytes.Buffer)<br>
+// 写入消息头<br>
+err := binary.Write(pkg, binary.LittleEndian, length)<br>
+if err != nil {<br>
+return nil, err<br>
+}<br>
+// 写入消息实体<br>
+err = binary.Write(pkg, binary.LittleEndian, []byte(message))<br>
+if err != nil {<br>
+return nil, err<br>
+}</p>
+<pre><code>return pkg, nil
+</code></pre>
+<p>}</p>
+<p>func Decode(reader *bufio.Reader) (string, error) {<br>
+// 读取消息的长度<br>
+lengthByte, _ := reader.Peek(4)<br>
+lengthBuff := bytes.NewBuffer(lengthByte)<br>
+var length int32<br>
+err := binary.Read(lengthBuff, binary.LittleEndian, &amp;length)<br>
+if err != nil {<br>
+return &quot;&quot;, err<br>
+}<br>
+if int32(reader.Buffered()) &lt; length+4 {<br>
+return &quot;&quot;, err<br>
+}</p>
+<pre><code>// 读取消息真正的内容
+pack := make([]byte, int(4+length))
+_, err = reader.Read(pack)
+if err != nil {
+    return &quot;&quot;, err
 }
-
-func Encode(message string) (*bytes.Buffer, error) {
-    // 读取消息的长度
-    var length int32 = int32(len(message))
-    var pkg *bytes.Buffer = new(bytes.Buffer)
-    // 写入消息头
-    err := binary.Write(pkg, binary.LittleEndian, length)
+return string(pack[4:]), nil
+</code></pre>
+<p>}</p>
+<p>func main() {<br>
+ConnMap = make(map[string]net.Conn)<br>
+listen_sock, err := net.Listen(&quot;tcp&quot;, &quot;localhost:10000&quot;)<br>
+checkError(err)<br>
+defer listen_sock.Close()</p>
+<pre><code>for {
+    new_conn, err := listen_sock.Accept()
+    ConnMap[new_conn.RemoteAddr().String()] = new_conn
     if err != nil {
-        return nil, err
-    }
-    // 写入消息实体
-    err = binary.Write(pkg, binary.LittleEndian, []byte(message))
-    if err != nil {
-        return nil, err
+        continue
     }
 
-    return pkg, nil
-}
-
-func Decode(reader *bufio.Reader) (string, error) {
-    // 读取消息的长度
-    lengthByte, _ := reader.Peek(4)
-    lengthBuff := bytes.NewBuffer(lengthByte)
-    var length int32
-    err := binary.Read(lengthBuff, binary.LittleEndian, &amp;length)
-    if err != nil {
-        return &quot;&quot;, err
-    }
-    if int32(reader.Buffered()) &lt; length+4 {
-        return &quot;&quot;, err
-    }
-
-    // 读取消息真正的内容
-    pack := make([]byte, int(4+length))
-    _, err = reader.Read(pack)
-    if err != nil {
-        return &quot;&quot;, err
-    }
-    return string(pack[4:]), nil
-}
-
-
-func onMessageRecived(conn net.Conn) {
-    reader := bufio.NewReader(conn)
-    for {
-        msg, _ := reader.ReadString('\n')
-        fmt.Println(msg)
-    }
-}
-
-func main() {
-    conn, err := net.Dial(&quot;tcp&quot;, &quot;127.0.0.1:10000&quot;)
-    checkError(err)
-    defer conn.Close()
-    go onMessageRecived(conn);
-    for {
-      var msg string
-      fmt.Scanln(&amp;msg)
-      if msg == &quot;quit&quot; {
-             break
-      }
-      message,_ := Encode(msg)
-      conn.Write(message.Bytes())
-    }
-    fmt.Println(&quot;send msg&quot;)
+    go recvConnMsg(new_conn)
 }
 </code></pre>
-<h2 id="简单的语法">简单的语法</h2>
-<pre><code class="language-gotemplate">package main
+<p>}</p>
+<pre><code>
+## 客户端
+</code></pre>
+<p>package main</p>
+<p>import (<br>
+&quot;fmt&quot;<br>
+&quot;net&quot;<br>
+&quot;os&quot;<br>
+&quot;bufio&quot;<br>
+&quot;bytes&quot;<br>
+&quot;encoding/binary&quot;<br>
+)</p>
+<p>func checkError(err error){<br>
+if  err != nil {<br>
+fmt.Println(&quot;Error: %s&quot;, err.Error())<br>
+os.Exit(1)<br>
+}<br>
+}</p>
+<p>func Encode(message string) (*bytes.Buffer, error) {<br>
+// 读取消息的长度<br>
+var length int32 = int32(len(message))<br>
+var pkg *bytes.Buffer = new(bytes.Buffer)<br>
+// 写入消息头<br>
+err := binary.Write(pkg, binary.LittleEndian, length)<br>
+if err != nil {<br>
+return nil, err<br>
+}<br>
+// 写入消息实体<br>
+err = binary.Write(pkg, binary.LittleEndian, []byte(message))<br>
+if err != nil {<br>
+return nil, err<br>
+}</p>
+<pre><code>return pkg, nil
+</code></pre>
+<p>}</p>
+<p>func Decode(reader *bufio.Reader) (string, error) {<br>
+// 读取消息的长度<br>
+lengthByte, _ := reader.Peek(4)<br>
+lengthBuff := bytes.NewBuffer(lengthByte)<br>
+var length int32<br>
+err := binary.Read(lengthBuff, binary.LittleEndian, &amp;length)<br>
+if err != nil {<br>
+return &quot;&quot;, err<br>
+}<br>
+if int32(reader.Buffered()) &lt; length+4 {<br>
+return &quot;&quot;, err<br>
+}</p>
+<pre><code>// 读取消息真正的内容
+pack := make([]byte, int(4+length))
+_, err = reader.Read(pack)
+if err != nil {
+    return &quot;&quot;, err
+}
+return string(pack[4:]), nil
+</code></pre>
+<p>}</p>
+<p>func onMessageRecived(conn net.Conn) {<br>
+reader := bufio.NewReader(conn)<br>
+for {<br>
+msg, _ := reader.ReadString('\n')<br>
+fmt.Println(msg)<br>
+}<br>
+}</p>
+<p>func main() {<br>
+conn, err := net.Dial(&quot;tcp&quot;, &quot;127.0.0.1:10000&quot;)<br>
+checkError(err)<br>
+defer conn.Close()<br>
+go onMessageRecived(conn);<br>
+for {<br>
+var msg string<br>
+fmt.Scanln(&amp;msg)<br>
+if msg == &quot;quit&quot; {<br>
+break<br>
+}<br>
+message,_ := Encode(msg)<br>
+conn.Write(message.Bytes())<br>
+}<br>
+fmt.Println(&quot;send msg&quot;)<br>
+}</p>
+<pre><code>
+## 简单的语法
+
+```gotemplate
+package main
 
 import (
     &quot;fmt&quot;
