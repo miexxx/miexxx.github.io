@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>RabbitMQ技术调研 | Great Wei</title>
-<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1584525845404">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1584526073348">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="RabbitMQ技术调研 | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
@@ -25,7 +25,7 @@ Beanstalkd
       <div class="main-content">
         <div class="site-header">
   <a href="https://miexxx.github.io">
-  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1584525845404" alt="">
+  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1584526073348" alt="">
   </a>
   <h1 class="site-title">
     Great Wei
@@ -119,7 +119,7 @@ Beanstalkd协议基于ASCII编码运行在tcp上。客户端连接服务器并�
 <p>轮询系统，如下图，一个被投放的任务，在延迟时间过后需要再检查一遍状态，如果不符合，继续释放（release with delay）为延迟投放状态（DELAYED），直到时间过期之后，再次进入ready队列，被worker预订，进行一些逻辑判断，比如微信银行卡退款是否成功，如果成功，删除该任务，如果没成功，继续释放（release with delay）为延迟投放状态。<br>
 <img src="https://pic1.zhimg.com/80/8add0f140c21e738f26b1ccd8d2fa892_1440w.jpg" alt="" loading="lazy"></p>
 <h3 id="缺陷">缺陷</h3>
-<p>Beanstalk单点部署，不支持集群，当服务发送故障容易造成任务积压问题。</p>
+<p>Beanstalk单点部署，不支持集群，当服务发送故障容易造成任务积压问题，不能够灵活的设置消息持久化。</p>
 <hr>
 <h2 id="rabbitmq">RabbitMQ</h2>
 <p><a href="http://tryrabbitmq.com/">模拟器</a></p>

@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://miexxx.github.io</id>
     <title>Great Wei</title>
-    <updated>2020-03-18T10:04:08.204Z</updated>
+    <updated>2020-03-18T10:07:55.837Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://miexxx.github.io"/>
     <link rel="self" href="https://miexxx.github.io/atom.xml"/>
@@ -41,7 +41,7 @@ Beanstalkd协议基于ASCII编码运行在tcp上。客户端连接服务器并�
 <p>轮询系统，如下图，一个被投放的任务，在延迟时间过后需要再检查一遍状态，如果不符合，继续释放（release with delay）为延迟投放状态（DELAYED），直到时间过期之后，再次进入ready队列，被worker预订，进行一些逻辑判断，比如微信银行卡退款是否成功，如果成功，删除该任务，如果没成功，继续释放（release with delay）为延迟投放状态。<br>
 <img src="https://pic1.zhimg.com/80/8add0f140c21e738f26b1ccd8d2fa892_1440w.jpg" alt="" loading="lazy"></p>
 <h3 id="缺陷">缺陷</h3>
-<p>Beanstalk单点部署，不支持集群，当服务发送故障容易造成任务积压问题。</p>
+<p>Beanstalk单点部署，不支持集群，当服务发送故障容易造成任务积压问题，不能够灵活的设置消息持久化。</p>
 <hr>
 <h2 id="rabbitmq">RabbitMQ</h2>
 <p><a href="http://tryrabbitmq.com/">模拟器</a></p>
