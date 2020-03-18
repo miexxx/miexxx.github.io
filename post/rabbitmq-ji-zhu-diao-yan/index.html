@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>RabbitMQ技术调研 | Great Wei</title>
-<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1584514072162">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1584523362200">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="RabbitMQ技术调研 | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
@@ -25,7 +25,7 @@ Beanstalkd
       <div class="main-content">
         <div class="site-header">
   <a href="https://miexxx.github.io">
-  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1584514072162" alt="">
+  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1584523362200" alt="">
   </a>
   <h1 class="site-title">
     Great Wei
@@ -89,7 +89,7 @@ Beanstalkd
                 2020-03-16
               </span>
               <span>
-                8 min read
+                10 min read
               </span>
               
             </div>
@@ -123,6 +123,41 @@ Beanstalkd协议基于ASCII编码运行在tcp上。客户端连接服务器并�
 <hr>
 <h2 id="rabbitmq">RabbitMQ</h2>
 <p><a href="http://tryrabbitmq.com/">模拟器</a></p>
+<h3 id="生产者与消费者">生产者与消费者</h3>
+<p>生产者生产消息，消费者消费消息，消息存储在队列中。<br>
+生产者：</p>
+<pre><code>$connection = new \PhpAmqpLib\Connection\AMQPStreamConnection('127.0.0.1', '5673', 'guest', 'guest');
+$channel = $connection-&gt;channel();
+$channel-&gt;queue_declare('hello1', false, false, false, false);      // 队列声明，如果队列不存在，则创建一个，如果你能保证队列一定存在则不需要进行队列声明。
+$msg = new \PhpAmqpLib\Message\AMQPMessage('Hello World!');
+$channel-&gt;basic_publish($msg, '', 'hello1');
+$channel-&gt;close();
+$connection-&gt;close();
+
+
+函数：
+// 声明队列
+public function queue_declare(
+        $queue = '',            //队列名称
+        $passive = false,      //如果只是需要知道该队列是否存在，传递true
+        $durable = false,       //队列可持久话，如果希望节点关闭也不会丢失队列，传递true
+        $exclusive = false,      //排他性，针对首次建立连接的，一个连接下面多个通道也是可见的， 对于其他连接是不可见的，断开连接后自动删除
+        $auto_delete = true,   //自动删除，默认是开启的，最后一个消息被消费后自动删除队列
+        $nowait = false,
+        $arguments = array(), //可用于镜像队列配置
+        $ticket = null
+    ) {}
+
+    // 生成消息
+     public function basic_publish(
+        $msg,               
+        $exchange = '',             
+        $routing_key = '',            
+        $mandatory = false,
+        $immediate = false,
+        $ticket = null
+    ) {
+</code></pre>
 <h3 id="发布订阅">发布订阅</h3>
 <p>一次发布，订阅的队列都能接收到消息进行处理，将繁琐的业务逻辑进行解耦。<br>
 <img src="https://www.rabbitmq.com/img/tutorials/exchanges.png" alt="" loading="lazy"><br>
@@ -150,6 +185,11 @@ RPC工作程序（又名：服务器）正在等待该队列上的请求。出�
 rpc_service服务端，消费rpc_queue队列，接收到消息后进行逻辑处理，再将数据放入回调队列中。<br>
 rpc_client客户端，需要生产消息到rpc_queue,同时消费回调队列的结果correlation_id相同时返回结果。</p>
 <h3 id="集群">集群</h3>
+<p>RabbitMQ始终记录的四种类型的内部元数据：<br>
+队列元数据 - 队列名称和他们的属性<br>
+交换器元数据 - 交换器名称、类型和属性<br>
+绑定元数据  - 一张简单的表格展示了如何将消息路由到队列<br>
+vhost元数据 - 为vhost内的队列、交换器、绑定提供命名空间和安全属性。</p>
 <h4 id="单机多节点部署">单机多节点部署</h4>
 <p>RABBITMQ_NODE_PORT:指定rmq端口<br>
 RABBITMQ_NODENAME:指定节点名称与域名<br>
@@ -201,6 +241,7 @@ rabbitmqctl forget_cluster_node rabbit1@localhost      //集群中移除节点</
 </li>
 <li><a href="#rabbitmq">RabbitMQ</a>
 <ul>
+<li><a href="#%E7%94%9F%E4%BA%A7%E8%80%85%E4%B8%8E%E6%B6%88%E8%B4%B9%E8%80%85">生产者与消费者</a></li>
 <li><a href="#%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85">发布订阅</a></li>
 <li><a href="#%E8%B7%AF%E7%94%B1">路由</a></li>
 <li><a href="#%E4%B8%BB%E9%A2%98">主题</a></li>
