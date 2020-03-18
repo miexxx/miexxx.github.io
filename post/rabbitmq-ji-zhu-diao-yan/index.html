@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>RabbitMQ技术调研 | Great Wei</title>
-<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1584540228144">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1584542100888">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="RabbitMQ技术调研 | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
@@ -25,7 +25,7 @@ Beanstalkd
       <div class="main-content">
         <div class="site-header">
   <a href="https://miexxx.github.io">
-  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1584540228144" alt="">
+  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1584542100888" alt="">
   </a>
   <h1 class="site-title">
     Great Wei
@@ -89,7 +89,7 @@ Beanstalkd
                 2020-03-16
               </span>
               <span>
-                12 min read
+                13 min read
               </span>
               
             </div>
@@ -229,7 +229,40 @@ rabbitmqctl forget_cluster_node rabbit1@localhost      //集群中移除节点</
 <p>rabbitmqctl set_policy ha-all &quot;^&quot; '{&quot;ha-mode&quot;:&quot;all&quot;, &quot;ha-sync-mode&quot;:&quot;automatic&quot;}'<br>
 将所有队列都是设置为镜像队列并且自动同步，是否需要自动同步可以根据自己需求进行设置。</p>
 <h4 id="负载均衡">负载均衡</h4>
-<p>HAProxy 提供高可用性、负载均衡以及基于 TCP 和 HTTP 应用的代理，支持虚拟主机，它是免费、快速并且可靠的一种解决方案。</p>
+<p>HAProxy 提供高可用性、负载均衡以及基于 TCP 和 HTTP 应用的代理，支持虚拟主机，它是免费、快速并且可靠的一种解决方案。<br>
+配置项：</p>
+<pre><code>global #全局属性
+    daemon  #以daemon方式在后台运行
+    maxconn 256  #最大同时256连接
+   
+
+defaults #默认参数
+    mode http  #http模式
+    timeout connect 5000ms  #连接server端超时5s
+    timeout client 50000ms  #客户端响应超时50s
+    timeout server 50000ms  #server端响应超时50s
+#绑定配置
+listen rabbitmq_cluster 
+    bind 0.0.0.0:5670
+    #配置TCP模式
+    mode tcp
+    #加权轮询
+    balance roundrobin
+    #RabbitMQ集群节点配置
+    server node1 0.0.0.0:5672 check inter 2000 rise 2 fall 3
+    server node2 0.0.0.0:5673 check inter 2000 rise 2 fall 3
+    server node3 0.0.0.0:5674 check inter 2000 rise 2 fall 3
+
+#haproxy监控页面地址
+listen monitor
+    bind  0.0.0.0:8100
+    mode http
+    option httplog
+    stats enable
+    stats uri /stats
+    stats refresh 5s
+
+</code></pre>
 <h3 id="思维脑图">思维脑图</h3>
 <p><a href="https://naotu.baidu.com/file/407c820a7e2f189bfc7b55150ca55ffb?token=29cc096245c90973">脑图</a></p>
 
