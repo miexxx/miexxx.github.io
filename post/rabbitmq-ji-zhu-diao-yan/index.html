@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>RabbitMQ技术调研 | Great Wei</title>
-<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1584523362200">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1584525845404">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="RabbitMQ技术调研 | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
@@ -25,7 +25,7 @@ Beanstalkd
       <div class="main-content">
         <div class="site-header">
   <a href="https://miexxx.github.io">
-  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1584523362200" alt="">
+  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1584525845404" alt="">
   </a>
   <h1 class="site-title">
     Great Wei
@@ -125,6 +125,7 @@ Beanstalkd协议基于ASCII编码运行在tcp上。客户端连接服务器并�
 <p><a href="http://tryrabbitmq.com/">模拟器</a></p>
 <h3 id="生产者与消费者">生产者与消费者</h3>
 <p>生产者生产消息，消费者消费消息，消息存储在队列中。<br>
+<img src="https://www.rabbitmq.com/img/tutorials/python-one.png" alt="" loading="lazy"><br>
 生产者：</p>
 <pre><code>$connection = new \PhpAmqpLib\Connection\AMQPStreamConnection('127.0.0.1', '5673', 'guest', 'guest');
 $channel = $connection-&gt;channel();
@@ -150,12 +151,12 @@ public function queue_declare(
 
     // 生成消息
      public function basic_publish(
-        $msg,               
-        $exchange = '',             
-        $routing_key = '',            
-        $mandatory = false,
-        $immediate = false,
-        $ticket = null
+        $msg,                       // 消息体
+        $exchange = '',           // 交换器，默认direct。
+        $routing_key = '',         // 路由key  
+        $mandatory = false,      //当mandatory标志位设置为true时，如果exchange根据自身类型和消息routeKey无法找到一个符合条件的queue，那么会调用basic.return方法将消息返回给生产者（Basic.Return + Content-Header + Content-Body）
+        $immediate = false,         //当immediate标志位设置为true时，如果exchange在将消息路由到queue(s)时发现对于的queue上么有消费者，那么这条消息不会放入队列中。当与消息routeKey关联的所有queue（一个或者多个）都没有消费者时，该消息会通过basic.return方法返还给生产者。
+        $ticket = null                     // 暂时没发现用途
     ) {
 </code></pre>
 <h3 id="发布订阅">发布订阅</h3>
