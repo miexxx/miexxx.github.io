@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>RabbitMQ技术调研 | Great Wei</title>
-<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1584599341996">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1584600151436">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="RabbitMQ技术调研 | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
@@ -25,7 +25,7 @@ Beanstalkd
       <div class="main-content">
         <div class="site-header">
   <a href="https://miexxx.github.io">
-  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1584599341996" alt="">
+  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1584600151436" alt="">
   </a>
   <h1 class="site-title">
     Great Wei
@@ -127,11 +127,11 @@ Beanstalkd协议基于ASCII编码运行在tcp上。客户端连接服务器并�
 <p>生产者生产消息，消费者消费消息，消息存储在队列中。<br>
 <img src="https://www.rabbitmq.com/img/tutorials/python-one.png" alt="" loading="lazy"><br>
 生产者：</p>
-<pre><code>$connection = new \PhpAmqpLib\Connection\AMQPStreamConnection('127.0.0.1', '5673', 'guest', 'guest');
-$channel = $connection-&gt;channel();
-$channel-&gt;queue_declare('hello1', false, false, false, false);      // 队列声明，如果队列不存在，则创建一个，如果你能保证队列一定存在则不需要进行队列声明。
-$msg = new \PhpAmqpLib\Message\AMQPMessage('Hello World!');
-$channel-&gt;basic_publish($msg, '', 'hello1');
+<pre><code>$connection = new \PhpAmqpLib\Connection\AMQPStreamConnection('127.0.0.1', '5670', 'guest', 'guest');                   //haproxy设置负载均衡后，每次连接能够均匀的请求到每一个节点。
+$channel = $connection-&gt;channel();     
+$channel-&gt;queue_declare('rabbit', false, false, false, false);      // 队列声明，如果队列不存在，则创建一个，如果你能保证队列一定存在则不需要进行队列声明。
+$msg = new \PhpAmqpLib\Message\AMQPMessage('rabbit');
+$channel-&gt;basic_publish($msg, '', 'rabbit');
 $channel-&gt;close();
 $connection-&gt;close();
 
@@ -157,7 +157,7 @@ public function queue_declare(
         $mandatory = false,      //当mandatory标志位设置为true时，如果exchange根据自身类型和消息routeKey无法找到一个符合条件的queue，那么会调用basic.return方法将消息返回给生产者（Basic.Return + Content-Header + Content-Body）
         $immediate = false,         //当immediate标志位设置为true时，如果exchange在将消息路由到queue(s)时发现对于的queue上么有消费者，那么这条消息不会放入队列中。当与消息routeKey关联的所有queue（一个或者多个）都没有消费者时，该消息会通过basic.return方法返还给生产者。
         $ticket = null                     // 暂时没发现用途
-    ) {
+    ) {}
 </code></pre>
 <h3 id="发布订阅">发布订阅</h3>
 <p>一次发布，订阅的队列都能接收到消息进行处理，将繁琐的业务逻辑进行解耦。<br>
