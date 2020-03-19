@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://miexxx.github.io</id>
     <title>Great Wei</title>
-    <updated>2020-03-19T13:06:31.536Z</updated>
+    <updated>2020-03-19T13:20:36.285Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://miexxx.github.io"/>
     <link rel="self" href="https://miexxx.github.io/atom.xml"/>
@@ -10,6 +10,53 @@
     <logo>https://miexxx.github.io/images/avatar.png</logo>
     <icon>https://miexxx.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Great Wei</rights>
+    <entry>
+        <title type="html"><![CDATA[计算机操作系统-死锁]]></title>
+        <id>https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-si-suo/</id>
+        <link href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-si-suo/">
+        </link>
+        <updated>2020-03-19T13:07:02.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="产生死锁的必要条件">产生死锁的必要条件</h1>
+<p><img src="https://camo.githubusercontent.com/1a8800931db59afc3925e96446601d198d8df9da/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f63303337633930312d376561652d346533312d613165342d3964343133323965356333652e706e67" alt="" loading="lazy"><br>
+互斥：每个资源要么已经分配给了一个进程，要么就是可用的。<br>
+占有和等待：已经得到了某个资源的进程可以再请求新的资源。<br>
+不可抢占：已经分配给一个进程的资源不能强制性地被抢占，它只能被占有它的进程显式地释放。<br>
+环路等待：有两个或者两个以上的进程组成一条环路，该环路中的每个进程都在等待下一个进程所占有的资源。</p>
+<h1 id="处理方法">处理方法</h1>
+<p>主要有以下四种方法：<br>
+鸵鸟策略<br>
+死锁检测与死锁恢复<br>
+死锁预防<br>
+死锁避免</p>
+<h2 id="鸵鸟策略">鸵鸟策略</h2>
+<p>把头埋在沙子里，假装根本没发生问题。<br>
+因为解决死锁问题的代价很高，因此鸵鸟策略这种不采取任务措施的方案会获得更高的性能。<br>
+当发生死锁时不会对用户造成多大影响，或发生死锁的概率很低，可以采用鸵鸟策略。<br>
+大多数操作系统，包括 Unix，Linux 和 Windows，处理死锁问题的办法仅仅是忽略它。</p>
+<h2 id="死锁检测与死锁恢复">死锁检测与死锁恢复</h2>
+<p>不试图阻止死锁，而是当检测到死锁发送时，采取措施进行恢复。</p>
+<h3 id="每种类型一个资源的死锁检测">每种类型一个资源的死锁检测</h3>
+<p><img src="https://camo.githubusercontent.com/ccebd10711103f30cd895559e28fe8daa9738e78/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f62316661303435332d613462302d346561652d613335322d3438616363613866666637342e706e67" alt="" loading="lazy"><br>
+上图为资源分配图，其中方框表示资源，圆圈表示进程。资源指向进程表示该资源已经分配给该进程，进程指向资源表示进程请求获取该资源。<br>
+图 a 可以抽取出环，如图 b，它满足了环路等待条件，因此会发生死锁。<br>
+每种类型一个资源的死锁检测算法是通过检测有向图是否存在环来实现，从一个节点出发进行深度优先搜索，对访问过的节点进行标记，如果访问了已经标记的节点，就表示有向图存在环，也就是检测到死锁的发生。</p>
+<h3 id="死锁恢复">死锁恢复</h3>
+<p>利用抢占恢复<br>
+利用回滚恢复<br>
+通过杀死进程恢复</p>
+<h1 id="死锁预防">死锁预防</h1>
+<p>在程序运行之前预防发生死锁。</p>
+<h2 id="破坏互斥条件">破坏互斥条件</h2>
+<p>例如假脱机打印机技术允许若干个进程同时输出，唯一真正请求物理打印机的进程是打印机守护进程。</p>
+<h2 id="破坏占有和等待条件">破坏占有和等待条件</h2>
+<p>一种实现方式是规定所有进程在开始执行前请求所需要的全部资源。</p>
+<h2 id="破坏不可抢占条件">破坏不可抢占条件</h2>
+<h2 id="破坏环路等待">破坏环路等待</h2>
+<p>给资源统一编号，进程只能按编号顺序来请求资源。</p>
+<h1 id="死锁避免">死锁避免</h1>
+<p>在程序运行时避免发送死锁。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[RabbitMQ技术调研]]></title>
         <id>https://miexxx.github.io/post/rabbitmq-ji-zhu-diao-yan/</id>
@@ -898,36 +945,6 @@ func client () {
 <h2 id="其它">其它</h2>
 <p><a href="http://www.ischoolbar.com/EsParser/">sql语法转换ES查询语法</a><br>
 <a href="http://Json.cn">Json</a></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Es]]></title>
-        <id>https://miexxx.github.io/post/es-chang-jian-wen-ti/</id>
-        <link href="https://miexxx.github.io/post/es-chang-jian-wen-ti/">
-        </link>
-        <updated>2019-07-05T03:39:44.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="内存不足查询失败">内存不足查询失败：</h2>
-<p>在公司搭建的ELK日志分析系统，在一个月内稳定的运行中，突然有一天，日志分析工具不好使了。<br>
-发现问题是由于，ES的内存不足了，导致查询失败。</p>
-<ul>
-<li>解决方法：</li>
-</ul>
-<pre><code class="language-$xslt"> curl -XDELETE http://127.0.0.1:9200/*$format_date
- curl -XPOST 'http://127.0.0.1:9200/*$format_date/_forcemerge?only_expunge_deletes=true'
- curl -XPOST 'http://127.0.0.1:9200/_forcemerge?only_expunge_deletes=true'
-</code></pre>
-<p>对索引与数据进行物理删除,所以在使用这类需要占用大量磁盘，内存的程序，都应该定时监控清理。</p>
-<h2 id="索引写入失败">索引写入失败：</h2>
-<p>当服务器磁盘占用达到95%，es会自动将索引设置成只读模式。</p>
-<ul>
-<li>解决方法：</li>
-</ul>
-<pre><code class="language-$xslt">将系统磁盘清理后，注意将索引取消只读模式。
-</code></pre>
-<h2 id="单个索引过大查询失败">单个索引过大，查询失败</h2>
-<p>由于索引过大，需要大量内存加载数据导致搜索失败，记得定时清理无用的日志信息。</p>
-<h2 id="其它问题">其它问题</h2>
-<p>前辈走过的坑 <a href="http://zoufeng.net/2018/07/16/cpu-of-elasticsearch-high-search-slow/">排查elasticsearch的cpu居高不下，查询慢的问题</a></p>
 ]]></content>
     </entry>
 </feed>
