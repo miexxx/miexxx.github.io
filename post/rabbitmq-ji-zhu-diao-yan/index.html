@@ -2,20 +2,19 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>RabbitMQ技术调研 | Great Wei</title>
-<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1584624256255">
+<title>RabbitMQ | Great Wei</title>
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1584625026392">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="RabbitMQ技术调研 | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="RabbitMQ | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="使用一个技术前，先研究一下优缺点。
-
+    <meta name="description" content="
 RabbitMQ 与 Beanstalkd之间的对比
 Beanstalkd
-Beantalkd 一个轻量级消息中间件，他的最大特点是将自己定位为基于管道  (tube) 和任务 (job) 的工作..." />
+Beantalkd 一个轻量级消息中间件，他的最大特点是将自己定位为基于管道  (tube) 和任务 (job) 的工作队列 (work-queue)，和R..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -25,7 +24,7 @@ Beanstalkd
       <div class="main-content">
         <div class="site-header">
   <a href="https://miexxx.github.io">
-  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1584624256255" alt="">
+  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1584625026392" alt="">
   </a>
   <h1 class="site-title">
     Great Wei
@@ -82,7 +81,7 @@ Beanstalkd
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              RabbitMQ技术调研
+              RabbitMQ
             </h2>
             <div class="post-info">
               <span>
@@ -96,8 +95,7 @@ Beanstalkd
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>使用一个技术前，先研究一下优缺点。</p>
-<!-- more -->
+                <!-- more -->
 <h1 id="rabbitmq-与-beanstalkd之间的对比">RabbitMQ 与 Beanstalkd之间的对比</h1>
 <h2 id="beanstalkd">Beanstalkd</h2>
 <p>Beantalkd 一个轻量级消息中间件，他的最大特点是将自己定位为基于管道  (tube) 和任务 (job) 的工作队列 (work-queue)，和RabbitMQ不同的是，Beanstalkd应该是一个工作队列，任务队列。<br>

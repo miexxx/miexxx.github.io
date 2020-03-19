@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://miexxx.github.io</id>
     <title>Great Wei</title>
-    <updated>2020-03-19T13:24:19.018Z</updated>
+    <updated>2020-03-19T13:37:10.943Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://miexxx.github.io"/>
     <link rel="self" href="https://miexxx.github.io/atom.xml"/>
@@ -58,15 +58,12 @@
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[RabbitMQ技术调研]]></title>
+        <title type="html"><![CDATA[RabbitMQ]]></title>
         <id>https://miexxx.github.io/post/rabbitmq-ji-zhu-diao-yan/</id>
         <link href="https://miexxx.github.io/post/rabbitmq-ji-zhu-diao-yan/">
         </link>
         <updated>2020-03-16T07:09:54.000Z</updated>
-        <summary type="html"><![CDATA[<p>使用一个技术前，先研究一下优缺点。</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>使用一个技术前，先研究一下优缺点。</p>
-<!-- more -->
+        <content type="html"><![CDATA[<!-- more -->
 <h1 id="rabbitmq-与-beanstalkd之间的对比">RabbitMQ 与 Beanstalkd之间的对比</h1>
 <h2 id="beanstalkd">Beanstalkd</h2>
 <p>Beantalkd 一个轻量级消息中间件，他的最大特点是将自己定位为基于管道  (tube) 和任务 (job) 的工作队列 (work-queue)，和RabbitMQ不同的是，Beanstalkd应该是一个工作队列，任务队列。<br>
@@ -517,9 +514,9 @@ WAN（广域网，由多个LAN构成），LAN（局域网，一栋楼或者大�
         <link href="https://miexxx.github.io/post/si-wei-duan-lian/">
         </link>
         <updated>2020-01-13T05:30:50.000Z</updated>
-        <summary type="html"><![CDATA[<p>            每天积累一些题目。</p>
+        <summary type="html"><![CDATA[<p></p>
 ]]></summary>
-        <content type="html"><![CDATA[<p>            每天积累一些题目。</p>
+        <content type="html"><![CDATA[<p></p>
 <h2 id="-more-"><!-- more --></h2>
 <h1 id="去除数组重复值">去除数组重复值</h1>
 <p>在一个长度为 n 的数组里的所有数字都在 0 到 n-1 的范围内。数组中数字是重复的，但不知道有几个数字是重复的，也不知道每个数字重复几次。请找出数组中唯一个重复的数字。</p>
