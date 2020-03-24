@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>RabbitMQ | Great Wei</title>
-<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1584625106915">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1585021915859">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="RabbitMQ | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
@@ -14,7 +14,8 @@
     <meta name="description" content="
 RabbitMQ 与 Beanstalkd之间的对比
 Beanstalkd
-Beantalkd 一个轻量级消息中间件，他的最大特点是将自己定位为基于管道  (tube) 和任务 (job) 的工作队列 (work-queue)，和R..." />
+Beantalkd 一个轻量级消息中间件，他的最大特点是将自己定位为基于管道  (tube) 和任务 (job) 的工作队列 (work-queue)
+有以..." />
     <meta name="keywords" content="消息队列" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -24,7 +25,7 @@ Beanstalkd
       <div class="main-content">
         <div class="site-header">
   <a href="https://miexxx.github.io">
-  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1584625106915" alt="">
+  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1585021915859" alt="">
   </a>
   <h1 class="site-title">
     Great Wei
@@ -88,7 +89,7 @@ Beanstalkd
                 2020-03-16
               </span>
               <span>
-                14 min read
+                13 min read
               </span>
               
                 <a href="https://miexxx.github.io/tag/aK1-G3OHz/" class="post-tag">
@@ -102,26 +103,31 @@ Beanstalkd
                 <!-- more -->
 <h1 id="rabbitmq-与-beanstalkd之间的对比">RabbitMQ 与 Beanstalkd之间的对比</h1>
 <h2 id="beanstalkd">Beanstalkd</h2>
-<p>Beantalkd 一个轻量级消息中间件，他的最大特点是将自己定位为基于管道  (tube) 和任务 (job) 的工作队列 (work-queue)，和RabbitMQ不同的是，Beanstalkd应该是一个工作队列，任务队列。<br>
+<p>Beantalkd 一个轻量级消息中间件，他的最大特点是将自己定位为基于管道  (tube) 和任务 (job) 的工作队列 (work-queue)<br>
 有以下特点：</p>
 <h3 id="任务优先级-priority">任务优先级 (priority):</h3>
 <p>任务 (job) 可以有 0~2^32 个优先级, 0 代表最高优先级。 beanstalkd 采用最大最小堆 (Min-max heap) 处理任务优先级排序, 任何时刻调用 reserve 命令的消费者总是能拿到当前优先级最高的任务, 时间复杂度为 O(logn)。</p>
+<h4 id="最大堆与最小堆">最大堆与最小堆</h4>
+<figure data-type="image" tabindex="1"><img src="https://img-blog.csdn.net/20160317150649506" alt="" loading="lazy"></figure>
+<p><img src="https://img-blog.csdn.net/20160317150655703" alt="" loading="lazy"><br>
+堆树是一种二叉树，堆树中某个节点的值总是不大于或不小于其孩子节点的值。<br>
+当父节点的键值总是大于或等于任何一个子节点的键值时为最大堆。 当父节点的键值总是小于或等于任何一个子节点的键值时为最小堆。</p>
 <h3 id="延时任务-delay">延时任务 (delay):</h3>
-<p>有两种方式可以延时执行任务 (job): 生产者发布任务时指定延时；或者当任务处理完毕后, 消费者再次将任务放入队列延时执行 (RELEASE with )。这种机制可以实现分布式的 java.util.Timer，这种分布式定时任务的优势是：如果某个消费者节点故障，任务超时重发 (time-to-run) 能够保证任务转移到另外的节点执行。</p>
+<p>有两种方式可以延时执行任务 (job): 生产者发布任务时指定延时，或者当任务处理完毕后, 消费者再次将任务放入队列延时执行 (RELEASE with )。</p>
 <h3 id="任务超时重发-time-to-run">任务超时重发 (time-to-run):</h3>
 <p>Beanstalkd 把任务返回给消费者以后：消费者必须在预设的 TTR (time-to-run) 时间内发送 delete / release/ bury 改变任务状态；否则 Beanstalkd 会认为消息处理失败，然后把任务交给另外的消费者节点执行。如果消费者预计在 TTR (time-to-run) 时间内无法完成任务, 也可以发送 touch 命令, 它的作用是让 Beanstalkd 从系统时间重新计算 TTR (time-to-run)。</p>
 <h3 id="任务预留-buried">任务预留 (buried):</h3>
 <p>如果任务因为某些原因无法执行, 消费者可以把任务置为 buried 状态让 Beanstalkd 保留这些任务。管理员可以通过 peek buried 命令查询被保留的任务，并且进行人工干预。简单的, kick 能够一次性把 n 条被保留的任务踢回队列。</p>
 <h3 id="速度优势">速度优势</h3>
 <p><img src="https://pic1.zhimg.com/80/dbbd8ac979caf1400eda6974edd4d712_1440w.jpg" alt="" loading="lazy"><br>
-Beanstalkd协议基于ASCII编码运行在tcp上。客户端连接服务器并发送指令和数据，然后等待响应并关闭连接。对于每个连接，服务器按照接收命令的序列依次处理并响应。所有整型值都非负的十进制数，除非有特别声明。</p>
+Beanstalkd协议基于tcp上。客户端连接服务器并发送指令和数据，然后等待响应并关闭连接。对于每个连接，服务器按照接收命令的序列依次处理并响应。</p>
 <h3 id="场景优势">场景优势</h3>
 <p>延时系统，比如延迟20分钟发送短信，******，在投放的时候就设定一定的延迟时间值，让任务在延迟时间到了之后进入ready队列，等待worker预订处理。<br>
 <img src="https://pic4.zhimg.com/80/b2fe6330ac4cee0ace41e47a82bf713f_1440w.jpg" alt="" loading="lazy"></p>
 <p>轮询系统，如下图，一个被投放的任务，在延迟时间过后需要再检查一遍状态，如果不符合，继续释放（release with delay）为延迟投放状态（DELAYED），直到时间过期之后，再次进入ready队列，被worker预订，进行一些逻辑判断，比如微信银行卡退款是否成功，如果成功，删除该任务，如果没成功，继续释放（release with delay）为延迟投放状态。<br>
 <img src="https://pic1.zhimg.com/80/8add0f140c21e738f26b1ccd8d2fa892_1440w.jpg" alt="" loading="lazy"></p>
 <h3 id="缺陷">缺陷</h3>
-<p>Beanstalk单点部署，不支持集群，当服务发送故障容易造成任务积压问题，不能够灵活的设置消息持久化。</p>
+<p>Beanstalk单点部署，不支持集群，当服务发送故障造成服务不可用，任务积压问题，不能够灵活的设置消息持久化。</p>
 <hr>
 <h2 id="rabbitmq">RabbitMQ</h2>
 <p><a href="http://tryrabbitmq.com/">模拟器</a></p>
@@ -129,16 +135,7 @@ Beanstalkd协议基于ASCII编码运行在tcp上。客户端连接服务器并�
 <p>生产者生产消息，消费者消费消息，消息存储在队列中。<br>
 <img src="https://www.rabbitmq.com/img/tutorials/python-one.png" alt="" loading="lazy"><br>
 生产者：</p>
-<pre><code>$connection = new \PhpAmqpLib\Connection\AMQPStreamConnection('127.0.0.1', '5670', 'guest', 'guest');                   //haproxy设置负载均衡后，每次连接能够均匀的请求到每一个节点。
-$channel = $connection-&gt;channel();     
-$channel-&gt;queue_declare('rabbit', false, false, false, false);      // 队列声明，如果队列不存在，则创建一个，如果你能保证队列一定存在则不需要进行队列声明。
-$msg = new \PhpAmqpLib\Message\AMQPMessage('rabbit');
-$channel-&gt;basic_publish($msg, '', 'rabbit');
-$channel-&gt;close();
-$connection-&gt;close();
-
-
-函数：
+<pre><code>函数：
 // 声明队列
 public function queue_declare(
         $queue = '',            //队列名称
@@ -294,7 +291,11 @@ listen monitor
 <ul>
 <li><a href="#beanstalkd">Beanstalkd</a>
 <ul>
-<li><a href="#%E4%BB%BB%E5%8A%A1%E4%BC%98%E5%85%88%E7%BA%A7-priority">任务优先级 (priority):</a></li>
+<li><a href="#%E4%BB%BB%E5%8A%A1%E4%BC%98%E5%85%88%E7%BA%A7-priority">任务优先级 (priority):</a>
+<ul>
+<li><a href="#%E6%9C%80%E5%A4%A7%E5%A0%86%E4%B8%8E%E6%9C%80%E5%B0%8F%E5%A0%86">最大堆与最小堆</a></li>
+</ul>
+</li>
 <li><a href="#%E5%BB%B6%E6%97%B6%E4%BB%BB%E5%8A%A1-delay">延时任务 (delay):</a></li>
 <li><a href="#%E4%BB%BB%E5%8A%A1%E8%B6%85%E6%97%B6%E9%87%8D%E5%8F%91-time-to-run">任务超时重发 (time-to-run):</a></li>
 <li><a href="#%E4%BB%BB%E5%8A%A1%E9%A2%84%E7%95%99-buried">任务预留 (buried):</a></li>
