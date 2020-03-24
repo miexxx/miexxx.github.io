@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://miexxx.github.io</id>
     <title>Great Wei</title>
-    <updated>2020-03-24T12:20:51.795Z</updated>
+    <updated>2020-03-24T12:55:08.391Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://miexxx.github.io"/>
     <link rel="self" href="https://miexxx.github.io/atom.xml"/>
@@ -367,7 +367,59 @@ listen monitor
 <p>交换器和绑定始终可视为在所有节点上，队列可以选择性的跨多个节点进行镜像。每个镜像队列由一个master和一个或者多个mirrors组成，主节点位于一个通常称为master的节点，每个队列都有自己的主节点。</p>
 <h3 id="延迟队列">延迟队列</h3>
 <p><img src="https://oscimg.oschina.net/oscnet/86897739832497bd1cfac14e629a3b3b7c8.jpg" alt="" loading="lazy"><br>
-通过死信队列与消息的过期时间实现延时队列。</p>
+通过死信队列与消息的过期时间实现延时队列。<br>
+生产者：</p>
+<pre><code>$channel = $connection-&gt;channel();
+
+$channel-&gt;exchange_declare('delay_exchange', 'direct',false,false,false);
+$channel-&gt;exchange_declare('cache_exchange', 'direct',false,false,false);
+
+$tale = new AMQPTable();
+$tale-&gt;set('x-dead-letter-exchange', 'delay_exchange');
+$tale-&gt;set('x-dead-letter-routing-key','delay_exchange');
+$tale-&gt;set('x-message-ttl',10000);
+
+$channel-&gt;queue_declare('cache_queue',false,true,false,false,false,$tale);
+$channel-&gt;queue_bind('cache_queue', 'cache_exchange','cache_exchange');
+
+$channel-&gt;queue_declare('delay_queue',false,true,false,false,false);
+$channel-&gt;queue_bind('delay_queue', 'delay_exchange','delay_exchange');
+$msg = new AMQPMessage('Hello World'.$argv[1],array(
+    'expiration' =&gt; intval($argv[1]),
+    'delivery_mode' =&gt; AMQPMessage::DELIVERY_MODE_PERSISTENT
+));
+$channel-&gt;basic_publish($msg,'cache_exchange','cache_exchange');
+echo date('Y-m-d H:i:s').&quot; [x] Sent 'Hello World!' &quot;.PHP_EOL;
+$channel-&gt;close();
+$connection-&gt;close();
+</code></pre>
+<p>消费者:</p>
+<pre><code>$channel = $connection-&gt;channel();
+$channel-&gt;exchange_declare('delay_exchange', 'direct',false,false,false);
+$channel-&gt;exchange_declare('cache_exchange', 'direct',false,false,false);
+$channel-&gt;queue_declare('delay_queue',false,true,false,false,false);
+$channel-&gt;queue_bind('delay_queue', 'delay_exchange','delay_exchange');
+
+echo ' [*] Waiting for message. To exit press CTRL+C '.PHP_EOL;
+
+$callback = function ($msg){
+    echo date('Y-m-d H:i:s').&quot; [x] Received&quot;,$msg-&gt;body,PHP_EOL;
+
+     $msg-&gt;delivery_info['channel']-&gt;basic_ack($msg-&gt;delivery_info['delivery_tag']);
+
+};
+
+//只有consumer已经处理并确认了上一条message时queue才分派新的message给它
+$channel-&gt;basic_qos(null, 1, null);
+$channel-&gt;basic_consume('delay_queue','',false,false,false,false,$callback);
+
+
+while (count($channel-&gt;callbacks)) {
+    $channel-&gt;wait();
+}
+$channel-&gt;close();
+$connection-&gt;close();
+</code></pre>
 <h3 id="死信队列">死信队列</h3>
 <p>一个消息在满足如下条件下，会进死信交换机，记住这里是交换机而不是队列，一个交换机可以对应很多队列。<br>
 2.1 消息被Consumer拒收了，并且reject方法的参数里requeue是false。也就是说不会被再次放在队列里，被其他消费者使用。<br>
