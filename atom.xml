@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://miexxx.github.io</id>
     <title>Great Wei</title>
-    <updated>2020-03-24T09:55:26.397Z</updated>
+    <updated>2020-03-24T11:26:21.218Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://miexxx.github.io"/>
     <link rel="self" href="https://miexxx.github.io/atom.xml"/>
@@ -209,9 +209,65 @@ $channel-&gt;wait_for_pending_acks();
 </code></pre>
 <h3 id="路由">路由</h3>
 <p><img src="https://www.rabbitmq.com/img/tutorials/direct-exchange.png" alt="" loading="lazy"><br>
-在发布订阅的基础上，有些队列并不需要接收所有消息，而是只对自己感兴趣的内容进行订阅，这就是路由的功能，生成消息时可以添加routing-key进行绑定，发送到指定队列。</p>
+在发布订阅的基础上，有些队列并不需要接收所有消息，而是只对自己感兴趣的内容进行订阅，这就是路由的功能，生成消息时可以添加routing-key进行绑定，发送到指定队列。<br>
+生产者:</p>
+<pre><code> $channel = $connection-&gt;channel();
+    $channel-&gt;exchange_declare($exchangeName, 'direct', false, false, false);
+    $n = 1;
+    while ($n &lt; 10) {
+        $msg = new \PhpAmqpLib\Message\AMQPMessage(
+            &quot;direct routing message !!! $n&quot;
+        );
+        $channel-&gt;basic_publish($msg, $exchangeName, $routingKey);
+        $n ++;
+    }
+    $channel-&gt;close();
+    $connection-&gt;close();
+</code></pre>
+<p>消费者：</p>
+<pre><code>$channel = $connection-&gt;channel();
+    $channel-&gt;queue_declare($queueName, false, false, false, false);
+    $channel-&gt;queue_bind($queueName, $exchangeName, $routingKey);
+    $callback = function ($msg) {
+        echo ' [x] ', $msg-&gt;delivery_info['routing_key'], $msg-&gt;body, &quot;\n&quot;;
+    };
+    $channel-&gt;basic_consume($queueName, '', false, true, false, false, $callback);
+    while ($channel-&gt;is_consuming()) {
+        $channel-&gt;wait();
+    }
+    $channel-&gt;close();
+    $connection-&gt;close();
+</code></pre>
 <h3 id="主题">主题</h3>
-<p>路由功能虽然解决了，订阅者只接收自己订阅的内容，但是如果用户可能想要接收到，某一类相关的消息，就需要同topic功能， 主题交流不具有任意routing-key，routing-key必须是单词列表以&quot;.&quot;分隔，单词可以使用&quot;*&quot;通配符表示，&quot;#&quot;绑定表示接收所有消息,和直接订阅效果一样。</p>
+<p>路由功能虽然解决了，订阅者只接收自己订阅的内容，但是如果用户可能想要接收到，某一类相关的消息，就需要同topic功能， 主题交流不具有任意routing-key，routing-key必须是单词列表以&quot;.&quot;分隔，单词可以使用&quot;*&quot;通配符表示，&quot;#&quot;绑定表示接收所有消息,和直接订阅效果一样。<br>
+生产者：</p>
+<pre><code> $channel = $connection-&gt;channel();
+    $channel-&gt;exchange_declare($exchangeName, 'topic', false, false, false);
+    $n = 1;
+    while ($n &lt; 10) {
+        $msg = new \PhpAmqpLib\Message\AMQPMessage(
+            &quot;topic routing message !!! $n&quot;
+        );
+        $channel-&gt;basic_publish($msg, $exchangeName, $routingKey);
+        $n ++;
+    }
+    $channel-&gt;close();
+    $connection-&gt;close();
+</code></pre>
+<p>消费者:</p>
+<pre><code> $channel = $connection-&gt;channel();
+    $channel-&gt;queue_declare($queueName, false, false, false, false);
+    $channel-&gt;queue_bind($queueName, $exchangeName, $routingKey);
+    $callback = function ($msg) {
+        echo ' [x] ', $msg-&gt;delivery_info['routing_key'], $msg-&gt;body, &quot;\n&quot;;
+    };
+    $channel-&gt;basic_consume($queueName, '', false, true, false, false, $callback);
+    while ($channel-&gt;is_consuming()) {
+        $channel-&gt;wait();
+    }
+    $channel-&gt;close();
+    $connection-&gt;close();
+</code></pre>
 <h3 id="rpc">RPC</h3>
 <p>有关RPC的说明<br>
 尽管RPC是计算中非常普遍的模式，但它经常受到批评。当程序员不知道函数调用是本地的还是缓慢的RPC时，就会出现问题。这样的混乱会导致系统变幻莫测，并给调试增加了不必要的复杂性。滥用RPC可能会导致无法维护的意大利面条代码，而不是简化软件。<br>
