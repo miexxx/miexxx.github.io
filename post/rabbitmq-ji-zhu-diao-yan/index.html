@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>RabbitMQ | Great Wei</title>
-<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1585036420701">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1585042201185">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="RabbitMQ | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
@@ -25,7 +25,7 @@ Beanstalkd
       <div class="main-content">
         <div class="site-header">
   <a href="https://miexxx.github.io">
-  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1585036420701" alt="">
+  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1585042201185" alt="">
   </a>
   <h1 class="site-title">
     Great Wei
@@ -89,7 +89,7 @@ Beanstalkd
                 2020-03-16
               </span>
               <span>
-                17 min read
+                18 min read
               </span>
               
                 <a href="https://miexxx.github.io/tag/aK1-G3OHz/" class="post-tag">
@@ -118,6 +118,8 @@ Beanstalkd
 <p>Beanstalkd 把任务返回给消费者以后：消费者必须在预设的 TTR (time-to-run) 时间内发送 delete / release/ bury 改变任务状态；否则 Beanstalkd 会认为消息处理失败，然后把任务交给另外的消费者节点执行。如果消费者预计在 TTR (time-to-run) 时间内无法完成任务, 也可以发送 touch 命令, 它的作用是让 Beanstalkd 从系统时间重新计算 TTR (time-to-run)。</p>
 <h3 id="任务预留-buried">任务预留 (buried):</h3>
 <p>如果任务因为某些原因无法执行, 消费者可以把任务置为 buried 状态让 Beanstalkd 保留这些任务。管理员可以通过 peek buried 命令查询被保留的任务，并且进行人工干预。简单的, kick 能够一次性把 n 条被保留的任务踢回队列。</p>
+<h3 id="消息持久化">消息持久化</h3>
+<p>通过日志实现消息的持久化。</p>
 <h3 id="速度优势">速度优势</h3>
 <p><img src="https://pic1.zhimg.com/80/dbbd8ac979caf1400eda6974edd4d712_1440w.jpg" alt="" loading="lazy"><br>
 Beanstalkd协议基于tcp上。客户端连接服务器并发送指令和数据，然后等待响应并关闭连接。对于每个连接，服务器按照接收命令的序列依次处理并响应。</p>
@@ -213,7 +215,36 @@ $channel-&gt;wait_for_pending_acks();
 <h3 id="发布订阅">发布订阅</h3>
 <p>一次发布，订阅的队列都能接收到消息进行处理，将繁琐的业务逻辑进行解耦。<br>
 <img src="https://www.rabbitmq.com/img/tutorials/exchanges.png" alt="" loading="lazy"><br>
-每个订阅者就是一个队列，虽然这场景也可以通过一个队列进行所有业务操作，但是一旦一个复杂的业务发生故障，容易导致任务积压，如果能够将业务拆分的更加小，每个队列处理自己的业务逻辑，能够很好解决这一问题，采用发布订阅模式，发布者不需要关系哪些队列关注这个任务，只要订阅了，自动回接收到任务。</p>
+每个订阅者就是一个队列，虽然这场景也可以通过一个队列进行所有业务操作，但是一旦一个复杂的业务发生故障，容易服务不可用任务积压，如果能够将业务拆分的更加小，每个队列处理自己的业务逻辑，能够很好解决这一问题，采用发布订阅模式，发布者不需要关系哪些队列关注这个任务，只要订阅了，自动回接收到任务。<br>
+有几种交换类型：direct,topic,headers,fanout。<br>
+生产者：</p>
+<pre><code> $channel = $connection-&gt;channel();
+    $channel-&gt;exchange_declare($exchangeName, 'fanout', false, false, false);
+    $n = 1;
+    while ($n &lt; 10) {
+        $msg = new \PhpAmqpLib\Message\AMQPMessage(
+            &quot;fanout message !!! $n&quot;
+        );
+        $channel-&gt;basic_publish($msg, $exchangeName);
+        $n ++;
+    }
+    $channel-&gt;close();
+    $connection-&gt;close();
+</code></pre>
+<p>消费者：</p>
+<pre><code>$channel = $connection-&gt;channel();
+    $channel-&gt;queue_declare($queueName, false, false, false, false);
+    $channel-&gt;queue_bind($queueName, $exchangeName);
+    $callback = function ($msg) {
+        echo ' [x] ', $msg-&gt;body, &quot;\n&quot;;
+    };
+    $channel-&gt;basic_consume($queueName, '', false, true, false, false, $callback);
+    while ($channel-&gt;is_consuming()) {
+        $channel-&gt;wait();
+    }
+    $channel-&gt;close();
+    $connection-&gt;close();
+</code></pre>
 <h3 id="路由">路由</h3>
 <p><img src="https://www.rabbitmq.com/img/tutorials/direct-exchange.png" alt="" loading="lazy"><br>
 在发布订阅的基础上，有些队列并不需要接收所有消息，而是只对自己感兴趣的内容进行订阅，这就是路由的功能，生成消息时可以添加routing-key进行绑定，发送到指定队列。</p>
@@ -351,6 +382,7 @@ listen monitor
 <li><a href="#%E5%BB%B6%E6%97%B6%E4%BB%BB%E5%8A%A1-delay">延时任务 (delay):</a></li>
 <li><a href="#%E4%BB%BB%E5%8A%A1%E8%B6%85%E6%97%B6%E9%87%8D%E5%8F%91-time-to-run">任务超时重发 (time-to-run):</a></li>
 <li><a href="#%E4%BB%BB%E5%8A%A1%E9%A2%84%E7%95%99-buried">任务预留 (buried):</a></li>
+<li><a href="#%E6%B6%88%E6%81%AF%E6%8C%81%E4%B9%85%E5%8C%96">消息持久化</a></li>
 <li><a href="#%E9%80%9F%E5%BA%A6%E4%BC%98%E5%8A%BF">速度优势</a></li>
 <li><a href="#%E5%9C%BA%E6%99%AF%E4%BC%98%E5%8A%BF">场景优势</a></li>
 <li><a href="#%E7%BC%BA%E9%99%B7">缺陷</a></li>
