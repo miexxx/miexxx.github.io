@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://miexxx.github.io</id>
     <title>Great Wei</title>
-    <updated>2020-03-25T12:00:02.094Z</updated>
+    <updated>2020-03-25T12:05:31.496Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://miexxx.github.io"/>
     <link rel="self" href="https://miexxx.github.io/atom.xml"/>
@@ -10,6 +10,17 @@
     <logo>https://miexxx.github.io/images/avatar.png</logo>
     <icon>https://miexxx.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Great Wei</rights>
+    <entry>
+        <title type="html"><![CDATA[计算机操作系统-内存管理]]></title>
+        <id>https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-nei-cun-guan-li/</id>
+        <link href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-nei-cun-guan-li/">
+        </link>
+        <updated>2020-03-25T12:02:56.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="虚拟内存">虚拟内存</h1>
+<p>虚拟内存的目的是为了让屋里内存扩充成更大的逻辑内存，从而让程序获得更多的可用内存。<br>
+为了更好的管理内存，操作系统将内存抽象成地址空间，每一个程序拥有自己的地址空间，这个地址空间被分割成多个块。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[计算机操作系统-死锁]]></title>
         <id>https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-si-suo/</id>
@@ -1182,19 +1193,6 @@ func client () {
         <content type="html"><![CDATA[<h2 id="概述">概述</h2>
 <p>Phabricator是一套基于Web的软件开发协作工具，包括代码审查工具Differential，资源库浏览器Diffusion，变更监测工具Herald，Bug跟踪工具Maniphest和维基工具Phriction。Phabricator可与Git、Mercurial、Subversion集成使用。 Phabricator是开源软件，可在Apache许可证第2版下作为自由软件分发。 Phabricator最初是Facebook的一个内部工具，主要开发者为Evan Priestley。Evan Priestley离开Facebook后，在名为Phacility的新公司继续Phabricator的开发。</p>
 <h2 id="搭建">搭建</h2>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[工具汇总]]></title>
-        <id>https://miexxx.github.io/post/gong-ju-hui-zong/</id>
-        <link href="https://miexxx.github.io/post/gong-ju-hui-zong/">
-        </link>
-        <updated>2019-07-19T04:01:04.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="elk工具">ELK工具：</h2>
-<p><a href="http://grokdebug.herokuapp.com/">Grok正则解析工具</a></p>
-<h2 id="其它">其它</h2>
-<p><a href="http://www.ischoolbar.com/EsParser/">sql语法转换ES查询语法</a><br>
-<a href="http://Json.cn">Json</a></p>
 ]]></content>
     </entry>
 </feed>
