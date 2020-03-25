@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://miexxx.github.io</id>
     <title>Great Wei</title>
-    <updated>2020-03-24T12:55:51.197Z</updated>
+    <updated>2020-03-25T06:38:28.996Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://miexxx.github.io"/>
     <link rel="self" href="https://miexxx.github.io/atom.xml"/>
@@ -94,6 +94,23 @@ Beanstalkd协议基于tcp上。客户端连接服务器并发送指令和数据�
 <p>Beanstalk单点部署，不支持集群，当服务发送故障造成服务不可用，任务积压问题，不能够灵活的设置消息持久化。</p>
 <hr>
 <h2 id="rabbitmq">RabbitMQ</h2>
+<h3 id="rabbitmq特性">Rabbitmq特性</h3>
+<p>可靠性：持久化存储、ACK消息确认、发布confirm、事务支持。<br>
+灵活的路由：交换机功能。交换机类型：direct,topic,headers,fanout。<br>
+镜像，master-slave 多协议支持,集群节点<br>
+多语言客户端支持：java、c#、ruby、Python、php、c、scale、nodejs、go、erlang…<br>
+管理界面功能丰富、命令行rabbitmqctl、RPC远程调度</p>
+<h3 id="amqp高级消息协议">AMQP高级消息协议</h3>
+<p>一个AMQP服务器类似于邮件服务器，exchange类似于消息传输代理（email里的概念），message queue类似于邮箱。Binding定义了每一个传输代理中的消息路由表，发布者将消息发给特定的传输代理，然后传输代理将这些消息路由到邮箱中，消费者从这些邮箱中取出消息。</p>
+<p>AMQP术语<br>
+Channel（信道）： 在AMQP模型中，我们不需要通过建立太多的TCP连接来实现。假如针对每一个AMQP连接都建立一个TCP连接的话，会占用大量的系统资源。对此，AMQP提供了通道（channel）机制。即，共享一个TCP连接，可创建多个通道。<br>
+​ 在多线程/进程的应用程序中正确做法是，对于每一个线程/进程，应分别建立一个通道，而不是多个线程/进程之间去共享一个通道。<br>
+Exchange（交换器）：用于接受、分配消息；可以有好几种模式、相当于邮箱<br>
+Queue（队列）：用于存储生产者的消息；<br>
+RoutingKey（路由键）：用于把生成者的数据分配到交换器上；<br>
+BindingKey（绑定键）：用于把交换器的消息绑定到队列上；<br>
+Broker（消息代理）：消息代理会接收来自生产者（publishers/producers）生产的消息，并将它们路由(route，可以理解成按指定规则转发)给相应的消费者(consumers)手中。<br>
+VHOST（虚拟主机）：为了在一个单独的代理上实现多个隔离的环境（用户、用户组、交换机、队列 等），AMQP 提供了一个虚拟主机（virtual hosts - vhosts）的概念。这跟 Web servers 虚拟主机概念非常相似，这为 AMQP 实体提供了完全隔离的环境。当连接被建立的时候，AMQP 客户端来指定使用哪个虚拟主机。</p>
 <p><a href="http://tryrabbitmq.com/">模拟器</a></p>
 <h3 id="hello-world">hello world</h3>
 <p>生产者生产消息，消费者消费消息，消息存储在队列中。<br>
