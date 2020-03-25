@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://miexxx.github.io</id>
     <title>Great Wei</title>
-    <updated>2020-03-25T06:38:28.996Z</updated>
+    <updated>2020-03-25T11:42:46.285Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://miexxx.github.io"/>
     <link rel="self" href="https://miexxx.github.io/atom.xml"/>
@@ -449,7 +449,56 @@ $connection-&gt;close();
  'delivery_mode' =&gt; 2,         // 设置消息持久化
  'priority' =&gt; 1,                   // 设置优先级
 ));
+</code></pre>
+<h3 id="使用插件的延时队列">使用插件的延时队列</h3>
+<p>生产者：</p>
+<pre><code>$conn = new AMQPConnection($connectConfig);
+    $conn-&gt;connect();
+    $channel = new AMQPChannel($conn);
+    $exchange = new AMQPExchange($channel);
+    $exchange-&gt;setName($params['exchangeName']);
+    $exchange-&gt;setType('x-delayed-message');    //x-delayed-message类型
+    /*RabbitMQ常用的Exchange Type有三种：fanout、direct、topic。
 
+      fanout:把所有发送到该Exchange的消息投递到所有与它绑定的队列中。
+
+      direct:把消息投递到那些binding key与routing key完全匹配的队列中。
+
+      topic:将消息路由到binding key与routing key模式匹配的队列中。*/
+    $exchange-&gt;setArgument('x-delayed-type','direct');
+    $exchange-&gt;declareExchange();
+
+    $channel-&gt;startTransaction();
+    //RabbitMQ不容许声明2个相同名称、配置不同的Queue,否则报错
+    $queue = new AMQPQueue($channel);
+    $queue-&gt;setName($params['queueName']);
+    $queue-&gt;setFlags(AMQP_DURABLE);
+    $queue-&gt;declareQueue();
+
+    //绑定队列和交换机
+    $queue-&gt;bind($params['exchangeName'], $params['routeKey']);
+    $channel-&gt;commitTransaction();
+
+    for($i=1;$i &lt;= 5;$i++){
+        //生成消息
+        echo '发送时间：'.date(&quot;Y-m-d H:i:s&quot;, time()).PHP_EOL;
+        echo 'i='.$i.'，延迟'.$i.'秒'.PHP_EOL;
+        $message = json_encode(['order_id'=&gt;time(),'i'=&gt;$i]);
+        $exchange-&gt;publish($message, $params['routeKey'], AMQP_NOPARAM, ['headers'=&gt;['x-delay'=&gt; 2000*$i]]);
+        sleep(2);
+    }
+    $conn-&gt;disconnect();
+</code></pre>
+<p>消费者:</p>
+<pre><code> $channel = $connection-&gt;channel();
+    $queueName = 'delayed_queue_test';
+    $callback = function ($msg) {
+        echo ' [x] Received ', $msg-&gt;body, &quot;\n&quot;;
+    };
+    $channel-&gt;basic_consume($queueName, '', false, true, false, false, $callback);
+    while ($channel-&gt;is_consuming()) {
+        $channel-&gt;wait();
+    }
 </code></pre>
 <h3 id="思维脑图">思维脑图</h3>
 <p><a href="https://naotu.baidu.com/file/407c820a7e2f189bfc7b55150ca55ffb?token=29cc096245c90973">脑图</a></p>
