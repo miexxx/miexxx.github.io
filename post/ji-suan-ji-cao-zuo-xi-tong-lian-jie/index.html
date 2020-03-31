@@ -2,21 +2,28 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Mysql | Great Wei</title>
+<title>计算机操作系统-链接 | Great Wei</title>
 <link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1585663189445">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="Mysql | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="计算机操作系统-链接 | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="
-数据库迁移命令
-mysqldump -uroot -ppassword -h172.xxx.xxx.xx  &gt; xxx.sql 数据库导出
+    <meta name="description" content="编译系统
+以下是一个hello.c程序
+#include &lt;stdio.h&gt;
 
-mysql -uroot -ppassword -h172.xxx.xxx.xx 连接数据..." />
-    <meta name="keywords" content="mysql" />
+int main()
+{
+    printf(&quot;hello, world\n&quot;);
+    return 0;
+}
+
+
+在Un..." />
+    <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
   </head>
@@ -82,79 +89,60 @@ mysql -uroot -ppassword -h172.xxx.xxx.xx 连接数据..." />
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              Mysql
+              计算机操作系统-链接
             </h2>
             <div class="post-info">
               <span>
-                2019-04-01
+                2020-03-31
               </span>
               <span>
-                3 min read
+                2 min read
               </span>
-              
-                <a href="https://miexxx.github.io/tag/70yj136M-/" class="post-tag">
-                  # mysql
-                </a>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <hr>
-<h2 id="数据库迁移命令">数据库迁移命令</h2>
-<pre><code class="language-mysql">mysqldump -uroot -ppassword -h172.xxx.xxx.xx  &gt; xxx.sql 数据库导出
+                <h1 id="编译系统">编译系统</h1>
+<p>以下是一个hello.c程序</p>
+<pre><code>#include &lt;stdio.h&gt;
 
-mysql -uroot -ppassword -h172.xxx.xxx.xx 连接数据库
-
-source xxx.sql 执行sql文件
+int main()
+{
+    printf(&quot;hello, world\n&quot;);
+    return 0;
+}
 
 </code></pre>
-<hr>
-<h2 id="mysql版本导致的sql查询异常">Mysql版本导致的sql查询异常</h2>
-<pre><code class="language-bash">一个简单的需求，查询数据中如果 a = 0 则按照 x字段降序， 如果 b = 0 则按照 y字段降序。
-问题sql:
-select * from 
-(select * from tableA where a = 0 order by a desc) A 
-union 
-select * from (select * from tableB where b = 0 order by b desc ) B
-
-如果在5.6版本mysql可以得到预期结果,5.6版本以上order by会被优化器过滤,导致查询结果没有排序效果。
-这居然还是官方的优化- -！,还有一点 orderby 和 union 同时使用的时候，order by 需要放入子查询语句中。
-
-解决方法：
-必须在子查询中order by 之后添加limit条件, 还有子查询使用order by  排序字段必须被select。
-
-正确sql:
-
-select * from 
- (select * from tableA where a = 0 order by a desc limit 1000) A 
- union 
- select * from (select * from tableB where b = 0 order by b desc limit 1000) B
+<p>在Unix系统上，由于编译器把源文件转换为目标文件。</p>
+<pre><code>gcc -o hello hello.c
 </code></pre>
-<hr>
-<h2 id="sql-查询索引失效">sql 查询索引失效</h2>
-<p>在日常开发中，有许多问题是由于数据库索引没有建立好，与sql写法问题导致索引失效，当我们服务出现了接口压力时，分析原因，如果是由于数据库耗时原因的话，我们应该分析一下sql，获取日志的sql后，执行explain “需要执行的sql”   根据KEY字段判断索引是否有效。</p>
-<hr>
-<h2 id="多张分表联合查询出现bug">多张分表联合查询出现bug</h2>
-<p>上线代码过程中，发现日志一直对一段正常的逻辑代码报错，排查后发现填充的字段数据有问题，于是去数据库查询后发现数据并没有问题，逻辑也是正常的，不断的排查过程中，发现是sql查询的结果有问题，copy sql执行后，发现查询出来的数据的确有问题，其中有一个字段的数据与其它字段数据进行了交换，之后排查发现两张分表的表字段顺序是不相同的，导致发生了这样的一个bug。</p>
-<h3 id="处理方法">处理方法</h3>
-<p>desc tableName  md5处理后分表之间进行表结构对比，发现出现问题的表结构及时处理。</p>
+<p>这个过程大致如下：<br>
+<img src="https://camo.githubusercontent.com/e1da518d4b62181167c2b1fea745c9bcc6b44c35/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f62333936643732362d623735662d346133322d383961322d3033613762366531396636662e6a7067" alt="" loading="lazy"></p>
+<p>预处理阶段：处理以 # 开头的预处理命令；<br>
+编译阶段：翻译成汇编文件；<br>
+汇编阶段：将汇编文件翻译成可重定位目标文件；<br>
+链接阶段：将可重定位目标文件和 printf.o 等单独预编译好的目标文件进行合并，得到最终的可执行目标文件。</p>
+<h1 id="静态链接">静态链接</h1>
+<p>静态链接器以一组可重定位目标文件为输入，生成一个完全链接的可执行目标文件作为输出。链接器主要完成以下两个任务：</p>
+<p>符号解析：每个符号对应于一个函数、一个全局变量或一个静态变量，符号解析的目的是将每个符号引用与一个符号定义关联起来。<br>
+重定位：链接器通过把每个符号定义与一个内存位置关联起来，然后修改所有对这些符号的引用，使得它们指向这个内存位置。<br>
+<img src="https://camo.githubusercontent.com/33c7b278162d2fde0df39a36dc9943ff03f9aa05/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f34376439383538332d386262302d343563632d383132642d3437656566613061346134302e6a7067" alt="" loading="lazy"></p>
+<h1 id="动态链接">动态链接</h1>
+<p>静态库有以下两个问题：</p>
+<p>当静态库更新时那么整个程序都要重新进行链接；<br>
+对于 printf 这种标准函数库，如果每个程序都要有代码，这会极大浪费资源。<br>
+共享库是为了解决静态库的这两个问题而设计的，在 Linux 系统中通常用 .so 后缀来表示，Windows 系统上它们被称为 DLL。它具有以下特点：</p>
+<p>在给定的文件系统中一个库只有一个文件，所有引用该库的可执行目标文件都共享这个文件，它不会被复制到引用它的可执行文件中；<br>
+在内存中，一个共享库的 .text 节（已编译程序的机器代码）的一个副本可以被不同的正在运行的进程共享。<br>
+<img src="https://camo.githubusercontent.com/f684ca99d53f8992733f530d09165309e6f72e87/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f37366463373736392d316161632d343838382d396265612d3036346631636161386537372e6a7067" alt="" loading="lazy"></p>
 
               </div>
               <div class="toc-container">
                 <ul class="markdownIt-TOC">
-<li>
-<ul>
-<li><a href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%81%E7%A7%BB%E5%91%BD%E4%BB%A4">数据库迁移命令</a></li>
-<li><a href="#mysql%E7%89%88%E6%9C%AC%E5%AF%BC%E8%87%B4%E7%9A%84sql%E6%9F%A5%E8%AF%A2%E5%BC%82%E5%B8%B8">Mysql版本导致的sql查询异常</a></li>
-<li><a href="#sql-%E6%9F%A5%E8%AF%A2%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88">sql 查询索引失效</a></li>
-<li><a href="#%E5%A4%9A%E5%BC%A0%E5%88%86%E8%A1%A8%E8%81%94%E5%90%88%E6%9F%A5%E8%AF%A2%E5%87%BA%E7%8E%B0bug">多张分表联合查询出现bug</a>
-<ul>
-<li><a href="#%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95">处理方法</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li><a href="#%E7%BC%96%E8%AF%91%E7%B3%BB%E7%BB%9F">编译系统</a></li>
+<li><a href="#%E9%9D%99%E6%80%81%E9%93%BE%E6%8E%A5">静态链接</a></li>
+<li><a href="#%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5">动态链接</a></li>
 </ul>
 
               </div>
@@ -165,9 +153,9 @@ select * from
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://miexxx.github.io/post/chang-guang-she-qu/">
+            <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-she-bei-guan-li/">
               <h3 class="post-title">
-                常逛社区
+                计算机操作系统-设备管理
               </h3>
             </a>
           </div>

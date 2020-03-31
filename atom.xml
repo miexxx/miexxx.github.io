@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://miexxx.github.io</id>
     <title>Great Wei</title>
-    <updated>2020-03-31T13:42:01.619Z</updated>
+    <updated>2020-03-31T13:59:53.306Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://miexxx.github.io"/>
     <link rel="self" href="https://miexxx.github.io/atom.xml"/>
@@ -10,6 +10,47 @@
     <logo>https://miexxx.github.io/images/avatar.png</logo>
     <icon>https://miexxx.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Great Wei</rights>
+    <entry>
+        <title type="html"><![CDATA[计算机操作系统-链接]]></title>
+        <id>https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-lian-jie/</id>
+        <link href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-lian-jie/">
+        </link>
+        <updated>2020-03-31T13:44:40.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="编译系统">编译系统</h1>
+<p>以下是一个hello.c程序</p>
+<pre><code>#include &lt;stdio.h&gt;
+
+int main()
+{
+    printf(&quot;hello, world\n&quot;);
+    return 0;
+}
+
+</code></pre>
+<p>在Unix系统上，由于编译器把源文件转换为目标文件。</p>
+<pre><code>gcc -o hello hello.c
+</code></pre>
+<p>这个过程大致如下：<br>
+<img src="https://camo.githubusercontent.com/e1da518d4b62181167c2b1fea745c9bcc6b44c35/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f62333936643732362d623735662d346133322d383961322d3033613762366531396636662e6a7067" alt="" loading="lazy"></p>
+<p>预处理阶段：处理以 # 开头的预处理命令；<br>
+编译阶段：翻译成汇编文件；<br>
+汇编阶段：将汇编文件翻译成可重定位目标文件；<br>
+链接阶段：将可重定位目标文件和 printf.o 等单独预编译好的目标文件进行合并，得到最终的可执行目标文件。</p>
+<h1 id="静态链接">静态链接</h1>
+<p>静态链接器以一组可重定位目标文件为输入，生成一个完全链接的可执行目标文件作为输出。链接器主要完成以下两个任务：</p>
+<p>符号解析：每个符号对应于一个函数、一个全局变量或一个静态变量，符号解析的目的是将每个符号引用与一个符号定义关联起来。<br>
+重定位：链接器通过把每个符号定义与一个内存位置关联起来，然后修改所有对这些符号的引用，使得它们指向这个内存位置。<br>
+<img src="https://camo.githubusercontent.com/33c7b278162d2fde0df39a36dc9943ff03f9aa05/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f34376439383538332d386262302d343563632d383132642d3437656566613061346134302e6a7067" alt="" loading="lazy"></p>
+<h1 id="动态链接">动态链接</h1>
+<p>静态库有以下两个问题：</p>
+<p>当静态库更新时那么整个程序都要重新进行链接；<br>
+对于 printf 这种标准函数库，如果每个程序都要有代码，这会极大浪费资源。<br>
+共享库是为了解决静态库的这两个问题而设计的，在 Linux 系统中通常用 .so 后缀来表示，Windows 系统上它们被称为 DLL。它具有以下特点：</p>
+<p>在给定的文件系统中一个库只有一个文件，所有引用该库的可执行目标文件都共享这个文件，它不会被复制到引用它的可执行文件中；<br>
+在内存中，一个共享库的 .text 节（已编译程序的机器代码）的一个副本可以被不同的正在运行的进程共享。<br>
+<img src="https://camo.githubusercontent.com/f684ca99d53f8992733f530d09165309e6f72e87/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f37366463373736392d316161632d343838382d396265612d3036346631636161386537372e6a7067" alt="" loading="lazy"></p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[计算机操作系统-设备管理]]></title>
         <id>https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-she-bei-guan-li/</id>
@@ -962,314 +1003,6 @@ arr[2] == 2 =&gt; cnt++,  这时候不清楚arr[2] 左右两端与2之间的关�
    <p>这个月过得太快了...。 </p>
 <h2 id="十二月">十二月：</h2>
    <p>过去的一年学到了许多技术，现在开始腾出时间看书了，立个flag，养成写博客的好习惯，2019再见，2020请好好待我。 </p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Go]]></title>
-        <id>https://miexxx.github.io/post/go-yu-yan-xue-xi/</id>
-        <link href="https://miexxx.github.io/post/go-yu-yan-xue-xi/">
-        </link>
-        <updated>2019-12-03T04:01:52.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="服务端">服务端</h2>
-<pre><code>package main
-
-import (
-    &quot;fmt&quot;
-    &quot;net&quot;
-    &quot;os&quot;
-    &quot;bufio&quot;
-    &quot;bytes&quot;
-    &quot;encoding/binary&quot;
-)
-
-var ConnMap map[string]net.Conn
-func checkError(err error){
-    if  err != nil {
-        fmt.Println(&quot;Error: %s&quot;, err.Error())
-        os.Exit(1)
-    }
-}
-
-func recvConnMsg(conn net.Conn) {
-//  var buf [50]byte
-    buf := make([]byte, 50)
-
-    defer conn.Close()
-
-    for {
-        n, err := conn.Read(buf)
-
-        if err != nil {
-            fmt.Println(&quot;conn closed&quot;)
-            return
-        }
-
-        fmt.Println(&quot;recv msg:&quot;, string(buf[0:n]))
-
-
-        boradcastMessage(conn.RemoteAddr().String() + &quot;:&quot; + string(buf[0:n]))
-    }
-}
-
-func boradcastMessage(message string) {
-     n := []byte(message)
-     for _,conn := range ConnMap {
-       conn.Write(n)
-     }
-}
-
-func Encode(message string) (*bytes.Buffer, error) {
-    // 读取消息的长度
-    var length int32 = int32(len(message))
-    var pkg *bytes.Buffer = new(bytes.Buffer)
-    // 写入消息头
-    err := binary.Write(pkg, binary.LittleEndian, length)
-    if err != nil {
-        return nil, err
-    }
-    // 写入消息实体
-    err = binary.Write(pkg, binary.LittleEndian, []byte(message))
-    if err != nil {
-        return nil, err
-    }
-
-    return pkg, nil
-}
-
-func Decode(reader *bufio.Reader) (string, error) {
-    // 读取消息的长度
-    lengthByte, _ := reader.Peek(4)
-    lengthBuff := bytes.NewBuffer(lengthByte)
-    var length int32
-    err := binary.Read(lengthBuff, binary.LittleEndian, &amp;length)
-    if err != nil {
-        return &quot;&quot;, err
-    }
-    if int32(reader.Buffered()) &lt; length+4 {
-        return &quot;&quot;, err
-    }
-
-    // 读取消息真正的内容
-    pack := make([]byte, int(4+length))
-    _, err = reader.Read(pack)
-    if err != nil {
-        return &quot;&quot;, err
-    }
-    return string(pack[4:]), nil
-}
-
-func main() {
-    ConnMap = make(map[string]net.Conn)
-    listen_sock, err := net.Listen(&quot;tcp&quot;, &quot;localhost:10000&quot;)
-    checkError(err)
-    defer listen_sock.Close()
-
-    for {
-        new_conn, err := listen_sock.Accept()
-        ConnMap[new_conn.RemoteAddr().String()] = new_conn
-        if err != nil {
-            continue
-        }
-
-        go recvConnMsg(new_conn)
-    }
-
-}
-</code></pre>
-<hr>
-<h2 id="客户端">客户端</h2>
-<pre><code>package main
-
-import (
-    &quot;fmt&quot;
-    &quot;net&quot;
-    &quot;os&quot;
-    &quot;bufio&quot;
-    &quot;bytes&quot;
-    &quot;encoding/binary&quot;
-)
-
-func checkError(err error){
-    if  err != nil {
-        fmt.Println(&quot;Error: %s&quot;, err.Error())
-        os.Exit(1)
-    }
-}
-
-func Encode(message string) (*bytes.Buffer, error) {
-    // 读取消息的长度
-    var length int32 = int32(len(message))
-    var pkg *bytes.Buffer = new(bytes.Buffer)
-    // 写入消息头
-    err := binary.Write(pkg, binary.LittleEndian, length)
-    if err != nil {
-        return nil, err
-    }
-    // 写入消息实体
-    err = binary.Write(pkg, binary.LittleEndian, []byte(message))
-    if err != nil {
-        return nil, err
-    }
-
-    return pkg, nil
-}
-
-func Decode(reader *bufio.Reader) (string, error) {
-    // 读取消息的长度
-    lengthByte, _ := reader.Peek(4)
-    lengthBuff := bytes.NewBuffer(lengthByte)
-    var length int32
-    err := binary.Read(lengthBuff, binary.LittleEndian, &amp;length)
-    if err != nil {
-        return &quot;&quot;, err
-    }
-    if int32(reader.Buffered()) &lt; length+4 {
-        return &quot;&quot;, err
-    }
-
-    // 读取消息真正的内容
-    pack := make([]byte, int(4+length))
-    _, err = reader.Read(pack)
-    if err != nil {
-        return &quot;&quot;, err
-    }
-    return string(pack[4:]), nil
-}
-
-
-func onMessageRecived(conn net.Conn) {
-    reader := bufio.NewReader(conn)
-    for {
-        msg, _ := reader.ReadString('\n')
-        fmt.Println(msg)
-    }
-}
-
-func main() {
-    conn, err := net.Dial(&quot;tcp&quot;, &quot;127.0.0.1:10000&quot;)
-    checkError(err)
-    defer conn.Close()
-    go onMessageRecived(conn);
-    for {
-      var msg string
-      fmt.Scanln(&amp;msg)
-      if msg == &quot;quit&quot; {
-             break
-      }
-      message,_ := Encode(msg)
-      conn.Write(message.Bytes())
-    }
-    fmt.Println(&quot;send msg&quot;)
-}
-</code></pre>
-<hr>
-<h2 id="简单的语法">简单的语法</h2>
-<pre><code>package main
-
-import (
-    &quot;fmt&quot;
-    &quot;net/http&quot;
-    &quot;net&quot;
-    &quot;io/ioutil&quot;
-)
-
-func main() {
- x, y := 3, 4
- z := sum(x, y)
- fmt.Println(z)
- n := byte('a')
- fmt.Println(n)
- a := []int{3, 1, 5}
- fmt.Println(a)
- b := make([]int, 4)
- fmt.Println(b)
- bs := []byte(&quot;a slice&quot;)
- fmt.Println(bs)
- s := []int{1, 2, 3}
- s = append(s, []int{1, 2, 3}...)
- fmt.Println(s)
- p := &amp;x
- fmt.Println(p)
- m := map[string]int{&quot;three&quot;:3 , &quot;four&quot;:4}
- m[&quot;one&quot;] = 1
- fmt.Println(m)
-
-
- if true {
-    fmt.Println(&quot;yes&quot;)
- }
- switch x {
-  case 0:
-       fmt.Println(&quot;xxx&quot;)
- }
-
- for x := 0; x &lt; 3; x++ {
-  fmt.Println(x)
- }
- fmt.Println(x)
-
- for key, value := range s{
-  fmt.Println(key, value)
- }
-
- defer fmt.Println(1)
- defer fmt.Println(2)
-
- cs := make(chan string)
-
- go func() {cs &lt;- &quot;你好&quot; }()
-
- select {
- case x := &lt;-cs:
- fmt.Println(x)
- }
-
- client()
-}
-
-func sum(a, b int) (sum int){
- return a + b;
-}
-
-func memory() (p *int) {
-       s := make([]int, 20)
-       s[3] = 7
-       return &amp;s[3]
-}
-
-type pair struct {
-    x, y int
-}
-
-
-func (p pair) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-
-    w.Write([]byte(&quot;Y分钟golang速成!&quot;))
-}
-
-func service() {
-    go func() {
-          err := http.ListenAndServe(&quot;:8080&quot;, pair{})
-          fmt.Println(err)
-    }()
-}
-
-func requestServer() {
-    resp, err := http.Get(&quot;http://localhost:8080&quot;)
-    fmt.Println(err)
-    defer resp.Body.Close()
-    body, err := ioutil.ReadAll(resp.Body)
-    fmt.Println(&quot;\n服务器消息： `%s`&quot;, string(body))
-}
-
-func client () {
-    conn, _ := net.Dial(&quot;tcp&quot;, &quot;127.0.0.1:9999&quot;)
-    defer conn.Close()
-    conn.Write([]byte(&quot;Hello world!&quot;))
-    fmt.Println(&quot;send msg&quot;)
-}
-</code></pre>
-<hr>
 ]]></content>
     </entry>
 </feed>
