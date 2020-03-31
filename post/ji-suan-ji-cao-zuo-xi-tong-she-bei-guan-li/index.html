@@ -1,0 +1,207 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>计算机操作系统-设备管理 | Great Wei</title>
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1585662113711">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="计算机操作系统-设备管理 | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="磁盘结构
+盘面（Platter）：一个磁盘有多个盘面；
+磁道（Track）：盘面上的圆形带状区域，一个盘面可以有多个磁道；
+扇区（Track Sector）：磁道上的一个弧段，一个磁道可以有多个扇区，它是最小的物理储存单位，目前主要有 51..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://miexxx.github.io">
+  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1585662113711" alt="">
+  </a>
+  <h1 class="site-title">
+    Great Wei
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/miexxx" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              计算机操作系统-设备管理
+            </h2>
+            <div class="post-info">
+              <span>
+                2020-03-31
+              </span>
+              <span>
+                2 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h1 id="磁盘结构">磁盘结构</h1>
+<p>盘面（Platter）：一个磁盘有多个盘面；<br>
+磁道（Track）：盘面上的圆形带状区域，一个盘面可以有多个磁道；<br>
+扇区（Track Sector）：磁道上的一个弧段，一个磁道可以有多个扇区，它是最小的物理储存单位，目前主要有 512 bytes 与 4 K 两种大小；<br>
+磁头（Head）：与盘面非常接近，能够将盘面上的磁场转换为电信号（读），或者将电信号转换为盘面的磁场（写）；<br>
+制动手臂（Actuator arm）：用于在磁道之间移动磁头；<br>
+主轴（Spindle）：使整个盘面转动。</p>
+<figure data-type="image" tabindex="1"><img src="https://camo.githubusercontent.com/42c8be3472d81b72762c2a88b29fa61b4bdf2409/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f30313466626334642d643837332d346131322d623136302d3836376464616564393830372e6a7067" alt="" loading="lazy"></figure>
+<h1 id="磁盘调度算法">磁盘调度算法</h1>
+<p>读写一个磁盘块的时间的影响因素有：</p>
+<p>旋转时间（主轴转动盘面，使得磁头移动到适当的扇区上）<br>
+寻道时间（制动手臂移动，使得磁头移动到适当的磁道上）<br>
+实际的数据传输时间<br>
+其中，寻道时间最长，因此磁盘调度的主要目标是使磁盘的平均寻道时间最短。</p>
+<h2 id="先来先服务">先来先服务</h2>
+<p>按照磁盘请求的顺序进行调度。<br>
+优点是公平和简单。缺点也很明显，因为未对寻道做任何优化，使平均寻道时间可能较长。</p>
+<h2 id="最短寻道时间优先">最短寻道时间优先</h2>
+<p>优先调度与当前磁头所在磁道距离最近的磁道。</p>
+<p>虽然平均寻道时间比较低，但是不够公平。如果新到达的磁道请求总是比一个在等待的磁道请求近，那么在等待的磁道请求会一直等待下去，也就是出现饥饿现象。具体来说，两端的磁道请求更容易出现饥饿现象。<br>
+<img src="https://camo.githubusercontent.com/513755459b87116ae3a03bb9c4c6a0b161e7d0ed/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f34653234383565342d333462642d343936372d396630322d3063303933623739376161612e706e67" alt="" loading="lazy"></p>
+<h2 id="电梯算法">电梯算法</h2>
+<p>电梯总是保持一个方向运行，直到该方向没有请求为止，然后改变运行方向。<br>
+电梯算法（扫描算法）和电梯的运行过程类似，总是按一个方向来进行磁盘调度，直到该方向上没有未完成的磁盘请求，然后改变方向。<br>
+因为考虑了移动方向，因此所有的磁盘请求都会被满足，解决了 SSTF 的饥饿问题。<br>
+<img src="https://camo.githubusercontent.com/8187903788bbfb90978169f20fa4fd41e094bf22/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f32373163653038662d633132342d343735662d623439302d6265343466656463366432652e706e67" alt="" loading="lazy"></p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E7%A3%81%E7%9B%98%E7%BB%93%E6%9E%84">磁盘结构</a></li>
+<li><a href="#%E7%A3%81%E7%9B%98%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95">磁盘调度算法</a>
+<ul>
+<li><a href="#%E5%85%88%E6%9D%A5%E5%85%88%E6%9C%8D%E5%8A%A1">先来先服务</a></li>
+<li><a href="#%E6%9C%80%E7%9F%AD%E5%AF%BB%E9%81%93%E6%97%B6%E9%97%B4%E4%BC%98%E5%85%88">最短寻道时间优先</a></li>
+<li><a href="#%E7%94%B5%E6%A2%AF%E7%AE%97%E6%B3%95">电梯算法</a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-nei-cun-guan-li/">
+              <h3 class="post-title">
+                计算机操作系统-内存管理
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://miexxx.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

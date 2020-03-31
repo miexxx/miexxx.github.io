@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://miexxx.github.io</id>
     <title>Great Wei</title>
-    <updated>2020-03-31T13:37:57.718Z</updated>
+    <updated>2020-03-31T13:42:01.619Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://miexxx.github.io"/>
     <link rel="self" href="https://miexxx.github.io/atom.xml"/>
@@ -10,6 +10,40 @@
     <logo>https://miexxx.github.io/images/avatar.png</logo>
     <icon>https://miexxx.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Great Wei</rights>
+    <entry>
+        <title type="html"><![CDATA[计算机操作系统-设备管理]]></title>
+        <id>https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-she-bei-guan-li/</id>
+        <link href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-she-bei-guan-li/">
+        </link>
+        <updated>2020-03-31T13:38:39.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="磁盘结构">磁盘结构</h1>
+<p>盘面（Platter）：一个磁盘有多个盘面；<br>
+磁道（Track）：盘面上的圆形带状区域，一个盘面可以有多个磁道；<br>
+扇区（Track Sector）：磁道上的一个弧段，一个磁道可以有多个扇区，它是最小的物理储存单位，目前主要有 512 bytes 与 4 K 两种大小；<br>
+磁头（Head）：与盘面非常接近，能够将盘面上的磁场转换为电信号（读），或者将电信号转换为盘面的磁场（写）；<br>
+制动手臂（Actuator arm）：用于在磁道之间移动磁头；<br>
+主轴（Spindle）：使整个盘面转动。</p>
+<figure data-type="image" tabindex="1"><img src="https://camo.githubusercontent.com/42c8be3472d81b72762c2a88b29fa61b4bdf2409/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f30313466626334642d643837332d346131322d623136302d3836376464616564393830372e6a7067" alt="" loading="lazy"></figure>
+<h1 id="磁盘调度算法">磁盘调度算法</h1>
+<p>读写一个磁盘块的时间的影响因素有：</p>
+<p>旋转时间（主轴转动盘面，使得磁头移动到适当的扇区上）<br>
+寻道时间（制动手臂移动，使得磁头移动到适当的磁道上）<br>
+实际的数据传输时间<br>
+其中，寻道时间最长，因此磁盘调度的主要目标是使磁盘的平均寻道时间最短。</p>
+<h2 id="先来先服务">先来先服务</h2>
+<p>按照磁盘请求的顺序进行调度。<br>
+优点是公平和简单。缺点也很明显，因为未对寻道做任何优化，使平均寻道时间可能较长。</p>
+<h2 id="最短寻道时间优先">最短寻道时间优先</h2>
+<p>优先调度与当前磁头所在磁道距离最近的磁道。</p>
+<p>虽然平均寻道时间比较低，但是不够公平。如果新到达的磁道请求总是比一个在等待的磁道请求近，那么在等待的磁道请求会一直等待下去，也就是出现饥饿现象。具体来说，两端的磁道请求更容易出现饥饿现象。<br>
+<img src="https://camo.githubusercontent.com/513755459b87116ae3a03bb9c4c6a0b161e7d0ed/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f34653234383565342d333462642d343936372d396630322d3063303933623739376161612e706e67" alt="" loading="lazy"></p>
+<h2 id="电梯算法">电梯算法</h2>
+<p>电梯总是保持一个方向运行，直到该方向没有请求为止，然后改变运行方向。<br>
+电梯算法（扫描算法）和电梯的运行过程类似，总是按一个方向来进行磁盘调度，直到该方向上没有未完成的磁盘请求，然后改变方向。<br>
+因为考虑了移动方向，因此所有的磁盘请求都会被满足，解决了 SSTF 的饥饿问题。<br>
+<img src="https://camo.githubusercontent.com/8187903788bbfb90978169f20fa4fd41e094bf22/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f32373163653038662d633132342d343735662d623439302d6265343466656463366432652e706e67" alt="" loading="lazy"></p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[计算机操作系统-内存管理]]></title>
         <id>https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-nei-cun-guan-li/</id>
@@ -1236,17 +1270,6 @@ func client () {
 }
 </code></pre>
 <hr>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Phabricator作为Code Review工具]]></title>
-        <id>https://miexxx.github.io/post/phabricator-zuo-wei-code-review-gong-ju/</id>
-        <link href="https://miexxx.github.io/post/phabricator-zuo-wei-code-review-gong-ju/">
-        </link>
-        <updated>2019-10-01T03:59:02.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="概述">概述</h2>
-<p>Phabricator是一套基于Web的软件开发协作工具，包括代码审查工具Differential，资源库浏览器Diffusion，变更监测工具Herald，Bug跟踪工具Maniphest和维基工具Phriction。Phabricator可与Git、Mercurial、Subversion集成使用。 Phabricator是开源软件，可在Apache许可证第2版下作为自由软件分发。 Phabricator最初是Facebook的一个内部工具，主要开发者为Evan Priestley。Evan Priestley离开Facebook后，在名为Phacility的新公司继续Phabricator的开发。</p>
-<h2 id="搭建">搭建</h2>
 ]]></content>
     </entry>
 </feed>
