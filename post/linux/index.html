@@ -2,21 +2,21 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Mysql | Great Wei</title>
+<title>LINUX | Great Wei</title>
 <link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1586270485033">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="Mysql | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="LINUX | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="
-数据库迁移命令
-mysqldump -uroot -ppassword -h172.xxx.xxx.xx  &gt; xxx.sql 数据库导出
-
-mysql -uroot -ppassword -h172.xxx.xxx.xx 连接数据..." />
-    <meta name="keywords" content="mysql" />
+    <meta name="description" content="sync
+为了加快对磁盘文件的读写速度，位于内存中的文件数据不会立即同步到磁盘，因此关机之前需要先进行 sync 同步操作。
+PATH
+可以在环境变量 PATH 中声明可执行文件的路径，路径之间用 : 分隔。
+/usr/local/bin:..." />
+    <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
   </head>
@@ -82,77 +82,53 @@ mysql -uroot -ppassword -h172.xxx.xxx.xx 连接数据..." />
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              Mysql
+              LINUX
             </h2>
             <div class="post-info">
               <span>
-                2019-04-01
+                2020-04-07
               </span>
               <span>
-                3 min read
+                2 min read
               </span>
-              
-                <a href="https://miexxx.github.io/tag/70yj136M-/" class="post-tag">
-                  # mysql
-                </a>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <hr>
-<h2 id="数据库迁移命令">数据库迁移命令</h2>
-<pre><code class="language-mysql">mysqldump -uroot -ppassword -h172.xxx.xxx.xx  &gt; xxx.sql 数据库导出
-
-mysql -uroot -ppassword -h172.xxx.xxx.xx 连接数据库
-
-source xxx.sql 执行sql文件
-
+                <h2 id="sync">sync</h2>
+<p>为了加快对磁盘文件的读写速度，位于内存中的文件数据不会立即同步到磁盘，因此关机之前需要先进行 sync 同步操作。</p>
+<h2 id="path">PATH</h2>
+<p>可以在环境变量 PATH 中声明可执行文件的路径，路径之间用 : 分隔。</p>
+<pre><code>/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/dmtsai/.local/bin:/home/dmtsai/bin
 </code></pre>
-<hr>
-<h2 id="mysql版本导致的sql查询异常">Mysql版本导致的sql查询异常</h2>
-<pre><code class="language-bash">一个简单的需求，查询数据中如果 a = 0 则按照 x字段降序， 如果 b = 0 则按照 y字段降序。
-问题sql:
-select * from 
-(select * from tableA where a = 0 order by a desc) A 
-union 
-select * from (select * from tableB where b = 0 order by b desc ) B
-
-如果在5.6版本mysql可以得到预期结果,5.6版本以上order by会被优化器过滤,导致查询结果没有排序效果。
-这居然还是官方的优化- -！,还有一点 orderby 和 union 同时使用的时候，order by 需要放入子查询语句中。
-
-解决方法：
-必须在子查询中order by 之后添加limit条件, 还有子查询使用order by  排序字段必须被select。
-
-正确sql:
-
-select * from 
- (select * from tableA where a = 0 order by a desc limit 1000) A 
- union 
- select * from (select * from tableB where b = 0 order by b desc limit 1000) B
-</code></pre>
-<hr>
-<h2 id="sql-查询索引失效">sql 查询索引失效</h2>
-<p>在日常开发中，有许多问题是由于数据库索引没有建立好，与sql写法问题导致索引失效，当我们服务出现了接口压力时，分析原因，如果是由于数据库耗时原因的话，我们应该分析一下sql，获取日志的sql后，执行explain “需要执行的sql”   根据KEY字段判断索引是否有效。</p>
-<hr>
-<h2 id="多张分表联合查询出现bug">多张分表联合查询出现bug</h2>
-<p>上线代码过程中，发现日志一直对一段正常的逻辑代码报错，排查后发现填充的字段数据有问题，于是去数据库查询后发现数据并没有问题，逻辑也是正常的，不断的排查过程中，发现是sql查询的结果有问题，copy sql执行后，发现查询出来的数据的确有问题，其中有一个字段的数据与其它字段数据进行了交换，之后排查发现两张分表的表字段顺序是不相同的，导致发生了这样的一个bug。</p>
-<h3 id="处理方法">处理方法</h3>
-<p>desc tableName  md5处理后分表之间进行表结构对比，发现出现问题的表结构及时处理。</p>
+<h2 id="磁盘的文件名">磁盘的文件名</h2>
+<p>Linux 中每个硬件都被当做一个文件，包括磁盘。磁盘以磁盘接口类型进行命名，常见磁盘的文件名如下：<br>
+IDE 磁盘：/dev/hd[a-d]<br>
+SATA/SCSI/SAS 磁盘：/dev/sd[a-p]<br>
+其中文件名后面的序号的确定与系统检测到磁盘的顺序有关，而与磁盘所插入的插槽位置无关。</p>
+<h2 id="分区">分区</h2>
+<p>磁盘分区表主要有两种格式，一种是限制较多的 MBR 分区表，一种是较新且限制较少的 GPT 分区表。</p>
+<h3 id="mbr">MBR</h3>
+<p>MBR 中，第一个扇区最重要，里面有主要开机记录（Master boot record, MBR）及分区表（partition table），其中主要开机记录占 446 bytes，分区表占 64 bytes。<br>
+分区表只有 64 bytes，最多只能存储 4 个分区，这 4 个分区为主分区（Primary）和扩展分区（Extended）。其中扩展分区只有一个，它使用其它扇区来记录额外的分区表，因此通过扩展分区可以分出更多分区，这些分区称为逻辑分区。<br>
+Linux 也把分区当成文件，分区文件的命名方式为：磁盘文件名 + 编号，例如 /dev/sda1。注意，逻辑分区的编号从 5 开始。</p>
+<h2 id="文件系统">文件系统</h2>
 
               </div>
               <div class="toc-container">
                 <ul class="markdownIt-TOC">
 <li>
 <ul>
-<li><a href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%81%E7%A7%BB%E5%91%BD%E4%BB%A4">数据库迁移命令</a></li>
-<li><a href="#mysql%E7%89%88%E6%9C%AC%E5%AF%BC%E8%87%B4%E7%9A%84sql%E6%9F%A5%E8%AF%A2%E5%BC%82%E5%B8%B8">Mysql版本导致的sql查询异常</a></li>
-<li><a href="#sql-%E6%9F%A5%E8%AF%A2%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88">sql 查询索引失效</a></li>
-<li><a href="#%E5%A4%9A%E5%BC%A0%E5%88%86%E8%A1%A8%E8%81%94%E5%90%88%E6%9F%A5%E8%AF%A2%E5%87%BA%E7%8E%B0bug">多张分表联合查询出现bug</a>
+<li><a href="#sync">sync</a></li>
+<li><a href="#path">PATH</a></li>
+<li><a href="#%E7%A3%81%E7%9B%98%E7%9A%84%E6%96%87%E4%BB%B6%E5%90%8D">磁盘的文件名</a></li>
+<li><a href="#%E5%88%86%E5%8C%BA">分区</a>
 <ul>
-<li><a href="#%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95">处理方法</a></li>
+<li><a href="#mbr">MBR</a></li>
 </ul>
 </li>
+<li><a href="#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F">文件系统</a></li>
 </ul>
 </li>
 </ul>
@@ -165,9 +141,9 @@ select * from
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://miexxx.github.io/post/chang-guang-she-qu/">
+            <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-lian-jie/">
               <h3 class="post-title">
-                常逛社区
+                计算机操作系统-链接
               </h3>
             </a>
           </div>
