@@ -2,23 +2,19 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Es | Great Wei</title>
+<title>Crontab | Great Wei</title>
 <link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1587645583804">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="Es | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="Crontab | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="内存不足查询失败：
-在公司搭建的ELK日志分析系统，在一个月内稳定的运行中，突然有一天，日志分析工具不好使了。
-发现问题是由于，ES的内存不足了，导致查询失败。
-
-解决方法：
-
- curl -XDELETE http://127.0.0.1..." />
-    <meta name="keywords" content="es" />
+    <meta name="description" content="问题：
+crontab设置定时任务时，* * * * * php 1.php， 由于crontab任务执行的用户角色不同，所以找不到php环境变量，导致任务执行失败。
+解决方法：输入完整php路径。 * * * * * /usr/local..." />
+    <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
   </head>
@@ -84,56 +80,30 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              Es
+              Crontab
             </h2>
             <div class="post-info">
               <span>
-                2019-07-05
+                2020-04-23
               </span>
               <span>
                 1 min read
               </span>
               
-                <a href="https://miexxx.github.io/tag/p4II1O4lqR/" class="post-tag">
-                  # es
-                </a>
-              
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <h2 id="内存不足查询失败">内存不足查询失败：</h2>
-<p>在公司搭建的ELK日志分析系统，在一个月内稳定的运行中，突然有一天，日志分析工具不好使了。<br>
-发现问题是由于，ES的内存不足了，导致查询失败。</p>
-<ul>
-<li>解决方法：</li>
-</ul>
-<pre><code class="language-$xslt"> curl -XDELETE http://127.0.0.1:9200/*$format_date
- curl -XPOST 'http://127.0.0.1:9200/*$format_date/_forcemerge?only_expunge_deletes=true'
- curl -XPOST 'http://127.0.0.1:9200/_forcemerge?only_expunge_deletes=true'
-</code></pre>
-<p>对索引与数据进行物理删除,所以在使用这类需要占用大量磁盘，内存的程序，都应该定时监控清理。</p>
-<h2 id="索引写入失败">索引写入失败：</h2>
-<p>当服务器磁盘占用达到95%，es会自动将索引设置成只读模式。</p>
-<ul>
-<li>解决方法：</li>
-</ul>
-<pre><code class="language-$xslt">将系统磁盘清理后，注意将索引取消只读模式。
-</code></pre>
-<h2 id="单个索引过大查询失败">单个索引过大，查询失败</h2>
-<p>由于索引过大，需要大量内存加载数据导致搜索失败，记得定时清理无用的日志信息。</p>
-<h2 id="其它问题">其它问题</h2>
-<p>前辈走过的坑 <a href="http://zoufeng.net/2018/07/16/cpu-of-elasticsearch-high-search-slow/">排查elasticsearch的cpu居高不下，查询慢的问题</a></p>
+                <h2 id="问题">问题：</h2>
+<p>crontab设置定时任务时，* * * * * php 1.php， 由于crontab任务执行的用户角色不同，所以找不到php环境变量，导致任务执行失败。</p>
+<p>解决方法：输入完整php路径。 * * * * * /usr/local/php 1.php</p>
 
               </div>
               <div class="toc-container">
                 <ul class="markdownIt-TOC">
 <li>
 <ul>
-<li><a href="#%E5%86%85%E5%AD%98%E4%B8%8D%E8%B6%B3%E6%9F%A5%E8%AF%A2%E5%A4%B1%E8%B4%A5">内存不足查询失败：</a></li>
-<li><a href="#%E7%B4%A2%E5%BC%95%E5%86%99%E5%85%A5%E5%A4%B1%E8%B4%A5">索引写入失败：</a></li>
-<li><a href="#%E5%8D%95%E4%B8%AA%E7%B4%A2%E5%BC%95%E8%BF%87%E5%A4%A7%E6%9F%A5%E8%AF%A2%E5%A4%B1%E8%B4%A5">单个索引过大，查询失败</a></li>
-<li><a href="#%E5%85%B6%E5%AE%83%E9%97%AE%E9%A2%98">其它问题</a></li>
+<li><a href="#%E9%97%AE%E9%A2%98">问题：</a></li>
 </ul>
 </li>
 </ul>
@@ -146,9 +116,9 @@
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://miexxx.github.io/post/elk-ri-zhi-fen-xi-xi-tong-da-jian/">
+            <a href="https://miexxx.github.io/post/linux/">
               <h3 class="post-title">
-                Elk日志分析系统搭建
+                LINUX
               </h3>
             </a>
           </div>
