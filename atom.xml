@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://miexxx.github.io</id>
     <title>Great Wei</title>
-    <updated>2020-04-28T07:01:54.446Z</updated>
+    <updated>2020-04-28T08:51:21.939Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://miexxx.github.io"/>
     <link rel="self" href="https://miexxx.github.io/atom.xml"/>
@@ -175,6 +175,54 @@ waitpid() 或者 wait() 调用会返回。<br>
 <p>僵尸进程通过 ps 命令显示出来的状态为 Z（zombie）。</p>
 <p>系统所能使用的进程号是有限的，如果产生大量僵尸进程，将因为没有可用的进程号而导致系统不能产生新的进程。</p>
 <p>要消灭系统中大量的僵尸进程，只需要将其父进程杀死，此时僵尸进程就会变成孤儿进程，从而被 init 进程所收养，这样 init 进程就会释放所有的僵尸进程所占有的资源，从而结束僵尸进程。</p>
+<h2 id="系统诊断命令">系统诊断命令</h2>
+<h3 id="free">free</h3>
+<p>需要学会查看系统内存 未使用的内容 = free + buffers + cached -m 单位转换M -g 单位转换为G</p>
+<h3 id="vmstat">vmstat</h3>
+<p>分析系统问题<br>
+r (running) 列表运行和等待的进程数量，如果长期大于1说明cpu不足，需要cpu。<br>
+b 列表等待资源的进程数，如等待I/O，或者内存交换等。</p>
+<p>cpu使用状态<br>
+us 表示用户进程cpu时间占比，如果长期大于50%,需要考虑优化用户程序。<br>
+sy 显示了内核进程cpu时间占比，如果us + sy 大于80%说明可能存在CPU不足。<br>
+wa 显示了IO等待所占用的CPU时间的百分比，说明IO等待严重，磁盘大量随机访问造成的，也可能是磁盘或者磁盘访问控制器带宽瓶颈造成的<br>
+id cpu处于空闲的百分比</p>
+<p>system显示采集间隔中观察到的每秒设备中断数。<br>
+in 列表在某一时间间隔中观察到的每秒设备中断数<br>
+cs 表示每秒产生的上下文切换次数</p>
+<p>memory 内存情况<br>
+swpd 切换到内存交换区的内存数量，如果swpd的值不为0，或者比较大，只要si,so的长期为0，系统性能还是正常<br>
+free 当前的空闲页面列表中内存数量(k表示)<br>
+buff 作为buffer cache的内存数量，一般对块设备的读写才需要缓冲。<br>
+cache 作为page cache的内存数量，一般作为文件系统的cache，如果cache较大，说明用到cache的文件较多，如果此时IO中bi比较小，说明文件系统效率比较好。</p>
+<p>swap<br>
+si 由内存进入内存交换区数量<br>
+so 有内存交换区进入内存数量</p>
+<p>IO<br>
+bi 从块设备读入数据的总量（读磁盘）（每秒kb）<br>
+bo 块设备写入数据的总量(写磁盘)（每秒kb）<br>
+这里我们设置的bi+bo参考值为1000，如果超过1000，而且wa值较大应该考虑均衡磁盘负载，可以结合iostat输出来分析。</p>
+<h3 id="dd">dd</h3>
+<p>模拟读写磁盘操作</p>
+<h3 id="top">top</h3>
+<p>系统</p>
+<h3 id="watch-more-procnetdev">watch more /proc/net/dev</h3>
+<p>用于定位丢包，错报情况，以便看望了瓶颈</p>
+<h3 id="netstat">netstat</h3>
+<p>查看端口</p>
+<h3 id="ping">ping</h3>
+<h3 id="traceroute-ip">traceroute ip</h3>
+<p>路由追踪</p>
+<h3 id="dig">dig</h3>
+<p>查看域名解析</p>
+<h3 id="dmesg">dmesg</h3>
+<p>查看系统日志</p>
+<h3 id="df">df</h3>
+<p>查看磁盘剩余空间</p>
+<h3 id="du">du</h3>
+<p>查看磁盘使用空间</p>
+<h3 id="ps">ps</h3>
+<p>查看进程</p>
 ]]></content>
     </entry>
     <entry>
