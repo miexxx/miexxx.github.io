@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://miexxx.github.io</id>
     <title>Great Wei</title>
-    <updated>2020-04-28T09:05:32.857Z</updated>
+    <updated>2020-05-09T09:27:05.851Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://miexxx.github.io"/>
     <link rel="self" href="https://miexxx.github.io/atom.xml"/>
@@ -11,14 +11,44 @@
     <icon>https://miexxx.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Great Wei</rights>
     <entry>
+        <title type="html"><![CDATA[zookeeper集群 + canal服务 搭建]]></title>
+        <id>https://miexxx.github.io/post/zookeeper-ji-qun-da-jian/</id>
+        <link href="https://miexxx.github.io/post/zookeeper-ji-qun-da-jian/">
+        </link>
+        <updated>2020-04-28T11:40:18.000Z</updated>
+        <content type="html"><![CDATA[<p></p>
+<h1 id="zookeeper简介">zookeeper简介</h1>
+<p>顾名思义 zookeeper 就是动物园管理员，他是用来管 hadoop（大象）、Hive(蜜蜂)、pig(小 猪)的管理员， Apache Hbase 和 Apache Solr 的分布式集群都用到了 zookeeper；Zookeeper: 是一个分布式的、开源的程序协调服务，是 hadoop 项目下的一个子项目。他提供的主要功 能包括：配置管理、名字服务、分布式锁、集群管理</p>
+<h1 id="zookeeper作用">zookeeper作用</h1>
+<h2 id="公共配置管理">公共配置管理</h2>
+<h2 id="服务器共用hosts名字服务">服务器共用hosts，名字服务</h2>
+<h2 id="分布式锁">分布式锁</h2>
+<h2 id="集群管理竞选策略">集群管理，竞选策略</h2>
+<p>本文章，主要讲解搭建内容，理论方面不再阐述。</p>
+<h1 id="单机多节点搭建要点">单机多节点搭建要点</h1>
+<p>需要修改每个节点存储日志目录（/usr/local/var/run/zookeeper/data/zoo-1/），每个节点需要创建myid。</p>
+<p>创建多个节点copy多分zoo.cfg文件，修改配置内容，主要配置其他节点的地址，与客户端端口。</p>
+<pre><code>clientPort=2182
+server.1=127.0.0.1:2666:3666
+server.2=127.0.0.1:2667:3667
+server.3=127.0.0.1:2668:3668
+</code></pre>
+<p>每个节点依次启动<br>
+服务端：zkServer  start zoo-1.cfg</p>
+<p>客户端可连接任意端口：zkCli -server ip:port(客户端端口)</p>
+<h1 id="canal简介">canal简介</h1>
+<p>canal是阿里巴巴开源的mysql数据库binlog的增量订阅&amp;消费组件。</p>
+]]></content>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[HTTP]]></title>
         <id>https://miexxx.github.io/post/http/</id>
         <link href="https://miexxx.github.io/post/http/">
         </link>
         <updated>2020-04-28T06:49:12.000Z</updated>
         <content type="html"><![CDATA[<h1 id="基础概念">基础概念</h1>
-<h2 id="url">url</h2>
-<p>url包好url 和urn<br>
+<h2 id="uri">uri</h2>
+<p>uri包好url 和urn<br>
 <img src="https://camo.githubusercontent.com/b61eb498c8b9458916441d9341d3975b6e1134cf/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f38343431623263342d646361372d346436622d386566622d6632326566636361663333312e706e67" alt="" loading="lazy"></p>
 <h2 id="请求和响应报文">请求和响应报文</h2>
 <h3 id="请求报文">请求报文</h3>
@@ -34,7 +64,7 @@
         </link>
         <updated>2020-04-23T12:36:57.000Z</updated>
         <content type="html"><![CDATA[<h2 id="问题">问题：</h2>
-<p>crontab设置定时任务时，* * * * * php 1.php， 由于crontab任务执行的用户角色不同，所以找不到php环境变量，导致任务执行失败。</p>
+<p>crontab设置定时任务时，* * * * * php 1.php， 找不到php环境变量，导致任务执行失败。</p>
 <p>解决方法：输入完整php路径。 * * * * * /usr/local/php 1.php</p>
 ]]></content>
     </entry>
@@ -949,112 +979,6 @@ FIFO 常用于客户-服务器应用程序中，FIFO 用作汇聚点，在客户
 多个进程可以将同一个文件映射到它们的地址空间从而实现共享内存。另外 XSI 共享内存不是使用文件，而是使用内存的匿名段。</p>
 <h2 id="套接字">套接字</h2>
 <p>与其它通信机制不同的是，它可用于不同机器间的进程通信。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[浅谈Mysql索引]]></title>
-        <id>https://miexxx.github.io/post/qian-tan-mysql-suo-yin/</id>
-        <link href="https://miexxx.github.io/post/qian-tan-mysql-suo-yin/">
-        </link>
-        <updated>2020-03-09T12:31:46.000Z</updated>
-        <content type="html"><![CDATA[<hr>
-<h2 id="何为索引">何为索引</h2>
-<p>索引其实就是一种优化查询的数据结构。比如mysql的索引就是使用B+树来实现的，而B+树就是一种数据结构，可以优化查询速度，所以可以利用索引来优化慢查询，索引的定义就是优化查询的数据结构。</p>
-<hr>
-<h2 id="有哪些可以优化查询的数据结构">有哪些可以优化查询的数据结构</h2>
-<p>优化查询的数据结构有哈希表，完全平衡二叉树，B树，B+树。其中Mysql使用最多的是B+树。</p>
-<hr>
-<h2 id="hash表">hash表</h2>
-<p>存储数据，需要先获取hashcode，再将数据存储到hashTable[hashcode],这种方式容易产生hash冲突，多个数据同时落到相同下标，可以采用hashTable[hashcode]存储的数据结构变化成链表，里面存储着这些公共hashcode的数据，这种方法叫做拉链法。<a href="https://www.cs.usfca.edu/~galles/visualization/OpenHash.html">实现过程</a><br>
-优点: 适合查询单一数据，速度快。<br>
-缺点：不适合查询范围数据，相当要遍历索引。</p>
-<hr>
-<h2 id="完全平衡二叉树">完全平衡二叉树</h2>
-<p>每个节点最多只能有左右两个子节点，左子树 &lt; 节点 &lt; 右子数，左右子数的层级不能超过 1 层。<br>
-<a href="https://link.zhihu.com/?target=https%3A//www.cs.usfca.edu/~galles/visualization/AVLtree.html">实现过程</a><br>
-插入过程，判断当前数与根节点大小进行判断，如果小于根节点，向左子树继续寻找，否则向右子树继续寻找，直到叶子节点后，回溯判断，左右层级是否超过了1层，继续进行树的结构变化。<br>
-优点：支持范围查询，因为二叉树是有序的。而且也可以提高查询效率，还是因为它是有序的，而且高度相比其它二叉树更平衡，通过二分法查询。<br>
-缺点：二叉树这个定义的本身就限制了它，即一个节点只能有两个子节点，所以当插入的数据非常多时，树的深度就会非常高，树的深度非常高的话就会影响查询效率，所以没有使用二叉树来当索引的。</p>
-<hr>
-<h2 id="b树">B树</h2>
-<p>简单介绍一下就是可以一个节点可以存储多个节点的搜索树。这样就没有了二叉树的两个节点的限制，同时带有有序的特点。所以图中有个参数：MAX.Degree,即一个节点存储的最大节点数，这里设置的是3，看得比较明显。这样的话一层就可以存储很多的数据了。<br>
-<a href="https://link.zhihu.com/?target=https%3A//www.cs.usfca.edu/~galles/visualization/BTree.html">实现过程</a><br>
-优点：它有二分查找可以快速定位数据的所在位置，而且每层可以存放大量数据，所以树的高度低。感觉还是很不错的。<br>
-缺点：范围查询效率太低，因为比一个数据大的话，虽说肯定会在右子树，但是上层数据和其它子树的数据不好对比。</p>
-<hr>
-<h2 id="b树-2">B+树</h2>
-<p><a href="https://link.zhihu.com/?target=https%3A//www.cs.usfca.edu/~galles/visualization/BPlusTree.html">实现过程</a><br>
-我们对比一下B+树和B树，发现了什么？图中是有重复元素的，仔细一看，所有的非叶子节点都在叶子节点中出现了备份。也就是说，最下面的一层，也就是所有的叶子节点就包含了所有的数据。这就和前面的所有结构都不一样的地方了。然后，比起B树而言，叶子节点这层还有指向后面的指针，也就是多了指向。这就能很好地进行了范围查询，很好地解决了B树的问题。这样定位到数据后，直接在这层的指针遍历即可。<br>
-经过上述的讨论，我总结了一下，衡量一种mysql索引好不好有三个原则：<br>
-1.能不能快速定位到元素所在位置。<br>
-2.能不能较好的进行范围查询。<br>
-3.树的高度是低还是高。</p>
-<hr>
-<h2 id="局部性原理与磁盘预读">局部性原理与磁盘预读</h2>
-<p>计算机科学中著名的局部性原理:当一个数据被用到时，其附近的数据也通常会马上被使用。</p>
-<p>所以操作系统为了提高效率，读取数据时往往不是严格按需读取，而是每次都会预读，即使只需要一个字节，操作系统也会从这个位置开始，顺序向后读取一定长度的数据放入内存。这里的-定长度叫做页，也就是操作系统操作磁盘时的基本单位。一般操作系统中 一页的大小是4Kb。</p>
-<p>从上面的原理我们也能知道，固态硬盘比机械硬盘快的最根本最简单的原因就是:固态硬盘使用的电路进行读写，而机械硬盘使用的机械运动。<br>
-其实不管是机械硬盘还是固态硬盘都是存储介质,真正控制读写的是操作系统。</p>
-<p>这部分属于计算机原理和操作系统方面的知识，感觉理解一下还是很有必要的。</p>
-<p>所以，回到我们的问题，B+树中一个节点到底存多少个元素合适?，其实也可以换个角度来思考B+树中一个节点到底多大合适?</p>
-<p>答案是: B+树中一个节点为一页或页的倍数最为合适。因为如果一个节点的大小小于1页，那么读取这个节点的时候其实也会读出1页，造成资源的浪费;如果一个节点的大小大于1页，比如1.2页，那么读取这个节点的时候会读出2页，也会造成资源的浪费;所以为了不造成浪费，所以最后把一个节点的大小控制在1页、2页、3页、4页等倍数页大小最为合适。</p>
-<p>那么，Mysql中B+树的一个节点大小为多大呢?<br>
-这个问题的答案是“1页&quot;”，这里说的页&quot;是Mysq自定义的单位(其实和操作系统类似)，Mysql的Innodb引擎中一页的默认大小是16k (如果操作系统中-页大小是4k，那么Mysql中1 页=操作系统中4页)，可以使用命令SHOW GLOBAL STATUS like 'Innodb_ page size';查看。 并且还可以告诉你的是，一个节点为1页就够了。</p>
-<p>为什么一个节点为一页（16kb）就够了呢？</p>
-<p>先来看看mylsam和innodb使用B+树的情况：<br>
-<img src="https://pic2.zhimg.com/80/v2-4229f0d89c874ff6c741e9bca99887c9_1440w.jpg" alt="" loading="lazy"><br>
-通常我们认为B+树的非叶子节点不存储数据，只有叶子节点才存储数据。而B树的非叶子节点和叶子节点都会存储数据，这会导致非叶子节点存储的索引值更少，树的高度相对会比B+树高，平均的io效率会比较低，所以使用B+树作为索引的数据结构，再加上B+树的叶子节点之间会有指针相连，便于范围查询。上图的data区域两个存储引擎会有所不同，也就是聚族和非聚族索引的区别。后面详细讲解。</p>
-<p>（这里说一下我对这里的为啥B树的高度相对B+树高的理解：就如上图所见，一个节点指的是<br>
-<img src="https://pic4.zhimg.com/80/v2-1d06b9e7c77bf6fe72cd7a556ff42753_1440w.png" alt="" loading="lazy"></p>
-<p>这才是一个节点，而不是单纯的15，或者加上旁边的一个指针。这样的话，前面已知一个节点是16kb大小，那么在这固定大小中，B树的非叶子节点还要存储数据，而B+树只存储值和指针。具体一点就是，假设数据大小2kb，值大小1kb,指针大小1kb。那么B树里只能有4个值，而B+树里则有8个值，这样的话，整个索引存储相同数量的值的话，B+树明显就比B树低，这样就提高了磁盘的io效率）</p>
-<p>前面我们提到数据区域存储的东西，现在来进行详细解释：</p>
-<p>myisam中，叶子节点的数据区域存储的是数据记录的地址。这也叫非聚族索引。</p>
-<p>下面是主键索引：<br>
-<img src="https://pic3.zhimg.com/80/v2-b26ee58c1e431ffda3645448858ee7b6_1440w.jpg" alt="" loading="lazy"></p>
-<p>下面是辅助索引：<br>
-<img src="https://pic3.zhimg.com/80/v2-ce65d7629ef49b53a23971e86c362f3a_1440w.jpg" alt="" loading="lazy"></p>
-<p>从图中看得出来，叶子节点中只存储着地址（也就是此值对应的记录的所在地址），找到对应的地址，然后去地址中取出数据。并且主键索引和辅助索引并没有太多区别。</p>
-<p>然后再来看innodb中的B+树：</p>
-<p>下面是主键索引：<br>
-<img src="https://pic1.zhimg.com/80/v2-c08615d9d603ab83532b325aa250789c_1440w.jpg" alt="" loading="lazy"></p>
-<p>下面是辅助索引：<br>
-<img src="https://pic1.zhimg.com/80/v2-b27e87b97d3c33d847ae97546ba2b1b0_1440w.jpg" alt="" loading="lazy"></p>
-<p>innodb的主键索引和实际数据是绑定在一起的也就是说innodb的表一定要有一个主键索引，如果一个表没有手动创建一个主键索引，innodb会查看有没有唯一索引，如果有，则选用唯一索引作为主键，如果连唯一索引也没有，则会默认建立一个隐藏的主键索引（用户不可见）</p>
-<p>另外，innodb的主键索引要比myisam的的主键索引查询效率较高（少一次磁盘io）,并且比辅助索引也要高很多。（这里不是很理解。。。。）</p>
-<p>所以，我们在使用innodb作为存储引擎时，要注意：</p>
-<p>1.手动建立一个主键索引</p>
-<p>2.尽量利用主键索引进行查询</p>
-<p>默默表示，看到这里对主键索引，辅助索引，聚族索引，非聚族索引有点理解不过来了。。。</p>
-<p>后面慢慢缓冲。。</p>
-<p>回到我们的问题:为什么一个节点为1页(16k) 就够了?</p>
-<p>对着上面Mysql中Innodb中对B+树的实际应用(主要看主键索引)，我们可以发现，B+树中的一个节点存储的内容是:</p>
-<p>非叶子节点 : 主键+指针</p>
-<p>叶子节点 : 数据</p>
-<p>那么，假设我们一行数据大小为1K,那么一页就能存16条数据，也就是一个叶子节点能存16条数据;</p>
-<p>再看非叶子节点，假设主键ID为bigint类型, 那么长度为8B，指针大小在Innodb源码中为6B，-共就是14B,那么一页里就可以存储16K/14=1170个(主键+指针)，那么一颗高度 为2的B+树能存储的数据为:</p>
-<p>1170<em>16=18720条，一 颗高度为3的B+树能存储的数据为: 1170</em>1170*16=21902400 (千万级条)。所以在InnoDB中B+树高度一般为1-3层， 它就能满足千万级的数据存储。在查找数据时一次页的查找代表一次IO,所以通过主键索引查询通常只需要1-3次IO操作即可查找到数据。所以也就回答了我们的问题，1 页=16k这么设置是比较合适的，是适用大多数的企业的，当然这个值是可以修改的，所以也能根据业务的时间情况进行调整。</p>
-<p>接着，我们来联系这次学到的索引底层原理再来看看我常常见到的最左前辍原则：</p>
-<p>比如有下面这个B+树索引，我们建立了一个联合索引，顺序是emp_no,title,from_data.既然是联合索引，那么它们按理说应该是放在一起连续存放的。<br>
-<img src="https://pic4.zhimg.com/80/v2-f9eca981e7b76e965036c8ff2a58767f_1440w.jpg" alt="" loading="lazy"></p>
-<p>我们判断一 个查询条件能不能用到索引,我们要分析这个查询条件能不能利用某个索引缩小查询范围</p>
-<p>对于select * from employees.titles where emp_ no = 1是能用到索引的，因为它能利用上面的索引缩小所有查询范围，首先和第一个节点&quot;4-r-01&quot;比较，1&lt;4, 所以可以直接确定结果在左子树，同理，依次按顺序进行比较，逐步可以缩小查询范围。</p>
-<p>对于select * from employees. titles where title =‘1’是不能用到索引的，因为它不能用到上面的索引，和第一节点进行比较时，没有emp_ no这个字段的值，不能确定到底该去左子树还是右子树继续进行查询。</p>
-<p>对于select * from employees.titles where title =‘1’and emp_ no = 1是能用到索引，按照我们的上面的分析,先用ttle='1 这个条件和第一个节点进行比较，是没有结果的，但是mysql会对这个sql进行优化，优化之后会将emp_ no=1这个条件放到第一位，从而可以利用索引。这里是使用了mysql的查询优化器。</p>
-<p>Mysq总结</p>
-<ol>
-<li>
-<p>B+树可以更好的结合磁盘IO原理提高查询效率</p>
-</li>
-<li>
-<p>Innodb一 定要有主键，没有主键会以唯一索引为主键， 否则会建立一个隐藏主键</p>
-</li>
-<li>
-<p>Innodb的数据是和主键索引存在一起的(数据在叶子节点中，MyISAM中的叶子节点存储的数据地址)</p>
-</li>
-</ol>
-<p>4.建立索引时要考虑已有索引，一个SQL语句只会选择花费最低的一个索引执行</p>
-<p>5.索引是一种有序的数据结构(B+树) ，一个节点可以存多个有序的元素，所以要利用好最左前缀原则<br>
-6.真实场景中一颗B+树的高度通常为3</p>
 ]]></content>
     </entry>
 </feed>

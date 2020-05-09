@@ -2,18 +2,19 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Phabricator作为Code Review工具 | Great Wei</title>
+<title>zookeeper集群 + canal服务 搭建 | Great Wei</title>
 <link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1589016418259">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="Phabricator作为Code Review工具 | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="zookeeper集群 + canal服务 搭建 | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="概述
-Phabricator是一套基于Web的软件开发协作工具，包括代码审查工具Differential，资源库浏览器Diffusion，变更监测工具Herald，Bug跟踪工具Maniphest和维基工具Phriction。Phabric..." />
-    <meta name="keywords" content="tool" />
+    <meta name="description" content="
+zookeeper简介
+顾名思义 zookeeper 就是动物园管理员，他是用来管 hadoop（大象）、Hive(蜜蜂)、pig(小 猪)的管理员， Apache Hbase 和 Apache Solr 的分布式集群都用到了 zo..." />
+    <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
   </head>
@@ -79,37 +80,57 @@ Phabricator是一套基于Web的软件开发协作工具，包括代码审查工
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              Phabricator作为Code Review工具
+              zookeeper集群 + canal服务 搭建
             </h2>
             <div class="post-info">
               <span>
-                2019-10-01
+                2020-04-28
               </span>
               <span>
-                1 min read
+                2 min read
               </span>
-              
-                <a href="https://miexxx.github.io/tag/_5EQAs6GBC/" class="post-tag">
-                  # tool
-                </a>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <h2 id="概述">概述</h2>
-<p>Phabricator是一套基于Web的软件开发协作工具，包括代码审查工具Differential，资源库浏览器Diffusion，变更监测工具Herald，Bug跟踪工具Maniphest和维基工具Phriction。Phabricator可与Git、Mercurial、Subversion集成使用。 Phabricator是开源软件，可在Apache许可证第2版下作为自由软件分发。 Phabricator最初是Facebook的一个内部工具，主要开发者为Evan Priestley。Evan Priestley离开Facebook后，在名为Phacility的新公司继续Phabricator的开发。</p>
-<h2 id="搭建">搭建</h2>
+                <p></p>
+<h1 id="zookeeper简介">zookeeper简介</h1>
+<p>顾名思义 zookeeper 就是动物园管理员，他是用来管 hadoop（大象）、Hive(蜜蜂)、pig(小 猪)的管理员， Apache Hbase 和 Apache Solr 的分布式集群都用到了 zookeeper；Zookeeper: 是一个分布式的、开源的程序协调服务，是 hadoop 项目下的一个子项目。他提供的主要功 能包括：配置管理、名字服务、分布式锁、集群管理</p>
+<h1 id="zookeeper作用">zookeeper作用</h1>
+<h2 id="公共配置管理">公共配置管理</h2>
+<h2 id="服务器共用hosts名字服务">服务器共用hosts，名字服务</h2>
+<h2 id="分布式锁">分布式锁</h2>
+<h2 id="集群管理竞选策略">集群管理，竞选策略</h2>
+<p>本文章，主要讲解搭建内容，理论方面不再阐述。</p>
+<h1 id="单机多节点搭建要点">单机多节点搭建要点</h1>
+<p>需要修改每个节点存储日志目录（/usr/local/var/run/zookeeper/data/zoo-1/），每个节点需要创建myid。</p>
+<p>创建多个节点copy多分zoo.cfg文件，修改配置内容，主要配置其他节点的地址，与客户端端口。</p>
+<pre><code>clientPort=2182
+server.1=127.0.0.1:2666:3666
+server.2=127.0.0.1:2667:3667
+server.3=127.0.0.1:2668:3668
+</code></pre>
+<p>每个节点依次启动<br>
+服务端：zkServer  start zoo-1.cfg</p>
+<p>客户端可连接任意端口：zkCli -server ip:port(客户端端口)</p>
+<h1 id="canal简介">canal简介</h1>
+<p>canal是阿里巴巴开源的mysql数据库binlog的增量订阅&amp;消费组件。</p>
 
               </div>
               <div class="toc-container">
                 <ul class="markdownIt-TOC">
-<li>
+<li><a href="#zookeeper%E7%AE%80%E4%BB%8B">zookeeper简介</a></li>
+<li><a href="#zookeeper%E4%BD%9C%E7%94%A8">zookeeper作用</a>
 <ul>
-<li><a href="#%E6%A6%82%E8%BF%B0">概述</a></li>
-<li><a href="#%E6%90%AD%E5%BB%BA">搭建</a></li>
+<li><a href="#%E5%85%AC%E5%85%B1%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86">公共配置管理</a></li>
+<li><a href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%85%B1%E7%94%A8hosts%E5%90%8D%E5%AD%97%E6%9C%8D%E5%8A%A1">服务器共用hosts，名字服务</a></li>
+<li><a href="#%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81">分布式锁</a></li>
+<li><a href="#%E9%9B%86%E7%BE%A4%E7%AE%A1%E7%90%86%E7%AB%9E%E9%80%89%E7%AD%96%E7%95%A5">集群管理，竞选策略</a></li>
 </ul>
 </li>
+<li><a href="#%E5%8D%95%E6%9C%BA%E5%A4%9A%E8%8A%82%E7%82%B9%E6%90%AD%E5%BB%BA%E8%A6%81%E7%82%B9">单机多节点搭建要点</a></li>
+<li><a href="#canal%E7%AE%80%E4%BB%8B">canal简介</a></li>
 </ul>
 
               </div>
@@ -120,9 +141,9 @@ Phabricator是一套基于Web的软件开发协作工具，包括代码审查工
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://miexxx.github.io/post/gong-ju-hui-zong/">
+            <a href="https://miexxx.github.io/post/http/">
               <h3 class="post-title">
-                工具汇总
+                HTTP
               </h3>
             </a>
           </div>
