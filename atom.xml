@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://miexxx.github.io</id>
     <title>Great Wei</title>
-    <updated>2020-05-11T03:18:35.935Z</updated>
+    <updated>2020-05-11T03:27:10.780Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://miexxx.github.io"/>
     <link rel="self" href="https://miexxx.github.io/atom.xml"/>
@@ -11,7 +11,7 @@
     <icon>https://miexxx.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Great Wei</rights>
     <entry>
-        <title type="html"><![CDATA[HTTP]]></title>
+        <title type="html"><![CDATA[Http]]></title>
         <id>https://miexxx.github.io/post/http/</id>
         <link href="https://miexxx.github.io/post/http/">
         </link>
@@ -188,8 +188,8 @@ If-Modified-Since: Wed, 21 Oct 2015 07:28:00 GMT</p>
     </entry>
     <entry>
         <title type="html"><![CDATA[Crontab]]></title>
-        <id>https://miexxx.github.io/post/crontab/</id>
-        <link href="https://miexxx.github.io/post/crontab/">
+        <id>https://miexxx.github.io/post/cr/</id>
+        <link href="https://miexxx.github.io/post/cr/">
         </link>
         <updated>2020-04-23T12:36:57.000Z</updated>
         <content type="html"><![CDATA[<h2 id="问题">问题：</h2>
@@ -198,7 +198,7 @@ If-Modified-Since: Wed, 21 Oct 2015 07:28:00 GMT</p>
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[LINUX]]></title>
+        <title type="html"><![CDATA[Linux]]></title>
         <id>https://miexxx.github.io/post/linux/</id>
         <link href="https://miexxx.github.io/post/linux/">
         </link>
