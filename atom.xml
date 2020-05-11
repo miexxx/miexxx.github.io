@@ -2,11 +2,11 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://miexxx.github.io</id>
     <title>Great Wei</title>
-    <updated>2020-05-11T03:27:49.810Z</updated>
+    <updated>2020-05-11T03:32:14.501Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://miexxx.github.io"/>
     <link rel="self" href="https://miexxx.github.io/atom.xml"/>
-    <subtitle>温故而知新</subtitle>
+    <subtitle>awsl</subtitle>
     <logo>https://miexxx.github.io/images/avatar.png</logo>
     <icon>https://miexxx.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Great Wei</rights>

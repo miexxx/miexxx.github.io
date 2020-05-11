@@ -1,101 +1,94 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" >
+
 <title>计算机操作系统-设备管理 | Great Wei</title>
-<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1589167664342">
-<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<meta name="description" content="awsl">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1589167923926">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="计算机操作系统-设备管理 | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
 
-    <meta name="description" content="磁盘结构
-盘面（Platter）：一个磁盘有多个盘面；
-磁道（Track）：盘面上的圆形带状区域，一个盘面可以有多个磁道；
-扇区（Track Sector）：磁道上的一个弧段，一个磁道可以有多个扇区，它是最小的物理储存单位，目前主要有 51..." />
-    <meta name="keywords" content="" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
-    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
   </head>
   <body>
-    <div class="main">
-      <div class="main-content">
-        <div class="site-header">
-  <a href="https://miexxx.github.io">
-  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1589167664342" alt="">
-  </a>
-  <h1 class="site-title">
-    Great Wei
-  </h1>
-  <p class="site-description">
-    温故而知新
-  </p>
-  <div class="menu-container">
-    
-      
-        <a href="/" class="menu">
-          首页
-        </a>
-      
-    
-      
-        <a href="/archives" class="menu">
-          归档
-        </a>
-      
-    
-      
-        <a href="/tags" class="menu">
-          标签
-        </a>
-      
-    
-      
-        <a href="/post/about" class="menu">
-          关于
-        </a>
-      
-    
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://miexxx.github.io">Great Wei</a></h3>
   </div>
-  <div class="social-container">
-    
-      
-        <a href="https://github.com/miexxx" target="_blank">
-          <i class="ri-github-line"></i>
-        </a>
-      
-    
-      
-    
-      
-    
-      
-    
-      
-    
-  </div>
-</div>
-
-        <div class="post-detail">
-          <article class="post">
-            <h2 class="post-title">
-              计算机操作系统-设备管理
-            </h2>
-            <div class="post-info">
-              <span>
-                2020-03-31
-              </span>
-              <span>
-                2 min read
-              </span>
-              
-            </div>
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
             
-            <div class="post-content-wrapper">
-              <div class="post-content">
-                <h1 id="磁盘结构">磁盘结构</h1>
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                归档
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>计算机操作系统-设备管理</h1>
+            <p class="article-meta">
+              2020-03-31
+              
+            </p>
+            
+            <div class="post-content">
+              <h1 id="磁盘结构">磁盘结构</h1>
 <p>盘面（Platter）：一个磁盘有多个盘面；<br>
 磁道（Track）：盘面上的圆形带状区域，一个盘面可以有多个磁道；<br>
 扇区（Track Sector）：磁道上的一个弧段，一个磁道可以有多个扇区，它是最小的物理储存单位，目前主要有 512 bytes 与 4 K 两种大小；<br>
@@ -122,86 +115,216 @@
 因为考虑了移动方向，因此所有的磁盘请求都会被满足，解决了 SSTF 的饥饿问题。<br>
 <img src="https://camo.githubusercontent.com/8187903788bbfb90978169f20fa4fd41e094bf22/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f32373163653038662d633132342d343735662d623439302d6265343466656463366432652e706e67" alt="" loading="lazy"></p>
 
-              </div>
-              <div class="toc-container">
-                <ul class="markdownIt-TOC">
-<li><a href="#%E7%A3%81%E7%9B%98%E7%BB%93%E6%9E%84">磁盘结构</a></li>
-<li><a href="#%E7%A3%81%E7%9B%98%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95">磁盘调度算法</a>
-<ul>
-<li><a href="#%E5%85%88%E6%9D%A5%E5%85%88%E6%9C%8D%E5%8A%A1">先来先服务</a></li>
-<li><a href="#%E6%9C%80%E7%9F%AD%E5%AF%BB%E9%81%93%E6%97%B6%E9%97%B4%E4%BC%98%E5%85%88">最短寻道时间优先</a></li>
-<li><a href="#%E7%94%B5%E6%A2%AF%E7%AE%97%E6%B3%95">电梯算法</a></li>
-</ul>
-</li>
-</ul>
-
-              </div>
             </div>
           </article>
         </div>
-
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-nei-cun-guan-li/">
+                <h3 class="post-title">
+                  计算机操作系统-内存管理
+                </h3>
+              </a>
+            </div>
+          
+        </div>
         
-          <div class="next-post">
-            <div class="next">下一篇</div>
-            <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-nei-cun-guan-li/">
-              <h3 class="post-title">
-                计算机操作系统-内存管理
-              </h3>
-            </a>
-          </div>
-        
+      </div>
 
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://miexxx.github.io/images/avatar.png?v=1589167923926" class="no-responsive avatar">
+    <div class="text-muted">awsl</div>
+    <div class="social-container">
+      
         
-
-        <div class="site-footer">
-  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
-  <a class="rss" href="https://miexxx.github.io/atom.xml" target="_blank">
-    <i class="ri-rss-line"></i> RSS
-  </a>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/http/">Http</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/cr/">Crontab</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/linux/">Linux</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-lian-jie/">计算机操作系统-链接</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-she-bei-guan-li/">计算机操作系统-设备管理</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-nei-cun-guan-li/">计算机操作系统-内存管理</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-si-suo/">计算机操作系统-死锁</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/rabbitmq-ji-zhu-diao-yan/">RabbitMQ</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-jin-cheng-guan-li/">计算机操作系统-进程管理</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/qian-tan-mysql-suo-yin/">浅谈Mysql索引</a>
+            </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+        <a href="https://miexxx.github.io/tag/p4sg31lgg/" class="badge warning">
+          http
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/S56XvLf_F/" class="badge secondary">
+          linux
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/g-GLbkF4h/" class="badge secondary">
+          计算机操作系统
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/aK1-G3OHz/" class="badge ">
+          消息队列
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/70yj136M-/" class="badge ">
+          mysql
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/0Mirl8SzEP/" class="badge ">
+          tcp/ip
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/LWmdmK1pz3/" class="badge warning">
+          思维逻辑
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/7VPFU2b1dg/" class="badge success">
+          go
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/_5EQAs6GBC/" class="badge secondary">
+          tool
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/p4II1O4lqR/" class="badge secondary">
+          es
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/WeHHX6YLrg/" class="badge ">
+          elk
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/FGearAi2Cw/" class="badge secondary">
+          nginx
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/ZHnK0KCAMk/" class="badge success">
+          社区
+        </a>
+      
+    </div>
+  </div>
+  <div class="paper">
+    Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://miexxx.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
 </div>
 
-      </div>
+
     </div>
 
-    <script>
-      hljs.initHighlightingOnLoad()
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 
-      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+<script type="application/javascript">
 
-      // This should probably be throttled.
-      // Especially because it triggers during smooth scrolling.
-      // https://lodash.com/docs/4.17.10#throttle
-      // You could do like...
-      // window.addEventListener("scroll", () => {
-      //    _.throttle(doThatStuff, 100);
-      // });
-      // Only not doing it here to keep this Pen dependency-free.
+AOS.init();
 
-      window.addEventListener("scroll", event => {
-        let fromTop = window.scrollY;
+hljs.initHighlightingOnLoad()
 
-        mainNavLinks.forEach((link, index) => {
-          let section = document.getElementById(decodeURI(link.hash).substring(1));
-          let nextSection = null
-          if (mainNavLinks[index + 1]) {
-            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
-          }
-          if (section.offsetTop <= fromTop) {
-            if (nextSection) {
-              if (nextSection.offsetTop > fromTop) {
-                link.classList.add("current");
-              } else {
-                link.classList.remove("current");    
-              }
-            } else {
-              link.classList.add("current");
-            }
-          } else {
-            link.classList.remove("current");
-          }
-        });
-      });
+</script>
 
-    </script>
+
+
+
   </body>
 </html>

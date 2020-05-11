@@ -1,117 +1,98 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" >
+
 <title>Http | Great Wei</title>
-<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1589167664342">
-<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<meta name="description" content="awsl">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1589167923926">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="Http | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
 
-    <meta name="description" content="基础概念
-uri
-uri包好url 和urn
 
-请求和响应报文
-请求报文
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
-响应报文
 
-GET
-获取资源
-当前网络请求中，绝大部分使用的是GET方法。
-HEAD
-获取报文首部
-和GET方法类似，但是不返回报文实体主体部分。
-主要用于确认UR..." />
-    <meta name="keywords" content="http" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
-    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
   </head>
   <body>
-    <div class="main">
-      <div class="main-content">
-        <div class="site-header">
-  <a href="https://miexxx.github.io">
-  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1589167664342" alt="">
-  </a>
-  <h1 class="site-title">
-    Great Wei
-  </h1>
-  <p class="site-description">
-    温故而知新
-  </p>
-  <div class="menu-container">
-    
-      
-        <a href="/" class="menu">
-          首页
-        </a>
-      
-    
-      
-        <a href="/archives" class="menu">
-          归档
-        </a>
-      
-    
-      
-        <a href="/tags" class="menu">
-          标签
-        </a>
-      
-    
-      
-        <a href="/post/about" class="menu">
-          关于
-        </a>
-      
-    
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://miexxx.github.io">Great Wei</a></h3>
   </div>
-  <div class="social-container">
-    
-      
-        <a href="https://github.com/miexxx" target="_blank">
-          <i class="ri-github-line"></i>
-        </a>
-      
-    
-      
-    
-      
-    
-      
-    
-      
-    
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
+            
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                归档
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
   </div>
-</div>
+</nav>
 
-        <div class="post-detail">
-          <article class="post">
-            <h2 class="post-title">
-              Http
-            </h2>
-            <div class="post-info">
-              <span>
-                2020-04-28
-              </span>
-              <span>
-                13 min read
-              </span>
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>Http</h1>
+            <p class="article-meta">
+              2020-04-28
               
-                <a href="https://miexxx.github.io/tag/p4sg31lgg/" class="post-tag">
-                  # http
+                <a href="https://miexxx.github.io/tag/p4sg31lgg/" class="badge ">
+                  http
                 </a>
               
-            </div>
+            </p>
             
-            <div class="post-content-wrapper">
-              <div class="post-content">
-                <h1 id="基础概念">基础概念</h1>
+            <div class="post-content">
+              <h1 id="基础概念">基础概念</h1>
 <h2 id="uri">uri</h2>
 <p>uri包好url 和urn<br>
 <img src="https://camo.githubusercontent.com/b61eb498c8b9458916441d9341d3975b6e1134cf/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f38343431623263342d646361372d346436622d386566622d6632326566636361663333312e706e67" alt="" loading="lazy"></p>
@@ -280,154 +261,216 @@ If-Modified-Since: Wed, 21 Oct 2015 07:28:00 GMT</p>
 <h2 id="内部协商">内部协商</h2>
 <p>通过内容协商返回最合适的内容，例如根据浏览器的默认语言选择返回中文界面还是英文界面。</p>
 
-              </div>
-              <div class="toc-container">
-                <ul class="markdownIt-TOC">
-<li><a href="#%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5">基础概念</a>
-<ul>
-<li><a href="#uri">uri</a></li>
-<li><a href="#%E8%AF%B7%E6%B1%82%E5%92%8C%E5%93%8D%E5%BA%94%E6%8A%A5%E6%96%87">请求和响应报文</a>
-<ul>
-<li><a href="#%E8%AF%B7%E6%B1%82%E6%8A%A5%E6%96%87">请求报文</a></li>
-<li><a href="#%E5%93%8D%E5%BA%94%E6%8A%A5%E6%96%87">响应报文</a></li>
-<li><a href="#get">GET</a></li>
-<li><a href="#head">HEAD</a></li>
-<li><a href="#post">POST</a></li>
-<li><a href="#put">PUT</a></li>
-<li><a href="#patch">PATCH</a></li>
-<li><a href="#delete">DELETE</a></li>
-<li><a href="#options">OPTIONS</a></li>
-<li><a href="#connect">CONNECT</a></li>
-<li><a href="#trace">TRACE</a></li>
-</ul>
-</li>
-<li><a href="#http%E7%8A%B6%E6%80%81%E7%A0%81">HTTP状态码</a>
-<ul>
-<li><a href="#1xx%E4%BF%A1%E6%81%AF">1xx信息</a></li>
-<li><a href="#2xx%E6%88%90%E5%8A%9F">2xx成功</a></li>
-<li><a href="#3xx%E9%87%8D%E5%AE%9A%E5%90%91">3xx重定向</a></li>
-<li><a href="#4xx-%E5%AE%A2%E6%88%B7%E7%AB%AF%E9%94%99%E8%AF%AF">4xx 客户端错误</a></li>
-<li><a href="#5xx-%E6%9C%8D%E5%8A%A1%E7%AB%AF%E9%94%99%E8%AF%AF">5xx 服务端错误</a></li>
-</ul>
-</li>
-<li><a href="#http%E9%A6%96%E9%83%A8">HTTP首部</a>
-<ul>
-<li><a href="#%E5%AE%9E%E4%BD%93%E9%A6%96%E9%83%A8">实体首部</a></li>
-<li><a href="#%E8%AF%B7%E6%B1%82%E9%A6%96%E9%83%A8">请求首部</a></li>
-<li><a href="#%E5%93%8D%E5%BA%94%E9%A6%96%E9%83%A8">响应首部</a></li>
-</ul>
-</li>
-<li><a href="#%E5%85%B7%E4%BD%93%E5%BA%94%E7%94%A8">具体应用</a>
-<ul>
-<li><a href="#%E8%BF%9E%E6%8E%A5%E7%AE%A1%E7%90%86">连接管理</a>
-<ul>
-<li><a href="#%E7%9F%AD%E8%BF%9E%E6%8E%A5%E4%B8%8E%E9%95%BF%E8%BF%9E%E6%8E%A5">短连接与长连接</a></li>
-<li><a href="#%E6%B5%81%E6%B0%B4%E7%BA%BF">流水线</a></li>
-<li><a href="#cookie">cookie</a>
-<ul>
-<li><a href="#%E7%94%A8%E9%80%94">用途</a></li>
-<li><a href="#%E5%88%9B%E5%BB%BA%E8%BF%87%E7%A8%8B">创建过程</a></li>
-<li><a href="#%E5%88%86%E7%B1%BB">分类</a></li>
-<li><a href="#%E4%BD%9C%E7%94%A8%E5%9F%9F">作用域</a></li>
-<li><a href="#javascript">JavaScript</a></li>
-<li><a href="#httponly">HttpOnly</a></li>
-<li><a href="#secure">Secure</a></li>
-<li><a href="#session">Session</a></li>
-<li><a href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E7%A6%81%E7%94%A8cookie">浏览器禁用Cookie</a></li>
-<li><a href="#cookie-%E4%B8%8E-session-%E9%80%89%E6%8B%A9">Cookie 与 Session 选择</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#%E7%BC%93%E5%AD%98">缓存</a>
-<ul>
-<li><a href="#%E4%BC%98%E7%82%B9">优点</a></li>
-<li><a href="#%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%B3%95">实现方法</a></li>
-<li><a href="#cache-control">Cache-Control</a>
-<ul>
-<li><a href="#%E7%A6%81%E6%AD%A2%E8%BF%9B%E8%A1%8C%E7%BC%93%E5%AD%98">禁止进行缓存</a></li>
-<li><a href="#%E5%BC%BA%E5%88%B6%E7%A1%AE%E8%AE%A4%E7%BC%93%E5%AD%98">强制确认缓存</a></li>
-<li><a href="#%E7%A7%81%E6%9C%89%E7%BC%93%E5%AD%98%E5%92%8C%E5%85%AC%E5%85%B1%E7%BC%93%E5%AD%98">私有缓存和公共缓存</a></li>
-<li><a href="#%E7%BC%93%E5%AD%98%E8%BF%87%E6%9C%9F%E6%9C%BA%E5%88%B6">缓存过期机制</a></li>
-<li><a href="#%E7%BC%93%E5%AD%98%E9%AA%8C%E7%9C%9F">缓存验真</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#%E5%86%85%E9%83%A8%E5%8D%8F%E5%95%86">内部协商</a></li>
-</ul>
-</li>
-</ul>
-
-              </div>
             </div>
           </article>
         </div>
-
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://miexxx.github.io/post/cr/">
+                <h3 class="post-title">
+                  Crontab
+                </h3>
+              </a>
+            </div>
+          
+        </div>
         
-          <div class="next-post">
-            <div class="next">下一篇</div>
-            <a href="https://miexxx.github.io/post/cr/">
-              <h3 class="post-title">
-                Crontab
-              </h3>
-            </a>
-          </div>
-        
+      </div>
 
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://miexxx.github.io/images/avatar.png?v=1589167923926" class="no-responsive avatar">
+    <div class="text-muted">awsl</div>
+    <div class="social-container">
+      
         
-
-        <div class="site-footer">
-  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
-  <a class="rss" href="https://miexxx.github.io/atom.xml" target="_blank">
-    <i class="ri-rss-line"></i> RSS
-  </a>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/http/">Http</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/cr/">Crontab</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/linux/">Linux</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-lian-jie/">计算机操作系统-链接</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-she-bei-guan-li/">计算机操作系统-设备管理</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-nei-cun-guan-li/">计算机操作系统-内存管理</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-si-suo/">计算机操作系统-死锁</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/rabbitmq-ji-zhu-diao-yan/">RabbitMQ</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-jin-cheng-guan-li/">计算机操作系统-进程管理</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/qian-tan-mysql-suo-yin/">浅谈Mysql索引</a>
+            </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+        <a href="https://miexxx.github.io/tag/p4sg31lgg/" class="badge ">
+          http
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/S56XvLf_F/" class="badge ">
+          linux
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/g-GLbkF4h/" class="badge success">
+          计算机操作系统
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/aK1-G3OHz/" class="badge secondary">
+          消息队列
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/70yj136M-/" class="badge warning">
+          mysql
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/0Mirl8SzEP/" class="badge warning">
+          tcp/ip
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/LWmdmK1pz3/" class="badge secondary">
+          思维逻辑
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/7VPFU2b1dg/" class="badge secondary">
+          go
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/_5EQAs6GBC/" class="badge ">
+          tool
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/p4II1O4lqR/" class="badge secondary">
+          es
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/WeHHX6YLrg/" class="badge ">
+          elk
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/FGearAi2Cw/" class="badge ">
+          nginx
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/ZHnK0KCAMk/" class="badge warning">
+          社区
+        </a>
+      
+    </div>
+  </div>
+  <div class="paper">
+    Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://miexxx.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
 </div>
 
-      </div>
+
     </div>
 
-    <script>
-      hljs.initHighlightingOnLoad()
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 
-      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+<script type="application/javascript">
 
-      // This should probably be throttled.
-      // Especially because it triggers during smooth scrolling.
-      // https://lodash.com/docs/4.17.10#throttle
-      // You could do like...
-      // window.addEventListener("scroll", () => {
-      //    _.throttle(doThatStuff, 100);
-      // });
-      // Only not doing it here to keep this Pen dependency-free.
+AOS.init();
 
-      window.addEventListener("scroll", event => {
-        let fromTop = window.scrollY;
+hljs.initHighlightingOnLoad()
 
-        mainNavLinks.forEach((link, index) => {
-          let section = document.getElementById(decodeURI(link.hash).substring(1));
-          let nextSection = null
-          if (mainNavLinks[index + 1]) {
-            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
-          }
-          if (section.offsetTop <= fromTop) {
-            if (nextSection) {
-              if (nextSection.offsetTop > fromTop) {
-                link.classList.add("current");
-              } else {
-                link.classList.remove("current");    
-              }
-            } else {
-              link.classList.add("current");
-            }
-          } else {
-            link.classList.remove("current");
-          }
-        });
-      });
+</script>
 
-    </script>
+
+
+
   </body>
 </html>

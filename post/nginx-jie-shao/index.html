@@ -1,104 +1,98 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" >
+
 <title>Nginx | Great Wei</title>
-<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1589167664342">
-<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<meta name="description" content="awsl">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1589167923926">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="Nginx | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
 
-    <meta name="description" content="Nginx介绍
-Nginx是lgor Sysoev为俄罗斯访问量第二的rambler.ru站点设计开发的。从2004年发布至今，凭借开源的力量，已经接近成熟与完善。
-Nginx功能丰富，可作为HTTP服务器，也可作为反向代理服务器，邮件服务..." />
-    <meta name="keywords" content="nginx" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
-    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
   </head>
   <body>
-    <div class="main">
-      <div class="main-content">
-        <div class="site-header">
-  <a href="https://miexxx.github.io">
-  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1589167664342" alt="">
-  </a>
-  <h1 class="site-title">
-    Great Wei
-  </h1>
-  <p class="site-description">
-    温故而知新
-  </p>
-  <div class="menu-container">
-    
-      
-        <a href="/" class="menu">
-          首页
-        </a>
-      
-    
-      
-        <a href="/archives" class="menu">
-          归档
-        </a>
-      
-    
-      
-        <a href="/tags" class="menu">
-          标签
-        </a>
-      
-    
-      
-        <a href="/post/about" class="menu">
-          关于
-        </a>
-      
-    
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://miexxx.github.io">Great Wei</a></h3>
   </div>
-  <div class="social-container">
-    
-      
-        <a href="https://github.com/miexxx" target="_blank">
-          <i class="ri-github-line"></i>
-        </a>
-      
-    
-      
-    
-      
-    
-      
-    
-      
-    
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
+            
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                归档
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
   </div>
-</div>
+</nav>
 
-        <div class="post-detail">
-          <article class="post">
-            <h2 class="post-title">
-              Nginx
-            </h2>
-            <div class="post-info">
-              <span>
-                2019-05-01
-              </span>
-              <span>
-                2 min read
-              </span>
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>Nginx</h1>
+            <p class="article-meta">
+              2019-05-01
               
-                <a href="https://miexxx.github.io/tag/FGearAi2Cw/" class="post-tag">
-                  # nginx
+                <a href="https://miexxx.github.io/tag/FGearAi2Cw/" class="badge warning">
+                  nginx
                 </a>
               
-            </div>
+            </p>
             
-            <div class="post-content-wrapper">
-              <div class="post-content">
-                <h2 id="nginx介绍">Nginx介绍</h2>
+            <div class="post-content">
+              <h2 id="nginx介绍">Nginx介绍</h2>
 <p>Nginx是lgor Sysoev为俄罗斯访问量第二的rambler.ru站点设计开发的。从2004年发布至今，凭借开源的力量，已经接近成熟与完善。</p>
 <p>Nginx功能丰富，可作为HTTP服务器，也可作为反向代理服务器，邮件服务器。支持FastCGI、SSL、Virtual Host、URL Rewrite、Gzip等功能。并且支持很多第三方的模块扩展。</p>
 <h2 id="负载均衡">负载均衡</h2>
@@ -114,86 +108,216 @@ Nginx功能丰富，可作为HTTP服务器，也可作为反向代理服务器�
 <p>Nginx的配置分为全局块、events块、http块和server块。在nginx.conf文件中只包含了全局块、events块和http块的内容，server块的配置需要自己定义。每一个server块都可以当做一个虚拟主机，一个http块可以包含多个server块，每一个server块的配置都是独立的，不会影响到其他server块。http全局块的配置对server块有效，但是如果server块中和http全局块的配置冲突，则采用就近原则，以server块的配置为准。</p>
 <p><a href="https://blog.51cto.com/zengestudy/1769705">原文</a></p>
 
-              </div>
-              <div class="toc-container">
-                <ul class="markdownIt-TOC">
-<li>
-<ul>
-<li><a href="#nginx%E4%BB%8B%E7%BB%8D">Nginx介绍</a></li>
-<li><a href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1">负载均衡</a></li>
-<li><a href="#web%E7%BC%93%E5%AD%98">web缓存</a></li>
-<li><a href="#nginx%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84">Nginx配置文件结构</a></li>
-</ul>
-</li>
-</ul>
-
-              </div>
             </div>
           </article>
         </div>
-
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://miexxx.github.io/post/mysql-chang-jian-wen-ti/">
+                <h3 class="post-title">
+                  Mysql
+                </h3>
+              </a>
+            </div>
+          
+        </div>
         
-          <div class="next-post">
-            <div class="next">下一篇</div>
-            <a href="https://miexxx.github.io/post/mysql-chang-jian-wen-ti/">
-              <h3 class="post-title">
-                Mysql
-              </h3>
-            </a>
-          </div>
-        
+      </div>
 
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://miexxx.github.io/images/avatar.png?v=1589167923926" class="no-responsive avatar">
+    <div class="text-muted">awsl</div>
+    <div class="social-container">
+      
         
-
-        <div class="site-footer">
-  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
-  <a class="rss" href="https://miexxx.github.io/atom.xml" target="_blank">
-    <i class="ri-rss-line"></i> RSS
-  </a>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/http/">Http</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/cr/">Crontab</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/linux/">Linux</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-lian-jie/">计算机操作系统-链接</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-she-bei-guan-li/">计算机操作系统-设备管理</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-nei-cun-guan-li/">计算机操作系统-内存管理</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-si-suo/">计算机操作系统-死锁</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/rabbitmq-ji-zhu-diao-yan/">RabbitMQ</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-jin-cheng-guan-li/">计算机操作系统-进程管理</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://miexxx.github.io/post/qian-tan-mysql-suo-yin/">浅谈Mysql索引</a>
+            </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+        <a href="https://miexxx.github.io/tag/p4sg31lgg/" class="badge secondary">
+          http
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/S56XvLf_F/" class="badge warning">
+          linux
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/g-GLbkF4h/" class="badge ">
+          计算机操作系统
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/aK1-G3OHz/" class="badge warning">
+          消息队列
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/70yj136M-/" class="badge secondary">
+          mysql
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/0Mirl8SzEP/" class="badge warning">
+          tcp/ip
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/LWmdmK1pz3/" class="badge secondary">
+          思维逻辑
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/7VPFU2b1dg/" class="badge secondary">
+          go
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/_5EQAs6GBC/" class="badge ">
+          tool
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/p4II1O4lqR/" class="badge warning">
+          es
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/WeHHX6YLrg/" class="badge ">
+          elk
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/FGearAi2Cw/" class="badge success">
+          nginx
+        </a>
+      
+        <a href="https://miexxx.github.io/tag/ZHnK0KCAMk/" class="badge secondary">
+          社区
+        </a>
+      
+    </div>
+  </div>
+  <div class="paper">
+    Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://miexxx.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
 </div>
 
-      </div>
+
     </div>
 
-    <script>
-      hljs.initHighlightingOnLoad()
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 
-      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+<script type="application/javascript">
 
-      // This should probably be throttled.
-      // Especially because it triggers during smooth scrolling.
-      // https://lodash.com/docs/4.17.10#throttle
-      // You could do like...
-      // window.addEventListener("scroll", () => {
-      //    _.throttle(doThatStuff, 100);
-      // });
-      // Only not doing it here to keep this Pen dependency-free.
+AOS.init();
 
-      window.addEventListener("scroll", event => {
-        let fromTop = window.scrollY;
+hljs.initHighlightingOnLoad()
 
-        mainNavLinks.forEach((link, index) => {
-          let section = document.getElementById(decodeURI(link.hash).substring(1));
-          let nextSection = null
-          if (mainNavLinks[index + 1]) {
-            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
-          }
-          if (section.offsetTop <= fromTop) {
-            if (nextSection) {
-              if (nextSection.offsetTop > fromTop) {
-                link.classList.add("current");
-              } else {
-                link.classList.remove("current");    
-              }
-            } else {
-              link.classList.add("current");
-            }
-          } else {
-            link.classList.remove("current");
-          }
-        });
-      });
+</script>
 
-    </script>
+
+
+
   </body>
 </html>
