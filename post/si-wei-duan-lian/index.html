@@ -4,94 +4,102 @@
     <meta charset="utf-8" >
 
 <title>思维锻炼 | Great Wei</title>
-<meta name="description" content="awsl">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1589195543973">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1589195570137">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
 
 
-<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
-
 
 <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
 
+
+    <meta name="description" content="
+
+去除数组重复值
+在一个长度为 n 的数组里的所有数字都在 0 到 n-1 的范围内。数组中数字是重复的，但不知道有几个数字是重复的，也不知道每个数字重复几次。请找出数组中唯一个重复的数字。
+Input:
+0 1 2 4 2 5
+思..." />
+    <meta name="keywords" content="思维逻辑" />
   </head>
   <body>
-  
-    <nav class="navbar border fixed split-nav">
-  <div class="nav-brand">
-    <h3><a href="https://miexxx.github.io">Great Wei</a></h3>
-  </div>
-  <div class="collapsible">
-    <input id="collapsible1" type="checkbox" name="collapsible1">
-    <button>
-      <label for="collapsible1">
-        <div class="bar1"></div>
-        <div class="bar2"></div>
-        <div class="bar3"></div>
-      </label>
-    </button>
-    <div class="collapsible-body">
-      <ul class="inline">
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://miexxx.github.io">
+        <img src="https://miexxx.github.io/images/avatar.png?v=1589195570137" class="site-logo">
+        <h1 class="site-title">Great Wei</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
         
-          <li>
-            
-              <a href="/" class="menu">
-                首页
-              </a>
-            
-          </li>
+          <a href="/" class="site-nav">
+            首页
+          </a>
         
-          <li>
-            
-              <a href="/archives" class="menu">
-                归档
-              </a>
-            
-          </li>
+      
         
-          <li>
-            
-              <a href="/tags" class="menu">
-                标签
-              </a>
-            
-          </li>
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
         
-          <li>
-            
-              <a href="/post/about" class="menu">
-                关于
-              </a>
-            
-          </li>
+      
         
-      </ul>
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
     </div>
   </div>
-</nav>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      awsl
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://miexxx.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
 
-    <div id="top" class="row site">
-      <div class="sm-12 md-8 col">
-        <div class="paper">
-          <article class="article">
-            <h1>思维锻炼</h1>
-            <p class="article-meta">
-              2020-01-13
-              
-                <a href="https://miexxx.github.io/tag/LWmdmK1pz3/" class="badge secondary">
-                  思维逻辑
-                </a>
-              
-            </p>
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">思维锻炼</h2>
+            <div class="post-date">2020-01-13</div>
             
-            <div class="post-content">
+            <div class="post-content" v-pre>
               <p></p>
 <h2 id="-more-"><!-- more --></h2>
 <h1 id="去除数组重复值">去除数组重复值</h1>
@@ -173,212 +181,54 @@ arr[2] == 2 =&gt; cnt++,  这时候不清楚arr[2] 左右两端与2之间的关�
 <hr>
 
             </div>
-          </article>
-        </div>
-        <div class="paper" data-aos="fade-in">
-          
-            <div class="next-post">
-              <div class="next">
-                下一篇
+            
+              <div class="tag-container">
+                
+                  <a href="https://miexxx.github.io/tag/LWmdmK1pz3/" class="tag">
+                    思维逻辑
+                  </a>
+                
               </div>
-              <a href="https://miexxx.github.io/post/go-yu-yan-xue-xi/">
-                <h3 class="post-title">
-                  Go
-                </h3>
-              </a>
-            </div>
-          
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://miexxx.github.io/post/go-yu-yan-xue-xi/">
+                  <h3 class="post-title">
+                    Go
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
         </div>
-        
       </div>
-
-      <div class="sm-12 md-4 col sidebar">
-  <div class="paper info-container">
-    <img src="https://miexxx.github.io/images/avatar.png?v=1589195543973" class="no-responsive avatar">
-    <div class="text-muted">awsl</div>
-    <div class="social-container">
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    </div>
-  </div>
-  <div class="paper">
-    <div class="sidebar-title">
-      最新文章
-    </div>
-    <div class="row">
-      <ul>
-        
-          
-            <li>
-              <a href="https://miexxx.github.io/post/http/">Http</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://miexxx.github.io/post/cr/">Crontab</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://miexxx.github.io/post/linux/">Linux</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-lian-jie/">计算机操作系统-链接</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-she-bei-guan-li/">计算机操作系统-设备管理</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-nei-cun-guan-li/">计算机操作系统-内存管理</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-si-suo/">计算机操作系统-死锁</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://miexxx.github.io/post/rabbitmq-ji-zhu-diao-yan/">RabbitMQ</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-jin-cheng-guan-li/">计算机操作系统-进程管理</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://miexxx.github.io/post/qian-tan-mysql-suo-yin/">浅谈Mysql索引</a>
-            </li>
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-      </ul>
-    </div>
-  </div>
-  <div class="paper">
-    <div class="sidebar-title">
-      标签列表
-    </div>
-    <div class="row">
-      
-        <a href="https://miexxx.github.io/tag/p4sg31lgg/" class="badge secondary">
-          http
-        </a>
-      
-        <a href="https://miexxx.github.io/tag/S56XvLf_F/" class="badge secondary">
-          linux
-        </a>
-      
-        <a href="https://miexxx.github.io/tag/g-GLbkF4h/" class="badge secondary">
-          计算机操作系统
-        </a>
-      
-        <a href="https://miexxx.github.io/tag/aK1-G3OHz/" class="badge secondary">
-          消息队列
-        </a>
-      
-        <a href="https://miexxx.github.io/tag/70yj136M-/" class="badge ">
-          mysql
-        </a>
-      
-        <a href="https://miexxx.github.io/tag/0Mirl8SzEP/" class="badge ">
-          tcp/ip
-        </a>
-      
-        <a href="https://miexxx.github.io/tag/LWmdmK1pz3/" class="badge secondary">
-          思维逻辑
-        </a>
-      
-        <a href="https://miexxx.github.io/tag/7VPFU2b1dg/" class="badge secondary">
-          go
-        </a>
-      
-        <a href="https://miexxx.github.io/tag/_5EQAs6GBC/" class="badge secondary">
-          tool
-        </a>
-      
-        <a href="https://miexxx.github.io/tag/p4II1O4lqR/" class="badge secondary">
-          es
-        </a>
-      
-        <a href="https://miexxx.github.io/tag/WeHHX6YLrg/" class="badge secondary">
-          elk
-        </a>
-      
-        <a href="https://miexxx.github.io/tag/FGearAi2Cw/" class="badge success">
-          nginx
-        </a>
-      
-        <a href="https://miexxx.github.io/tag/ZHnK0KCAMk/" class="badge secondary">
-          社区
-        </a>
-      
-    </div>
-  </div>
-  <div class="paper">
-    Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://miexxx.github.io/atom.xml" target="_blank">RSS</a>
-  </div>
-</div>
-
-
     </div>
 
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-
 <script type="application/javascript">
 
 AOS.init();
 
-hljs.initHighlightingOnLoad()
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
 
 </script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
 
 
 

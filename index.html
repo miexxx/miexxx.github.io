@@ -4,338 +4,68 @@
     <meta charset="utf-8" >
 
 <title>Great Wei</title>
-<meta name="description" content="awsl">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1589195543973">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1589195570137">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
 
 
-<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
-
 
 <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
 
+
+    <meta name="description" content="awsl">
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    
   </head>
   <body>
-    <nav class="navbar border fixed split-nav">
-  <div class="nav-brand">
-    <h3><a href="https://miexxx.github.io">Great Wei</a></h3>
-  </div>
-  <div class="collapsible">
-    <input id="collapsible1" type="checkbox" name="collapsible1">
-    <button>
-      <label for="collapsible1">
-        <div class="bar1"></div>
-        <div class="bar2"></div>
-        <div class="bar3"></div>
-      </label>
-    </button>
-    <div class="collapsible-body">
-      <ul class="inline">
-        
-          <li>
-            
-              <a href="/" class="menu">
-                首页
-              </a>
-            
-          </li>
-        
-          <li>
-            
-              <a href="/archives" class="menu">
-                归档
-              </a>
-            
-          </li>
-        
-          <li>
-            
-              <a href="/tags" class="menu">
-                标签
-              </a>
-            
-          </li>
-        
-          <li>
-            
-              <a href="/post/about" class="menu">
-                关于
-              </a>
-            
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-</nav>
+    <div id="app" class="main">
 
-
-    <div id="top" class="row site">
-      <div class="sm-12 md-8 col">
-        <div class="paper">
-          
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://miexxx.github.io/post/si-wei-duan-lian/">思维锻炼</a>
-    </h2>
-    <p class="article-meta">
-      2020-01-13
-      
-        <a href="https://miexxx.github.io/tag/LWmdmK1pz3/" class="badge success">
-          思维逻辑
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      <p></p>
-
-    </p>
-    <div class="row">
-      <a href="https://miexxx.github.io/post/si-wei-duan-lian/" class="readmore-link">
-        <button>
-          Read More
-        </button>
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://miexxx.github.io">
+        <img src="https://miexxx.github.io/images/avatar.png?v=1589195570137" class="site-logo">
+        <h1 class="site-title">Great Wei</h1>
       </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://miexxx.github.io/post/http/">Http</a>
-    </h2>
-    <p class="article-meta">
-      2020-04-28
-      
-        <a href="https://miexxx.github.io/tag/p4sg31lgg/" class="badge secondary">
-          http
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      
-    </p>
-    <div class="row">
-      <a href="https://miexxx.github.io/post/http/" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://miexxx.github.io/post/cr/">Crontab</a>
-    </h2>
-    <p class="article-meta">
-      2020-04-23
-      
-    </p>
-    <p class="text-lead">
-      
-    </p>
-    <div class="row">
-      <a href="https://miexxx.github.io/post/cr/" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://miexxx.github.io/post/linux/">Linux</a>
-    </h2>
-    <p class="article-meta">
-      2020-04-07
-      
-        <a href="https://miexxx.github.io/tag/S56XvLf_F/" class="badge secondary">
-          linux
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      
-    </p>
-    <div class="row">
-      <a href="https://miexxx.github.io/post/linux/" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-lian-jie/">计算机操作系统-链接</a>
-    </h2>
-    <p class="article-meta">
-      2020-03-31
-      
-        <a href="https://miexxx.github.io/tag/g-GLbkF4h/" class="badge warning">
-          计算机操作系统
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      
-    </p>
-    <div class="row">
-      <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-lian-jie/" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-she-bei-guan-li/">计算机操作系统-设备管理</a>
-    </h2>
-    <p class="article-meta">
-      2020-03-31
-      
-        <a href="https://miexxx.github.io/tag/g-GLbkF4h/" class="badge secondary">
-          计算机操作系统
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      
-    </p>
-    <div class="row">
-      <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-she-bei-guan-li/" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-nei-cun-guan-li/">计算机操作系统-内存管理</a>
-    </h2>
-    <p class="article-meta">
-      2020-03-25
-      
-        <a href="https://miexxx.github.io/tag/g-GLbkF4h/" class="badge ">
-          计算机操作系统
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      
-    </p>
-    <div class="row">
-      <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-nei-cun-guan-li/" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-si-suo/">计算机操作系统-死锁</a>
-    </h2>
-    <p class="article-meta">
-      2020-03-19
-      
-        <a href="https://miexxx.github.io/tag/g-GLbkF4h/" class="badge ">
-          计算机操作系统
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      
-    </p>
-    <div class="row">
-      <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-si-suo/" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://miexxx.github.io/post/rabbitmq-ji-zhu-diao-yan/">RabbitMQ</a>
-    </h2>
-    <p class="article-meta">
-      2020-03-16
-      
-        <a href="https://miexxx.github.io/tag/aK1-G3OHz/" class="badge secondary">
-          消息队列
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      
-    </p>
-    <div class="row">
-      <a href="https://miexxx.github.io/post/rabbitmq-ji-zhu-diao-yan/" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-  <article class="article">
-    <h2 class="article-title">
-      <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-jin-cheng-guan-li/">计算机操作系统-进程管理</a>
-    </h2>
-    <p class="article-meta">
-      2020-03-16
-      
-        <a href="https://miexxx.github.io/tag/g-GLbkF4h/" class="badge success">
-          计算机操作系统
-        </a>
-      
-    </p>
-    <p class="text-lead">
-      
-    </p>
-    <div class="row">
-      <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-jin-cheng-guan-li/" class="readmore-link">
-        <button>
-          Read More
-        </button>
-      </a>
-    </div>
-  </article>
-
-
-        </div>
-        
-        <div class="row flex-edges">
-  
-  
-    <a href="https://miexxx.github.io/page/2" class="paper-btn">
-      下一页
-    </a>
-  
-</div>
-
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
       </div>
+    </div>
+    <div>
       
-      <div class="sm-12 md-4 col sidebar">
-  <div class="paper info-container">
-    <img src="https://miexxx.github.io/images/avatar.png?v=1589195543973" class="no-responsive avatar">
-    <div class="text-muted">awsl</div>
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
     <div class="social-container">
       
         
@@ -349,174 +79,202 @@
         
       
     </div>
-  </div>
-  <div class="paper">
-    <div class="sidebar-title">
-      最新文章
+    <div class="site-description">
+      awsl
     </div>
-    <div class="row">
-      <ul>
-        
-          
-            <li>
-              <a href="https://miexxx.github.io/post/http/">Http</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://miexxx.github.io/post/cr/">Crontab</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://miexxx.github.io/post/linux/">Linux</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-lian-jie/">计算机操作系统-链接</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-she-bei-guan-li/">计算机操作系统-设备管理</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-nei-cun-guan-li/">计算机操作系统-内存管理</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-si-suo/">计算机操作系统-死锁</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://miexxx.github.io/post/rabbitmq-ji-zhu-diao-yan/">RabbitMQ</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-jin-cheng-guan-li/">计算机操作系统-进程管理</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://miexxx.github.io/post/qian-tan-mysql-suo-yin/">浅谈Mysql索引</a>
-            </li>
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-      </ul>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://miexxx.github.io/atom.xml" target="_blank">RSS</a>
     </div>
-  </div>
-  <div class="paper">
-    <div class="sidebar-title">
-      标签列表
-    </div>
-    <div class="row">
-      
-        <a href="https://miexxx.github.io/tag/p4sg31lgg/" class="badge secondary">
-          http
-        </a>
-      
-        <a href="https://miexxx.github.io/tag/S56XvLf_F/" class="badge warning">
-          linux
-        </a>
-      
-        <a href="https://miexxx.github.io/tag/g-GLbkF4h/" class="badge warning">
-          计算机操作系统
-        </a>
-      
-        <a href="https://miexxx.github.io/tag/aK1-G3OHz/" class="badge ">
-          消息队列
-        </a>
-      
-        <a href="https://miexxx.github.io/tag/70yj136M-/" class="badge ">
-          mysql
-        </a>
-      
-        <a href="https://miexxx.github.io/tag/0Mirl8SzEP/" class="badge success">
-          tcp/ip
-        </a>
-      
-        <a href="https://miexxx.github.io/tag/LWmdmK1pz3/" class="badge success">
-          思维逻辑
-        </a>
-      
-        <a href="https://miexxx.github.io/tag/7VPFU2b1dg/" class="badge ">
-          go
-        </a>
-      
-        <a href="https://miexxx.github.io/tag/_5EQAs6GBC/" class="badge success">
-          tool
-        </a>
-      
-        <a href="https://miexxx.github.io/tag/p4II1O4lqR/" class="badge warning">
-          es
-        </a>
-      
-        <a href="https://miexxx.github.io/tag/WeHHX6YLrg/" class="badge ">
-          elk
-        </a>
-      
-        <a href="https://miexxx.github.io/tag/FGearAi2Cw/" class="badge ">
-          nginx
-        </a>
-      
-        <a href="https://miexxx.github.io/tag/ZHnK0KCAMk/" class="badge ">
-          社区
-        </a>
-      
-    </div>
-  </div>
-  <div class="paper">
-    Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://miexxx.github.io/atom.xml" target="_blank">RSS</a>
   </div>
 </div>
 
-    </div>
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          
+            <article class="post-item">
+              <div class="left">
+                <a href="https://miexxx.github.io/post/si-wei-duan-lian/">
+                  <h2 class="post-title">思维锻炼</h2>
+                </a>
+                <div class="post-date">
+                  2020-01-13
+                </div>
+                <div class="post-abstract">
+                  <p></p>
+
+                </div>
+              </div>
+              
+            </article>
+          
+            <article class="post-item">
+              <div class="left">
+                <a href="https://miexxx.github.io/post/http/">
+                  <h2 class="post-title">Http</h2>
+                </a>
+                <div class="post-date">
+                  2020-04-28
+                </div>
+                <div class="post-abstract">
+                  
+                </div>
+              </div>
+              
+            </article>
+          
+            <article class="post-item">
+              <div class="left">
+                <a href="https://miexxx.github.io/post/cr/">
+                  <h2 class="post-title">Crontab</h2>
+                </a>
+                <div class="post-date">
+                  2020-04-23
+                </div>
+                <div class="post-abstract">
+                  
+                </div>
+              </div>
+              
+            </article>
+          
+            <article class="post-item">
+              <div class="left">
+                <a href="https://miexxx.github.io/post/linux/">
+                  <h2 class="post-title">Linux</h2>
+                </a>
+                <div class="post-date">
+                  2020-04-07
+                </div>
+                <div class="post-abstract">
+                  
+                </div>
+              </div>
+              
+            </article>
+          
+            <article class="post-item">
+              <div class="left">
+                <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-lian-jie/">
+                  <h2 class="post-title">计算机操作系统-链接</h2>
+                </a>
+                <div class="post-date">
+                  2020-03-31
+                </div>
+                <div class="post-abstract">
+                  
+                </div>
+              </div>
+              
+            </article>
+          
+            <article class="post-item">
+              <div class="left">
+                <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-she-bei-guan-li/">
+                  <h2 class="post-title">计算机操作系统-设备管理</h2>
+                </a>
+                <div class="post-date">
+                  2020-03-31
+                </div>
+                <div class="post-abstract">
+                  
+                </div>
+              </div>
+              
+            </article>
+          
+            <article class="post-item">
+              <div class="left">
+                <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-nei-cun-guan-li/">
+                  <h2 class="post-title">计算机操作系统-内存管理</h2>
+                </a>
+                <div class="post-date">
+                  2020-03-25
+                </div>
+                <div class="post-abstract">
+                  
+                </div>
+              </div>
+              
+            </article>
+          
+            <article class="post-item">
+              <div class="left">
+                <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-si-suo/">
+                  <h2 class="post-title">计算机操作系统-死锁</h2>
+                </a>
+                <div class="post-date">
+                  2020-03-19
+                </div>
+                <div class="post-abstract">
+                  
+                </div>
+              </div>
+              
+            </article>
+          
+            <article class="post-item">
+              <div class="left">
+                <a href="https://miexxx.github.io/post/rabbitmq-ji-zhu-diao-yan/">
+                  <h2 class="post-title">RabbitMQ</h2>
+                </a>
+                <div class="post-date">
+                  2020-03-16
+                </div>
+                <div class="post-abstract">
+                  
+                </div>
+              </div>
+              
+            </article>
+          
+            <article class="post-item">
+              <div class="left">
+                <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-jin-cheng-guan-li/">
+                  <h2 class="post-title">计算机操作系统-进程管理</h2>
+                </a>
+                <div class="post-date">
+                  2020-03-16
+                </div>
+                <div class="post-abstract">
+                  
+                </div>
+              </div>
+              
+            </article>
+          
+
+          <div class="pagination-container">
+  
+  
+    <a href="https://miexxx.github.io/page/2" class="next">下一页 <i class="icon-arrow-ios-forward-outline"></i></a>
+  
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 <script type="application/javascript">
 
 AOS.init();
 
-hljs.initHighlightingOnLoad()
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
 
 </script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
 
 
 
