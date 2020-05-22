@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1590133422530">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1590136081574">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
 
 
@@ -32,7 +32,7 @@ swoole_table 共享内存表
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://miexxx.github.io">
-        <img src="https://miexxx.github.io/images/avatar.png?v=1590133422530" class="site-logo">
+        <img src="https://miexxx.github.io/images/avatar.png?v=1590136081574" class="site-logo">
         <h1 class="site-title">Great Wei</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -209,7 +209,7 @@ function callback_function_async(swoole_process $worker)
 <p>启动之前编写一个协议类IM，负责处理业务逻辑。</p>
 <p>swoole_process 创建一个进程专门用于处理定时器，websocket_service.addprocess()<br>
 加载配置文件<br>
-编写各个回调函数</p>
+回调函数内需要编写的内容</p>
 <h3 id="connect">connect：</h3>
 <p>客户端连接时触发，将用户信息记录到swoole_table中，并且调用IM协议类中的方法，创建一个定时器，等待用户进行登录操作，swoole_timer_after 指定时间后自动关闭当前用户连接（主动关闭用户连接会触发回调函数close），如果用户在指定时间内登录，清除定时器。</p>
 <h3 id="handshake">handShake：</h3>
@@ -240,7 +240,6 @@ function callback_function_async(swoole_process $worker)
 客户端需要定时发送ping包</p>
 <h3 id="用户登录">用户登录</h3>
 <p>用户登录后清除登录定时器，更新本地在线信息，远端在线信息。</p>
-<h3 id="远端在线列表为了解决多机问题">远端在线列表为了解决多机问题</h3>
 
             </div>
             
