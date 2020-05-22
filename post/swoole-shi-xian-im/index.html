@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1590128275245">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1590133422530">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
 
 
@@ -18,15 +18,11 @@
 
 
 
-    <meta name="description" content="swoole实现的im
-
-Master进程
-master进程为主进程,该进程会创建Manager进程和Reactor线程等工作进/线程
-swoole的主进程,是个多线程的程序.
-主进程内的回调函数：
-onStart
-onShutdown
-o..." />
+    <meta name="description" content="0X01
+swoole_table 共享内存表
+在swoole_server-&gt;start()之前创建swoole_table对象。并存入全局变量或者类静态变量/对象属性中。
+在worker/task进程中获取table对象，并使用
+..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -36,7 +32,7 @@ o..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://miexxx.github.io">
-        <img src="https://miexxx.github.io/images/avatar.png?v=1590128275245" class="site-logo">
+        <img src="https://miexxx.github.io/images/avatar.png?v=1590133422530" class="site-logo">
         <h1 class="site-title">Great Wei</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -102,58 +98,152 @@ o..." />
             <div class="post-date">2020-05-22</div>
             
             <div class="post-content" v-pre>
-              <h1 id="swoole实现的im">swoole实现的im</h1>
-<figure data-type="image" tabindex="1"><img src="https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=4118852065,2174358700&amp;fm=173&amp;app=49&amp;f=JPEG?w=640&amp;h=329&amp;s=78E1B544CFBA0409589B83650300F053" alt="" loading="lazy"></figure>
-<h2 id="master进程">Master进程</h2>
-<p>master进程为主进程,该进程会创建Manager进程和Reactor线程等工作进/线程<br>
-swoole的主进程,是个多线程的程序.</p>
-<h3 id="主进程内的回调函数">主进程内的回调函数：</h3>
-<p>onStart<br>
-onShutdown<br>
-onMasterConnect<br>
-onMasterClose<br>
-onTimer<br>
-...</p>
-<h2 id="reactor线程">Reactor线程</h2>
-<p>Reactor线程是真正处理TCP连接，收发数据的线程。<br>
-Swoole的主线程在Accept新的连接后，会将这个连接分配给一个固定的Reactor线程，并由这个线程负责监听此socket。在socket可读时读取数据，并进行协议解析，将请求投递到Worker进程。在socket可写时将数据发送给TCP客户端.</p>
-<h2 id="manager进程">Manager进程</h2>
-<p>Manager进程是管理进程,该进程是为了创建管理所有的woker进程和TaskWorker进程,swoole中worker/task进程都是由Manager进程Fork并管理的。(master主进程为多线程进程,不能安全的执行fork操作)</p>
-<p>子进程结束运行时，manager进程负责回收此子进程，避免成为僵尸进程。并创建新的子进程<br>
-服务器关闭时，manager进程将发送信号给所有子进程，通知子进程关闭服务<br>
-服务器reload时，manager进程会逐个关闭/重启子进程</p>
-<h3 id="管理进程内的回调函数">管理进程内的回调函数</h3>
-<p>onManagerStart<br>
-onManagerStop</p>
-<h2 id="worker进程">Worker进程</h2>
-<p>worker进程是工作进程,所有的业务逻辑都在该进程中进行,当Reactor线程接收到来自客户端的数据后，会将数据打包通过管道发送给某个Worker进程.</p>
-<p>Swoole提供了完善的进程管理机制，当Worker进程异常退出，如发生PHP的致命错误、被其他程序误杀，或达到max_request次数之后正常退出。主进程会重新拉起新的Worker进程。 Worker进程内可以像普通的apache+php或者php-fpm中写代码。不需要像Node.js那样写异步回调的代码。</p>
-<h3 id="worker进程内的回调函数">Worker进程内的回调函数</h3>
-<p>onWorkerStart<br>
-onWorkerStop<br>
-onConnect<br>
-onClose<br>
-onReceive<br>
-onTimer<br>
-onFinish</p>
-<h2 id="taskworker进程">TaskWorker进程</h2>
-<p>Swoole的业务逻辑部分是同步阻塞运行的，如果遇到一些耗时较大的操作，例如访问数据库、广播消息等，就会影响服务器的响应速度。因此Swoole提供了Task功能，将这些耗时操作放到另外的进程去处理，当前进程继续执行后面的逻辑</p>
-<p>task进程必须是同步阻塞的,task进程支持定时器</p>
-<h3 id="taskworker进程内的回调函数">TaskWorker进程内的回调函数</h3>
-<p>onTask<br>
-onWorkerStart</p>
+              <h1 id="0x01">0X01</h1>
+<h2 id="swoole_table-共享内存表">swoole_table 共享内存表</h2>
+<p>在swoole_server-&gt;start()之前创建swoole_table对象。并存入全局变量或者类静态变量/对象属性中。<br>
+在worker/task进程中获取table对象，并使用</p>
+<p>注意点：只有在swoole_server-&gt;start()之前创建的table对象才能在子进程中使用<br>
+swoole_table构造方法中指定了最大容量，一旦超过此数据容量将无法分配内存导致set操作失败。所以使用swoole_table之前一定要规划好数据容量，实现进程之间的数据共享。</p>
+<pre><code>$table = new swoole_table(1024);
+$table-&gt;column('fd', swoole_table::TYPE_INT);
+$table-&gt;column('from_id', swoole_table::TYPE_INT);
+$table-&gt;column('data', swoole_table::TYPE_STRING, 64);
+$table-&gt;create();
+
+$serv = new swoole_server('127.0.0.1', 9501);
+//将table保存在serv对象上
+$serv-&gt;table = $table;
+
+$serv-&gt;on('receive', function ($serv, $fd, $from_id, $data) {
+    $ret = $serv-&gt;table-&gt;set($fd, array('from_id' =&gt; $data, 'fd' =&gt; $fd, 'data' =&gt; $data));
+});
+
+$serv-&gt;start();
+</code></pre>
+<h1 id="0x02">0X02</h1>
+<h2 id="swoole_websocket_server">swoole_websocket_server</h2>
+<p>WebSocket服务器是建立在Http服务器之上的长连接服务器，客户端首先会发送一个Http的请求与服务器进行握手。握手成功后会触发onOpen事件，表示连接已就绪，onOpen函数中可以得到$request对象，包含了Http握手的相关信息，如GET参数、Cookie、Http头信息等。</p>
+<p>建立连接后客户端与服务器端就可以双向通信了。</p>
+<pre><code>//创建websocket服务器对象，监听0.0.0.0:9502端口
+$ws = new swoole_websocket_server(&quot;0.0.0.0&quot;, 9502);
+
+//监听WebSocket连接打开事件
+$ws-&gt;on('open', function ($ws, $request) {
+    var_dump($request-&gt;fd, $request-&gt;get, $request-&gt;server);
+    $ws-&gt;push($request-&gt;fd, &quot;hello, welcome\n&quot;);
+});
+
+//监听WebSocket消息事件
+$ws-&gt;on('message', function ($ws, $frame) {
+    echo &quot;Message: {$frame-&gt;data}\n&quot;;
+    $ws-&gt;push($frame-&gt;fd, &quot;server: {$frame-&gt;data}&quot;);
+});
+
+//监听WebSocket连接关闭事件
+$ws-&gt;on('close', function ($ws, $fd) {
+    echo &quot;client-{$fd} is closed\n&quot;;
+});
+
+$ws-&gt;start();
+</code></pre>
+<h1 id="0x02-2">0X02</h1>
+<h2 id="swoole_process">swoole_process</h2>
+<p>swoole增加了多进程管理模块来替代PHP的pcntl，它相比pcntl的不同点是：</p>
+<p>swoole_process提供了pcntl没有的进程间通信<br>
+swoole_process支持重定向标准输入和输出，在子进程内echo或者读键盘输入可以被重定向为从管道中取数据<br>
+子进程可以异步化</p>
+<pre><code>$worker_num = 8;
+
+for($i = 0; $i &lt; $worker_num; $i++)
+{
+    $process = new swoole_process('callback_function', $redirect_stdout);
+    $pid = $process-&gt;start();
+    $workers[$pid] = $process;
+}
+
+function callback_function(swoole_process $worker)
+{
+    //echo &quot;Worker: start. PID=&quot;.$worker-&gt;pid.&quot;\n&quot;;
+    //recv data from master
+    $recv = $worker-&gt;read();
+    echo &quot;From Master: $recv\n&quot;;
+
+    //send data to master
+    $worker-&gt;write(&quot;hello master\n&quot;);
+
+    sleep(2);
+    $worker-&gt;exit(0);
+}
+// read/write 2个方法就是向管道内读写数据。主进程内可以通过write/read 向子进程写入，读取数据。
+
+// swoole_process支持了标准输入输出的重定向，子进程内echo时，会自动写入管道，而不是打印到屏幕。
+
+// 子进程异步
+function callback_function_async(swoole_process $worker)
+{
+    //echo &quot;Worker: start. PID=&quot;.$worker-&gt;pid.&quot;\n&quot;;
+    //recv data from master
+    $GLOBALS['worker'] = $worker;
+    swoole_event_add($worker-&gt;pipe, function($pipe) {
+        $worker = $GLOBALS['worker'];
+        $recv = $worker-&gt;read();
+
+        echo &quot;From Master: $recv\n&quot;;
+
+        //send data to master
+        $worker-&gt;write(&quot;hello master\n&quot;);
+
+        sleep(2);
+
+        $worker-&gt;exit(0);
+    });
+}
+
+//可以将管道加入到swoole_event中即可实现异步的进程间通信，另外子进程内可以使用swoole_timer/swoole_client/swoole_async这些异步的API。或者使用swoole_event_add直接操作swoole的EventLoop。
+</code></pre>
+<h1 id="0x03-实现im">0X03 实现IM</h1>
+<h2 id="创建一个swoole_table共享内存表用于记录连接的客户端信息">创建一个swoole_table共享内存表，用于记录连接的客户端信息</h2>
+<p>记录：<br>
+用户id, 设备id, 设备型号， 登录状态，数据接收池，客户端ip，客户端端口，上一次在线时间。</p>
+<h2 id="创建一个websocket_service">创建一个websocket_service</h2>
+<p>启动之前编写一个协议类IM，负责处理业务逻辑。</p>
+<p>swoole_process 创建一个进程专门用于处理定时器，websocket_service.addprocess()<br>
+加载配置文件<br>
+编写各个回调函数</p>
+<h3 id="connect">connect：</h3>
+<p>客户端连接时触发，将用户信息记录到swoole_table中，并且调用IM协议类中的方法，创建一个定时器，等待用户进行登录操作，swoole_timer_after 指定时间后自动关闭当前用户连接（主动关闭用户连接会触发回调函数close），如果用户在指定时间内登录，清除定时器。</p>
+<h3 id="handshake">handShake：</h3>
+<p>服务端握手时触发，有需要可以自己进行处理（可选项）。</p>
+<h3 id="message">message：</h3>
+<p>服务端接收到数据时触发，判断当前接收到是的数据是否完整（数据传输过程发生了拆包，swoole_frame-&gt;finish判断是否完整），如果数据不完整将数据存储到内存表中的当前用户的数据接收池，请求结束。否则将当前用户数据接收池数据获取出来与当前数据进行组和，情况数据接收池，获得到完整数据进行业务逻辑处理。调用IM协议类的方法进行相应处理。</p>
+<h3 id="close">close</h3>
+<p>主动断开客户端连接时触发，清除swoole_table用户相关数据。</p>
+<h3 id="start">start</h3>
+<p>websocket服务启动触发，有需要可以自行修改</p>
+<h3 id="managerstart">managerStart</h3>
+<p>manager进程启动时触发，有需要可以自行修改</p>
+<h3 id="workerstart">workerStart</h3>
+<p>worker进程启动时触发</p>
+<h3 id="shutdown">shutdown</h3>
+<p>服务关闭时触发，清除远端用户在线列表信息（redis）。</p>
+<h3 id="workererror">workerError</h3>
+<p>work异常触发，释放work资源，调用使用类的析构函数。</p>
+<h3 id="workerstop">workerStop</h3>
+<p>work停止触发，释放work资源，调用使用类的析构函数。</p>
+<h3 id="task">task</h3>
+<p>task启动时触发</p>
+<h2 id="im协议类">IM协议类</h2>
+<h3 id="接收消息">接收消息</h3>
+<p>解析接收的消息，判断当前消息是否正常，检查内存表中用户是否存在信息。<br>
+每次接收到消息重置心跳定时器。<br>
+检查用户是否有在线信息，如果有更新在线时间。<br>
+客户端需要定时发送ping包</p>
+<h3 id="用户登录">用户登录</h3>
+<p>用户登录后清除登录定时器，更新本地在线信息，远端在线信息。</p>
+<h3 id="远端在线列表为了解决多机问题">远端在线列表为了解决多机问题</h3>
 
             </div>
             
-            
-              <div class="next-post">
-                <div class="next">下一篇</div>
-                <a href="https://miexxx.github.io/post/swoole-websocket-li-jie/">
-                  <h3 class="post-title">
-                    swoole-websocket理解
-                  </h3>
-                </a>
-              </div>
             
 
             
