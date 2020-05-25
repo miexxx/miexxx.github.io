@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://miexxx.github.io</id>
     <title>Great Wei</title>
-    <updated>2020-05-25T07:03:05.947Z</updated>
+    <updated>2020-05-25T08:35:53.338Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://miexxx.github.io"/>
     <link rel="self" href="https://miexxx.github.io/atom.xml"/>
@@ -10,6 +10,97 @@
     <logo>https://miexxx.github.io/images/avatar.png</logo>
     <icon>https://miexxx.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Great Wei</rights>
+    <entry>
+        <title type="html"><![CDATA[MQTT协议详解]]></title>
+        <id>https://miexxx.github.io/post/mqtt-xie-yi-xiang-jie/</id>
+        <link href="https://miexxx.github.io/post/mqtt-xie-yi-xiang-jie/">
+        </link>
+        <updated>2020-05-25T08:18:07.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="mqtt是什么">MQTT是什么？</h1>
+<p>MQTT（Message Queuing Telemetry Transport，消息队列遥测传输协议），是一种基于发布/订阅（Publish/Subscribe）模式的轻量级通讯协议，该协议构建于TCP/IP协议上，由IBM在1999年发布，目前最新版本为v3.1.1。MQTT最大的优点在于可以以极少的代码和有限的带宽，为远程设备提供实时可靠的消息服务。做为一种低开销、低带宽占用的即时通讯协议，MQTT在物联网、小型设备、移动应用等方面有广泛的应用。</p>
+<p>当然，在物联网开发中，MQTT不是唯一的选择，与MQTT互相竞争的协议有XMPP和CoAP协议等，文章末尾会有一个比较和说明。</p>
+<h1 id="mqtt是哪一层协议">MQTT是哪一层协议？</h1>
+<p>众所周知，TCP/IP参考模型可以分为四层：应用层、传输层、网络层、链路层。TCP和UDP位于传输层，应用层常见的协议有HTTP、FTP、SSH等。MQTT协议运行于TCP之上，属于应用层协议，因此只要是支持TCP/IP协议栈的地方，都可以使用MQTT。</p>
+<h1 id="mqtt消息格式">MQTT消息格式</h1>
+<p>每条MQTT命令消息的消息头都包含一个固定的报头，有些消息会携带一个可变报文头和一个负荷。消息格式如下：</p>
+<p>固定报文头 | 可变报文头 | 负荷</p>
+<h2 id="固定报文头fixed-header">固定报文头（Fixed Header）</h2>
+<p>MQTT固定报文头最少有两个字节，第一字节包含消息类型（Message Type）和QoS级别等标志位。第二字节开始是剩余长度字段，该长度是后面的可变报文头加消息负载的总长度，该字段最多允许四个字节。</p>
+<p>剩余长度字段单个字节最大值为二进制0b0111 1111，16进制0x7F。也就是说，单个字节可以描述的最大长度是127字节。为什么不是256字节呢？因为MQTT协议规定，单个字节第八位（最高位）若为1，则表示后续还有字节存在，第八位起“延续位”的作用。</p>
+<p>例如，数字64，编码为一个字节，十进制表示为64，十六进制表示为0×40。数字321（65+2*128）编码为两个字节，重要性最低的放在前面，第一个字节为65+128=193（0xC1），第二个字节是2（0x02），表示2×128。</p>
+<p>由于MQTT协议最多只允许使用四个字节表示剩余长度（如表1），并且最后一字节最大值只能是0x7F不能是0xFF，所以能发送的最大消息长度是256MB，而不是512MB。</p>
+<h2 id="可变报文头variable-header">可变报文头（Variable Header）</h2>
+<p>可变报文头主要包含协议名、协议版本、连接标志（Connect Flags）、心跳间隔时间（Keep Alive timer）、连接返回码（Connect Return Code）、主题名（Topic Name）等，后面会针对主要部分进行讲解。</p>
+<h2 id="有效负荷payload">有效负荷（Payload）</h2>
+<p>Payload直译为负荷，可能让人摸不着头脑，实际上可以理解为消息主体（body）。</p>
+<p>当MQTT发送的消息类型是CONNECT（连接）、PUBLISH（发布）、SUBSCRIBE（订阅）、SUBACK（订阅确认）、UNSUBSCRIBE（取消订阅）时，则会带有负荷。</p>
+<h1 id="mqtt的主要特性">MQTT的主要特性</h1>
+<p>固定报文头中的第一个字节包含连接标志（Connect Flags），连接标志用来区分MQTT的消息类型。MQTT协议拥有14种不同的消息类型（如表2），可简单分为连接及终止、发布和订阅、QoS 2消息的机制以及各种确认ACK。至于每一个消息类型会携带什么内容，这里不多阐述。<br>
+<img src="https://img-blog.csdn.net/20170725100930389" alt="" loading="lazy"></p>
+<h1 id="消息质量qos">消息质量（Qos）</h1>
+<p>MQTT消息质量有三个等级，QoS 0，QoS 1和 QoS 2。</p>
+<p>QoS 0：最多分发一次。消息的传递完全依赖底层的TCP/IP网络，协议里没有定义应答和重试，消息要么只会到达服务端一次，要么根本没有到达。<br>
+QoS 1：至少分发一次。服务器的消息接收由PUBACK消息进行确认，如果通信链路或发送设备异常，或者指定时间内没有收到确认消息，发送端会重发这条在消息头中设置了DUP位的消息。<br>
+QoS 2：只分发一次。这是最高级别的消息传递，消息丢失和重复都是不可接受的，使用这个服务质量等级会有额外的开销。 <br>
+通过下面的例子可以更深刻的理解上面三个传输质量等级。<br>
+比如目前流行的共享单车智能锁，智能锁可以定时使用QoS level 0质量消息请求服务器，发送单车的当前位置，如果服务器没收到也没关系，反正过一段时间又会再发送一次。之后用户可以通过App查询周围单车位置，找到单车后需要进行解锁，这时候可以使用QoS level 1质量消息，手机App不断的发送解锁消息给单车锁，确保有一次消息能达到以解锁单车。最后用户用完单车后，需要提交付款表单，可以使用QoS level 2质量消息，这样确保只传递一次数据，否则用户就会多付钱了。</p>
+<h1 id="遗愿标志-will-flag">遗愿标志 （Will Flag）</h1>
+<p>在可变报文头的连接标志位字段（Connect Flags）里有三个Will标志位：Will Flag、Will QoS和Will Retain Flag，这些Will字段用于监控客户端与服务器之间的连接状况。如果设置了Will Flag，就必须设置Will QoS和Will Retain标志位，消息主体中也必须有Will Topic和Will Message字段。</p>
+<p>那遗愿消息是怎么回事呢？服务器与客户端通信时，当遇到异常或客户端心跳超时的情况，MQTT服务器会替客户端发布一个Will消息。当然如果服务器收到来自客户端的DISCONNECT消息，则不会触发Will消息的发送。 <br>
+因此，Will字段可以应用于设备掉线后需要通知用户的场景。</p>
+<h1 id="连接保活心跳机制keep-alive-timer">连接保活心跳机制（Keep Alive Timer）</h1>
+<p>MQTT客户端可以设置一个心跳间隔时间（Keep Alive Timer），表示在每个心跳间隔时间内发送一条消息。如果在这个时间周期内，没有业务数据相关的消息，客户端会发一个PINGREQ消息，相应的，服务器会返回一个PINGRESP消息进行确认。如果服务器在一个半（1.5）心跳间隔时间周期内没有收到来自客户端的消息，就会断开与客户端的连接。心跳间隔时间最大值大约可以设置为18个小时，0值意味着客户端不断开。</p>
+<h1 id="mqtt其他特点">MQTT其他特点</h1>
+<h2 id="异步发布-订阅实现">异步发布、订阅实现</h2>
+<p>发布/订阅模式解耦了发布消息的客户（发布者）与订阅消息的客户（订阅者）之间的关系，这意味着发布者和订阅者之间并不需要直接建立联系。<br>
+这个模式有以下好处：</p>
+<p>发布者与订阅者只需要知道同一个消息代理即可；<br>
+发布者和订阅者不需要直接交互；<br>
+发布者和订阅者不需要同时在线。<br>
+由于采用了发布/订阅实现，MQTT可以双向通信。也就是说MQTT支持服务端反向控制设备，设备可以订阅某个主题，然后发布者对该主题发布消息，设备收到消息后即可进行一系列操作。</p>
+<h2 id="二进制格式实现">二进制格式实现</h2>
+<p>MQTT基于二进制实现而不是字符串，比如HTTP和XMPP都是基于字符串实现。由于HTTP和XMPP拥有冗长的协议头部，而MQTT固定报文头仅有两字节，所以相比其他协议，发送一条消息最省流量。</p>
+<h2 id="mqtt的安全">MQTT的安全</h2>
+<p>由于MQTT运行于TCP层之上并以明文方式传输，这就相当于HTTP的明文传输，使用Wireshark可以完全看到MQTT发送的所有消息，消息指令一览无遗<br>
+!()[https://img-blog.csdn.net/20170725101215295]</p>
+<p>这样可能会产生以下风险：</p>
+<p>设备可能会被盗用；<br>
+客户端和服务端的静态数据可能是可访问的（可能会被修改）；<br>
+协议行为可能有副作用（如计时器攻击）；<br>
+拒绝服务攻击；<br>
+通信可能会被拦截、修改、重定向或者泄露；<br>
+虚假控制报文注入。<br>
+作为传输协议，MQTT仅关注消息传输，提供合适的安全功能是开发者的责任。安全功能可以从三个层次来考虑——应用层、传输层、网络层。</p>
+<p>应用层：在应用层上，MQTT提供了客户标识（Client Identifier）以及用户名和密码，可以在应用层验证设备。<br>
+传输层：类似于HTTPS，MQTT基于TCP连接，也可以加上一层TLS，传输层使用TLS加密是确保安全的一个好手段，可以防止中间人攻击。客户端证书不但可以作为设备的身份凭证，还可以用来验证设备。<br>
+网络层：如果有条件的话，可以通过拉专线或者使用VPN来连接设备与MQTT代理，以提高网络传输的安全性。</p>
+<h1 id="总结">总结</h1>
+<p>MQTT基于异步发布/订阅的实现解耦了消息发布者和订阅者，基于二进制的实现节省了存储空间及流量，同时MQTT拥有更好的消息处理机制，可以替代TCP Socket一部分应用场景。相对于HTTP和XMPP，MQTT可以选择用户数据格式，解析复杂度低，同时MQTT也可用于手机推送等领域。手机作为与人连接的入口，正好建立了人与物的连接，可谓一箭双雕。当然，其他协议也可以作为一个辅助的存在，HTTP可以为只需定时上传数据的设备服务，CoAP则更适用于非常受限的移动通信网络。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[美图长连接平台]]></title>
+        <id>https://miexxx.github.io/post/mei-tu-chang-lian-jie-ping-tai/</id>
+        <link href="https://miexxx.github.io/post/mei-tu-chang-lian-jie-ping-tai/">
+        </link>
+        <updated>2020-05-25T07:03:31.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="美图长连接服务">美图长连接服务</h1>
+<p>随着科技的飞速发展，技术的日新月异，长连接的运用场景日益增多。不仅在后端服务中被广泛运用，比较常见的有数据库的访问、服务内部状态的协调等，而且在 App  端的消息推送、聊天信息、直播弹字幕等场景长连接服务也是优选方案。长连接服务的重要性也在各个场合被业界专家不断提及，与此同时也引起了更为广泛地关注和讨论，各大公司也开始构建自己的长连接服务。</p>
+<p>美图公司于2016 年初开始构建长连接服务，与此同时， Go 在编程语言领域异军突起，考虑到其丰富的编程库，完善的工具链，简单高效的并发模型等优势，使我们最终选择 Go 去作为实现长连接服务的语言。在通信协议的选择上，考虑到 MQTT 协议的轻量、简单、易于实现的优点，选择了 MQTT 协议作为数据交互的载体。其整体的架构会在下文中做相应地介绍。</p>
+<p>美图长连接服务（项目内部代号为bifrost ）已经历时三年，在这三年的时间里，长连接服务经过了业务的检验，同时也经历了服务的重构，存储的升级等，长连接服务从之前支持单机二十几万连接到目前可以支撑单机百万连接。在大多数长连接服务中存在一个共性问题，那就是内存占用过高，我们经常发现单个节点几十万的长连接，内存却占用十几G 甚至更多，有哪些手段能降低内存呢？</p>
+<p>本文将从多个角度介绍长连接服务在内存优化路上的探索，首先会先通过介绍当前服务的架构模型，Go 语言的内存管理，让大家清晰地了解我们内存优化的方向和关注的重要数据。后面会重点介绍我们在内存优化上做的一些尝试以及具体的优化手段，希望对大家有一定的借鉴意义。</p>
+<h1 id="架构模型">架构模型</h1>
+<p><img src="https://mlog.club/api/img/proxy?url=https%3A%2F%2Fmmbiz.qpic.cn%2Fmmbiz_png%2F8XkvNnTiapON5Uia1wzpCd7y4KId7K77ElzicUjqlKZPG0TcpdY0pvwQMcWwT7ok24ALKYwibKJz7ekkuOib7a6ibxSw%2F640%3Fwx_fmt%3Dpng" alt="" loading="lazy"><br>
+从架构图中我们可以清晰地看到由7 个模块组成，分别是：conf 、grpcsrv 、mqttsrv、session、pubsub、packet、util ，每个模块的作用如下：</p>
+<p>conf ：配置管理中心，负责服务配置的初始化，基本字段校验。</p>
+<p>grpcsrv ：grpc 服务，集群内部信息交互协调。</p>
+<p>mqttsrv ：mqtt 服务，接收客户端连接，同时支持单进程多端口 MQTT 服务。</p>
+<p>session ：会话模块，管理客户端状态变化，MQTT 信息的收发。</p>
+<p>pubsub ：发布订阅模块，按照 Topic 维度保存 session 并发布 Topic 通知给 session。</p>
+<p>packet：协议解析模块，负责 MQTT 协议包解析。</p>
+<p>util ：工具包，目前集成监控、日志、grpc 客户端、调度上报四个子模块。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Swoole：Master/Reactor/Manager/Worker/TaskWorker(Task)]]></title>
         <id>https://miexxx.github.io/post/swoolemasterreactormanagerworkertaskworkertask/</id>
@@ -620,501 +711,6 @@ NRU 优先换出已经被修改的脏页面（R=0，M=1），而不是被频繁�
 地址空间的维度：分页是一维地址空间，分段是二维的。<br>
 大小是否可以改变：页的大小不可变，段的大小可以动态改变。<br>
 出现的原因：分页主要用于实现虚拟内存，从而获得更大的地址空间；分段主要是为了使程序和数据可以被划分为逻辑上独立的地址空间并且有助于共享和保护。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[计算机操作系统-死锁]]></title>
-        <id>https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-si-suo/</id>
-        <link href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-si-suo/">
-        </link>
-        <updated>2020-03-19T13:07:02.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="产生死锁的必要条件">产生死锁的必要条件</h1>
-<p><img src="https://camo.githubusercontent.com/1a8800931db59afc3925e96446601d198d8df9da/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f63303337633930312d376561652d346533312d613165342d3964343133323965356333652e706e67" alt="" loading="lazy"><br>
-互斥：每个资源要么已经分配给了一个进程，要么就是可用的。<br>
-占有和等待：已经得到了某个资源的进程可以再请求新的资源。<br>
-不可抢占：已经分配给一个进程的资源不能强制性地被抢占，它只能被占有它的进程显式地释放。<br>
-环路等待：有两个或者两个以上的进程组成一条环路，该环路中的每个进程都在等待下一个进程所占有的资源。</p>
-<h1 id="处理方法">处理方法</h1>
-<p>主要有以下四种方法：<br>
-鸵鸟策略<br>
-死锁检测与死锁恢复<br>
-死锁预防<br>
-死锁避免</p>
-<h2 id="鸵鸟策略">鸵鸟策略</h2>
-<p>把头埋在沙子里，假装根本没发生问题。<br>
-因为解决死锁问题的代价很高，因此鸵鸟策略这种不采取任务措施的方案会获得更高的性能。<br>
-当发生死锁时不会对用户造成多大影响，或发生死锁的概率很低，可以采用鸵鸟策略。<br>
-大多数操作系统，包括 Unix，Linux 和 Windows，处理死锁问题的办法仅仅是忽略它。</p>
-<h2 id="死锁检测与死锁恢复">死锁检测与死锁恢复</h2>
-<p>不试图阻止死锁，而是当检测到死锁发送时，采取措施进行恢复。</p>
-<h3 id="每种类型一个资源的死锁检测">每种类型一个资源的死锁检测</h3>
-<p><img src="https://camo.githubusercontent.com/ccebd10711103f30cd895559e28fe8daa9738e78/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f62316661303435332d613462302d346561652d613335322d3438616363613866666637342e706e67" alt="" loading="lazy"><br>
-上图为资源分配图，其中方框表示资源，圆圈表示进程。资源指向进程表示该资源已经分配给该进程，进程指向资源表示进程请求获取该资源。<br>
-图 a 可以抽取出环，如图 b，它满足了环路等待条件，因此会发生死锁。<br>
-每种类型一个资源的死锁检测算法是通过检测有向图是否存在环来实现，从一个节点出发进行深度优先搜索，对访问过的节点进行标记，如果访问了已经标记的节点，就表示有向图存在环，也就是检测到死锁的发生。</p>
-<h3 id="死锁恢复">死锁恢复</h3>
-<p>利用抢占恢复<br>
-利用回滚恢复<br>
-通过杀死进程恢复</p>
-<h1 id="死锁预防">死锁预防</h1>
-<p>在程序运行之前预防发生死锁。</p>
-<h2 id="破坏互斥条件">破坏互斥条件</h2>
-<p>例如假脱机打印机技术允许若干个进程同时输出，唯一真正请求物理打印机的进程是打印机守护进程。</p>
-<h2 id="破坏占有和等待条件">破坏占有和等待条件</h2>
-<p>一种实现方式是规定所有进程在开始执行前请求所需要的全部资源。</p>
-<h2 id="破坏不可抢占条件">破坏不可抢占条件</h2>
-<h2 id="破坏环路等待">破坏环路等待</h2>
-<p>给资源统一编号，进程只能按编号顺序来请求资源。</p>
-<h1 id="死锁避免">死锁避免</h1>
-<p>在程序运行时避免发送死锁。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[RabbitMQ]]></title>
-        <id>https://miexxx.github.io/post/rabbitmq-ji-zhu-diao-yan/</id>
-        <link href="https://miexxx.github.io/post/rabbitmq-ji-zhu-diao-yan/">
-        </link>
-        <updated>2020-03-16T07:09:54.000Z</updated>
-        <content type="html"><![CDATA[<!-- more -->
-<h2 id="beanstalkd">Beanstalkd</h2>
-<p>Beantalkd 一个轻量级消息中间件，他的最大特点是将自己定位为基于管道  (tube) 和任务 (job) 的工作队列 (work-queue)<br>
-有以下特点：</p>
-<h3 id="任务优先级-priority">任务优先级 (priority):</h3>
-<p>任务 (job) 可以有 0~2^32 个优先级, 0 代表最高优先级。 beanstalkd 采用最大最小堆 (Min-max heap) 处理任务优先级排序, 任何时刻调用 reserve 命令的消费者总是能拿到当前优先级最高的任务, 时间复杂度为 O(logn)。</p>
-<h4 id="最大堆与最小堆">最大堆与最小堆</h4>
-<figure data-type="image" tabindex="1"><img src="https://img-blog.csdn.net/20160317150649506" alt="" loading="lazy"></figure>
-<p><img src="https://img-blog.csdn.net/20160317150655703" alt="" loading="lazy"><br>
-堆树是一种二叉树，堆树中某个节点的值总是不大于或不小于其孩子节点的值。<br>
-当父节点的键值总是大于或等于任何一个子节点的键值时为最大堆。 当父节点的键值总是小于或等于任何一个子节点的键值时为最小堆。</p>
-<h3 id="延时任务-delay">延时任务 (delay):</h3>
-<p>有两种方式可以延时执行任务 (job): 生产者发布任务时指定延时，或者当任务处理完毕后, 消费者再次将任务放入队列延时执行 (RELEASE with )。</p>
-<h3 id="任务超时重发-time-to-run">任务超时重发 (time-to-run):</h3>
-<p>Beanstalkd 把任务返回给消费者以后：消费者必须在预设的 TTR (time-to-run) 时间内发送 delete / release/ bury 改变任务状态；否则 Beanstalkd 会认为消息处理失败，然后把任务交给另外的消费者节点执行。如果消费者预计在 TTR (time-to-run) 时间内无法完成任务, 也可以发送 touch 命令, 它的作用是让 Beanstalkd 从系统时间重新计算 TTR (time-to-run)。</p>
-<h3 id="任务预留-buried">任务预留 (buried):</h3>
-<p>如果任务因为某些原因无法执行, 消费者可以把任务置为 buried 状态让 Beanstalkd 保留这些任务。管理员可以通过 peek buried 命令查询被保留的任务，并且进行人工干预。简单的, kick 能够一次性把 n 条被保留的任务踢回队列。</p>
-<h3 id="消息持久化">消息持久化</h3>
-<p>通过日志实现消息的持久化。</p>
-<h3 id="速度优势">速度优势</h3>
-<p><img src="https://pic1.zhimg.com/80/dbbd8ac979caf1400eda6974edd4d712_1440w.jpg" alt="" loading="lazy"><br>
-Beanstalkd协议基于tcp上。客户端连接服务器并发送指令和数据，然后等待响应并关闭连接。对于每个连接，服务器按照接收命令的序列依次处理并响应。</p>
-<h3 id="场景优势">场景优势</h3>
-<p>延时系统，比如延迟20分钟发送短信，******，在投放的时候就设定一定的延迟时间值，让任务在延迟时间到了之后进入ready队列，等待worker预订处理。<br>
-<img src="https://pic4.zhimg.com/80/b2fe6330ac4cee0ace41e47a82bf713f_1440w.jpg" alt="" loading="lazy"></p>
-<p>轮询系统，如下图，一个被投放的任务，在延迟时间过后需要再检查一遍状态，如果不符合，继续释放（release with delay）为延迟投放状态（DELAYED），直到时间过期之后，再次进入ready队列，被worker预订，进行一些逻辑判断，比如微信银行卡退款是否成功，如果成功，删除该任务，如果没成功，继续释放（release with delay）为延迟投放状态。<br>
-<img src="https://pic1.zhimg.com/80/8add0f140c21e738f26b1ccd8d2fa892_1440w.jpg" alt="" loading="lazy"></p>
-<h3 id="缺陷">缺陷</h3>
-<p>Beanstalk单点部署，不支持集群，当服务发送故障造成服务不可用，任务积压问题，不能够灵活的设置消息持久化。</p>
-<hr>
-<h2 id="rabbitmq">RabbitMQ</h2>
-<h3 id="rabbitmq特性">Rabbitmq特性</h3>
-<p>可靠性：持久化存储、ACK消息确认、发布confirm、事务支持。<br>
-灵活的路由：交换机功能。交换机类型：direct,topic,headers,fanout。<br>
-镜像，master-slave 多协议支持,集群节点<br>
-多语言客户端支持：java、c#、ruby、Python、php、c、scale、nodejs、go、erlang…<br>
-管理界面功能丰富、命令行rabbitmqctl、RPC远程调度</p>
-<h3 id="amqp高级消息协议">AMQP高级消息协议</h3>
-<p>一个AMQP服务器类似于邮件服务器，exchange类似于消息传输代理（email里的概念），message queue类似于邮箱。Binding定义了每一个传输代理中的消息路由表，发布者将消息发给特定的传输代理，然后传输代理将这些消息路由到邮箱中，消费者从这些邮箱中取出消息。</p>
-<p>AMQP术语<br>
-Channel（信道）： 在AMQP模型中，我们不需要通过建立太多的TCP连接来实现。假如针对每一个AMQP连接都建立一个TCP连接的话，会占用大量的系统资源。对此，AMQP提供了通道（channel）机制。即，共享一个TCP连接，可创建多个通道。<br>
-​ 在多线程/进程的应用程序中正确做法是，对于每一个线程/进程，应分别建立一个通道，而不是多个线程/进程之间去共享一个通道。<br>
-Exchange（交换器）：用于接受、分配消息；可以有好几种模式、相当于邮箱<br>
-Queue（队列）：用于存储生产者的消息；<br>
-RoutingKey（路由键）：用于把生成者的数据分配到交换器上；<br>
-BindingKey（绑定键）：用于把交换器的消息绑定到队列上；<br>
-Broker（消息代理）：消息代理会接收来自生产者（publishers/producers）生产的消息，并将它们路由(route，可以理解成按指定规则转发)给相应的消费者(consumers)手中。<br>
-VHOST（虚拟主机）：为了在一个单独的代理上实现多个隔离的环境（用户、用户组、交换机、队列 等），AMQP 提供了一个虚拟主机（virtual hosts - vhosts）的概念。这跟 Web servers 虚拟主机概念非常相似，这为 AMQP 实体提供了完全隔离的环境。当连接被建立的时候，AMQP 客户端来指定使用哪个虚拟主机。</p>
-<p><a href="http://tryrabbitmq.com/">模拟器</a></p>
-<h3 id="hello-world">hello world</h3>
-<p>生产者生产消息，消费者消费消息，消息存储在队列中。<br>
-<img src="https://www.rabbitmq.com/img/tutorials/python-one.png" alt="" loading="lazy"><br>
-生产者：</p>
-<pre><code>函数：
-// 声明队列
-public function queue_declare(
-        $queue = '',            //队列名称
-        $passive = false,      //如果只是需要知道该队列是否存在，传递true
-        $durable = false,       //队列可持久话，如果希望节点关闭也不会丢失队列，传递true
-        $exclusive = false,      //排他性，针对首次建立连接的，一个连接下面多个通道也是可见的， 对于其他连接是不可见的，断开连接后自动删除
-        $auto_delete = true,   //自动删除，默认是开启的，最后一个消息被消费后自动删除队列
-        $nowait = false,
-        $arguments = array(), //可用于镜像队列配置
-        $ticket = null
-    ) {}
-
-// 发布消息
-     public function basic_publish(
-        $msg,                       // 消息体
-        $exchange = '',           // 交换器，默认direct。
-        $routing_key = '',         // 路由key  
-        $mandatory = false,      //当mandatory标志位设置为true时，如果exchange根据自身类型和消息routeKey无法找到一个符合条件的queue，那么会调用basic.return方法将消息返回给生产者（Basic.Return + Content-Header + Content-Body）
-        $immediate = false,         //当immediate标志位设置为true时，如果exchange在将消息路由到queue(s)时发现对于的queue上么有消费者，那么这条消息不会放入队列中。当与消息routeKey关联的所有queue（一个或者多个）都没有消费者时，该消息会通过basic.return方法返还给生产者。
-        $ticket = null                     // 暂时没发现用途
-    ) {}
-</code></pre>
-<p>消费者：</p>
-<pre><code>public function basic_consume(
-        $queue = '',                        // 队列名称
-        $consumer_tag = '',             // 消费者标签
-        $no_local = false,                 // 
-        $no_ack = false,                   // 消息ack
-        $exclusive = false,
-        $nowait = false,
-        $callback = null,                   // 回调函数
-        $ticket = null,
-        $arguments = array()
-    ) {}
-</code></pre>
-<h3 id="工作队列">工作队列</h3>
-<p>一个工作队列，该队列将用于在多个工作人员之间分配耗时的任务,默认情况下，RabbitMQ将按顺序将每个消费者都会收到相同数量的消息，采用循环发送的方式。</p>
-<h4 id="消息确认">消息确认</h4>
-<p>执行任务可能需要几秒钟。您可能想知道，如果其中一个消费者开始一项漫长的任务并仅部分完成而死掉，会发生什么情况。使用我们当前的代码，RabbitMQ一旦向消费者发送了一条消息，便立即将其标记为删除。在这种情况下，如果您杀死一个工人，我们将丢失正在处理的消息。我们还将丢失所有发送给该特定工作人员但尚未处理的消息。但是我们不想丢失任何任务。如果一个工人死亡，我们希望将任务交付给另一个工人。<br>
-为了确保消息永不丢失，RabbitMQ支持 消息确认。消费者发送回一个确认（acknowledgement），以告知RabbitMQ已经接收，处理了特定的消息，并且RabbitMQ可以自由删除它。<br>
-如果使用者死了（其通道已关闭，连接已关闭或TCP连接丢失）而没有发送确认，RabbitMQ将了解消息未完全处理，并将重新排队。如果同时有其他消费者在线，它将很快将其重新分发给另一位消费者。这样，即使工人偶尔死亡，您也可以确保不会丢失任何消息。没有任何消息超时；消费者死亡时，RabbitMQ将重新传递消息。</p>
-<p>如果当我们的消费者大量的消息内容忘记ack后，会照成rabbitMq将会消耗越来越多的内存，因为它无法释放任何未确认的消息。<br>
-rabbitmqctl list_queues name messages_ready messages_unacknowledged<br>
-以上命令可以查询队列中的为确认消息数量。</p>
-<h4 id="消息持久性">消息持久性</h4>
-<p>以上方法，已经能够解决消费者死亡，任务也不会丢失，但是，如果RabbitMQ服务器停止，我们的任务仍然会丢失，要确保消息不会丢失，需要做两件事，将队列与消息都是标记为持久性。</p>
-<pre><code>// 队列持久化
-$ channel-&gt; queue_declare（'task_queue'，false，true，false，false）;
-
-// 消息持久化
-$ msg = new AMQPMessage（
-    $ data，array（'delivery_mode' =&gt; AMQPMessage :: DELIVERY_MODE_PERSISTENT）
-）;
-</code></pre>
-<p>将消息标记持久化并不能完全保证不会丢失消息，应为RabbitMQ接收消息但尚未保存至磁盘中时还是有很短的时间，另外，RabbitMQ不会对每条消息都执行fsync(2)，可能只是保存到缓存中，而没有真正写入磁盘，持久性保证并不强，但是对于简单的任务队列而已，已经足够了，如果需要更强有力的保证，则可以使用<a href="https://www.rabbitmq.com/confirms.html#basics">发布者确认</a>。</p>
-<pre><code>$channel-&gt;confirm_select(); //开启确认模式
-$channel-&gt;basic_publish($msg, $exchangeName, $routeingKey);
- 
-//注册ack回调
-$channel-&gt;set_nack_handler(function (AMQPMessage $msg) {
-    var_dump('nack');
-});
-$channel-&gt;set_ack_handler(function (AMQPMessage $msg) {
-    var_dump(&quot;ack&quot;);
-});
-//等待接收ack
-$channel-&gt;wait_for_pending_acks();
-</code></pre>
-<h4 id="公平派遣">公平派遣</h4>
-<p>您可能已经注意到，调度仍然无法完全按照我们的要求进行。例如，在有两名工人的情况下，当所有奇怪的消息都很重，甚至消息都很轻时，一位工人将一直忙碌而另一位工人将几乎不做任何工作。好吧，RabbitMQ对此一无所知，并且仍将平均分配消息。发生这种情况是因为RabbitMQ在消息进入队列时<br>
-<img src="https://www.rabbitmq.com/img/tutorials/prefetch-count.png" alt="" loading="lazy"><br>
-为了克服这一点，我们可以将basic_qos方法与 prefetch_count = 1设置一起使用。这告诉RabbitMQ一次不要给工人一个以上的消息。换句话说，在处理并确认上一条消息之前，不要将新消息发送给工作人员。而是将其分派给尚不繁忙的下一个工作人员。</p>
-<pre><code>$ channel-&gt; basic_qos（null，1，null）;
-</code></pre>
-<h3 id="发布订阅">发布订阅</h3>
-<p>一次发布，订阅的队列都能接收到消息进行处理，将繁琐的业务逻辑进行解耦。<br>
-<img src="https://www.rabbitmq.com/img/tutorials/exchanges.png" alt="" loading="lazy"><br>
-每个订阅者就是一个队列，虽然这场景也可以通过一个队列进行所有业务操作，但是一旦一个复杂的业务发生故障，容易服务不可用任务积压，如果能够将业务拆分的更加小，每个队列处理自己的业务逻辑，能够很好解决这一问题，采用发布订阅模式，发布者不需要关系哪些队列关注这个任务，只要订阅了，自动回接收到任务。<br>
-有几种交换类型：direct,topic,headers,fanout。<br>
-生产者：</p>
-<pre><code> $channel = $connection-&gt;channel();
-    $channel-&gt;exchange_declare($exchangeName, 'fanout', false, false, false);
-    $n = 1;
-    while ($n &lt; 10) {
-        $msg = new \PhpAmqpLib\Message\AMQPMessage(
-            &quot;fanout message !!! $n&quot;
-        );
-        $channel-&gt;basic_publish($msg, $exchangeName);
-        $n ++;
-    }
-    $channel-&gt;close();
-    $connection-&gt;close();
-</code></pre>
-<p>消费者：</p>
-<pre><code>$channel = $connection-&gt;channel();
-    $channel-&gt;queue_declare($queueName, false, false, false, false);
-    $channel-&gt;queue_bind($queueName, $exchangeName);
-    $callback = function ($msg) {
-        echo ' [x] ', $msg-&gt;body, &quot;\n&quot;;
-    };
-    $channel-&gt;basic_consume($queueName, '', false, true, false, false, $callback);
-    while ($channel-&gt;is_consuming()) {
-        $channel-&gt;wait();
-    }
-    $channel-&gt;close();
-    $connection-&gt;close();
-</code></pre>
-<h3 id="路由">路由</h3>
-<p><img src="https://www.rabbitmq.com/img/tutorials/direct-exchange.png" alt="" loading="lazy"><br>
-在发布订阅的基础上，有些队列并不需要接收所有消息，而是只对自己感兴趣的内容进行订阅，这就是路由的功能，生成消息时可以添加routing-key进行绑定，发送到指定队列。<br>
-生产者:</p>
-<pre><code> $channel = $connection-&gt;channel();
-    $channel-&gt;exchange_declare($exchangeName, 'direct', false, false, false);
-    $n = 1;
-    while ($n &lt; 10) {
-        $msg = new \PhpAmqpLib\Message\AMQPMessage(
-            &quot;direct routing message !!! $n&quot;
-        );
-        $channel-&gt;basic_publish($msg, $exchangeName, $routingKey);
-        $n ++;
-    }
-    $channel-&gt;close();
-    $connection-&gt;close();
-</code></pre>
-<p>消费者：</p>
-<pre><code>$channel = $connection-&gt;channel();
-    $channel-&gt;queue_declare($queueName, false, false, false, false);
-    $channel-&gt;queue_bind($queueName, $exchangeName, $routingKey);
-    $callback = function ($msg) {
-        echo ' [x] ', $msg-&gt;delivery_info['routing_key'], $msg-&gt;body, &quot;\n&quot;;
-    };
-    $channel-&gt;basic_consume($queueName, '', false, true, false, false, $callback);
-    while ($channel-&gt;is_consuming()) {
-        $channel-&gt;wait();
-    }
-    $channel-&gt;close();
-    $connection-&gt;close();
-</code></pre>
-<h3 id="主题">主题</h3>
-<p>路由功能虽然解决了，订阅者只接收自己订阅的内容，但是如果用户可能想要接收到，某一类相关的消息，就需要同topic功能， 主题交流不具有任意routing-key，routing-key必须是单词列表以&quot;.&quot;分隔，单词可以使用&quot;*&quot;通配符表示，&quot;#&quot;绑定表示接收所有消息,和直接订阅效果一样。<br>
-生产者：</p>
-<pre><code> $channel = $connection-&gt;channel();
-    $channel-&gt;exchange_declare($exchangeName, 'topic', false, false, false);
-    $n = 1;
-    while ($n &lt; 10) {
-        $msg = new \PhpAmqpLib\Message\AMQPMessage(
-            &quot;topic routing message !!! $n&quot;
-        );
-        $channel-&gt;basic_publish($msg, $exchangeName, $routingKey);
-        $n ++;
-    }
-    $channel-&gt;close();
-    $connection-&gt;close();
-</code></pre>
-<p>消费者:</p>
-<pre><code> $channel = $connection-&gt;channel();
-    $channel-&gt;queue_declare($queueName, false, false, false, false);
-    $channel-&gt;queue_bind($queueName, $exchangeName, $routingKey);
-    $callback = function ($msg) {
-        echo ' [x] ', $msg-&gt;delivery_info['routing_key'], $msg-&gt;body, &quot;\n&quot;;
-    };
-    $channel-&gt;basic_consume($queueName, '', false, true, false, false, $callback);
-    while ($channel-&gt;is_consuming()) {
-        $channel-&gt;wait();
-    }
-    $channel-&gt;close();
-    $connection-&gt;close();
-</code></pre>
-<h3 id="rpc">RPC</h3>
-<p>有关RPC的说明<br>
-尽管RPC是计算中非常普遍的模式，但它经常受到批评。当程序员不知道函数调用是本地的还是缓慢的RPC时，就会出现问题。这样的混乱会导致系统变幻莫测，并给调试增加了不必要的复杂性。滥用RPC可能会导致无法维护的意大利面条代码，而不是简化软件。<br>
-牢记这一点，请考虑以下建议：<br>
-确保明显的是哪个函数调用是本地的，哪个是远程的。<br>
-记录您的系统。明确组件之间的依赖关系。<br>
-处理错误案例。RPC服务器长时间关闭后，客户端应如何反应？<br>
-如有疑问，请避免使用RPC。如果可以的话，应该使用异步管道-代替类似RPC的阻塞，将结果异步推送到下一个计算阶段。<br>
-<img src="https://www.rabbitmq.com/img/tutorials/python-six.png" alt="" loading="lazy"><br>
-客户端启动时，它将创建一个匿名排他回调队列。<br>
-对于RPC请求，客户端发送一条消息，该消息具有两个属性： reply_to（设置为回调队列）和correlation_id（设置为每个请求的唯一值）。<br>
-该请求被发送到rpc_queue队列。<br>
-RPC工作程序（又名：服务器）正在等待该队列上的请求。出现请求时，它将使用reply_to字段中的队列来完成工作，并将消息和结果发送回客户端。<br>
-客户端等待回调队列上的数据。出现消息时，它将检查correlation_id属性。如果它与请求中的值匹配，则将响应返回给应用程序。<br>
-客户端将请求发送到rpc_queue队列，需要传递请求唯一id，请求的回调队列。<br>
-rpc_service服务端，消费rpc_queue队列，接收到消息后进行逻辑处理，再将数据放入回调队列中。<br>
-rpc_client客户端，需要生产消息到rpc_queue,同时消费回调队列的结果correlation_id相同时返回结果。</p>
-<h3 id="集群">集群</h3>
-<p>RabbitMQ始终记录的四种类型的内部元数据：<br>
-队列元数据 - 队列名称和他们的属性<br>
-交换器元数据 - 交换器名称、类型和属性<br>
-绑定元数据  - 一张简单的表格展示了如何将消息路由到队列<br>
-vhost元数据 - 为vhost内的队列、交换器、绑定提供命名空间和安全属性。</p>
-<h4 id="单机多节点部署">单机多节点部署</h4>
-<p>RABBITMQ_NODE_PORT:指定rmq端口<br>
-RABBITMQ_NODENAME:指定节点名称与域名<br>
-rabbitmq-server -detached 后台运行<br>
-RABBITMQ_SERVER_START_ARGS：启动服务参数<br>
--rabbitmq_management listener [{port,15673}] 管理后台监听端口<br>
--rabbitmq_stomp tcp_listeners [61614] rabbitmq_stomp tcp服务使用端口<br>
--rabbitmq_mqtt  tcp_listeners [1884]rabbitmq_mqtt tcp服务使用端口</p>
-<p>第一个节点：<br>
-命令：RABBITMQ_NODE_PORT=5672 RABBITMQ_NODENAME=rabbit@localhost rabbitmq-server -detached<br>
-http://localhost:15674/#/ 地址能够进入对应节点管理后台。</p>
-<p>第二个节点：<br>
-注意：在单机部署多节点的时候，命令会有所不同，需要添加一些参数修改对应服务使用的端口，否则会出现端口冲突，节点无法启动。<br>
-RABBITMQ_NODE_PORT=5673 RABBITMQ_SERVER_START_ARGS=&quot;-rabbitmq_management listener [{port,15673}] -rabbitmq_stomp tcp_listeners [61614] -rabbitmq_mqtt  tcp_listeners [1884]&quot; RABBITMQ_NODENAME=rabbit2@localhost rabbitmq-server  -detached</p>
-<p>第三个节点：<br>
-RABBITMQ_NODE_PORT=5674 RABBITMQ_SERVER_START_ARGS=&quot;-rabbitmq_management listener [{port,15674}] -rabbitmq_stomp tcp_listeners [61615] -rabbitmq_mqtt  tcp_listeners [1885]&quot; RABBITMQ_NODENAME=rabbit2@localhost rabbitmq-server  -detached</p>
-<p>添加节点步骤：<br>
-rabbitmqctl -n rabbit1@localhost stop_app               //暂停节点服务<br>
-rabbitmqctl -n rabbit1@localhost reset                     //节点重置，将节点所属的cluster都删除。<br>
-rabbitmqctl -n rabbit1@localhost join_cluster rabbit@localhost  //将rabbit1节点加入集群 默认是disk 磁盘节点模式 --ram 可以指定为内存节点模式<br>
-rabbitmqctl -n rabbit1@localhost start_app                              //启动节点<br>
-rabbitmqctl cluster_status -n rabbit@localhost                          //查看集群情况<br>
-rabbit1只需要加入这个集群中任意一台节点就可以加入集群。</p>
-<p>删除节点步骤：<br>
-方法一：<br>
-rabbitmqctl -n rabbit1@localhost stop_app               //暂停节点服务<br>
-rabbitmqctl -n rabbit1@localhost reset                     //节点重置，将节点所属的cluster都删除。</p>
-<p>方法二：<br>
-rabbitmqctl -n rabbit1@localhost stop_app               //暂停节点服务<br>
-rabbitmqctl forget_cluster_node rabbit1@localhost      //集群中移除节点</p>
-<h4 id="内存节点与磁盘节点的区别">内存节点与磁盘节点的区别</h4>
-<p>网上说的云里雾里的，这边总结一下，只要队列和消息指定持久化，都会落地到磁盘中，内存节点和磁盘节点的区别就是将元数据放在了内存还是硬盘，仅此而已，当在集群中声明队列、交换器和绑定 ，这些操作会同步元数据到所有节点，所以一个集群至少要有一个磁盘节点来同步元数据。<br>
-元数据必须至少保存在一个硬盘上，内存节点重启会去磁盘节点下载当前集群元数据拷贝，磁盘节点全挂了，那么集群就无法创建新的东西了，但是还能继续使用已有的东西。</p>
-<p>默认情况下，队列只会保存在一个节点上，其他只是保存元数据，当然消息也会投递到这个队列所在的机器上<br>
-所以我们才有了创建镜像队列的需求，镜像队列则需要队列适配了策略，当一个节点挂掉后，其他节点都会有这个节点的镜像队列，选择其中一个节点作为新的队列master。</p>
-<p>rabbitmqctl set_policy ha-all &quot;^&quot; '{&quot;ha-mode&quot;:&quot;all&quot;, &quot;ha-sync-mode&quot;:&quot;automatic&quot;}'<br>
-将所有队列都是设置为镜像队列并且自动同步，是否需要自动同步可以根据自己需求进行设置， 也可以设置需要镜像同步的节点数，个人感觉一个master节点一个mirror节点就足够了。</p>
-<h4 id="负载均衡">负载均衡</h4>
-<p>HAProxy 提供高可用性、负载均衡以及基于 TCP 和 HTTP 应用的代理，支持虚拟主机，它是免费、快速并且可靠的一种解决方案。<br>
-配置项：</p>
-<pre><code>global #全局属性
-    daemon  #以daemon方式在后台运行
-    maxconn 256  #最大同时256连接
-   
-
-defaults #默认参数
-    mode http  #http模式
-    timeout connect 5000ms  #连接server端超时5s
-    timeout client 50000ms  #客户端响应超时50s
-    timeout server 50000ms  #server端响应超时50s
-#绑定配置
-listen rabbitmq_cluster 
-    bind 0.0.0.0:5670
-    #配置TCP模式
-    mode tcp
-    #加权轮询
-    balance roundrobin
-    #RabbitMQ集群节点配置
-    server node1 0.0.0.0:5672 check inter 2000 rise 2 fall 3
-    server node2 0.0.0.0:5673 check inter 2000 rise 2 fall 3
-    server node3 0.0.0.0:5674 check inter 2000 rise 2 fall 3
-
-#haproxy监控页面地址
-listen monitor
-    bind  0.0.0.0:8100
-    mode http
-    option httplog
-    stats enable
-    stats uri /stats
-    stats refresh 5s
-
-</code></pre>
-<p>haproxy -f /usr/local/haproxy/conf/haproxy.cnf</p>
-<h3 id="镜像队列">镜像队列</h3>
-<p>交换器和绑定始终可视为在所有节点上，队列可以选择性的跨多个节点进行镜像。每个镜像队列由一个master和一个或者多个mirrors组成，主节点位于一个通常称为master的节点，每个队列都有自己的主节点。</p>
-<h3 id="延迟队列">延迟队列</h3>
-<p><img src="https://oscimg.oschina.net/oscnet/86897739832497bd1cfac14e629a3b3b7c8.jpg" alt="" loading="lazy"><br>
-通过死信队列与消息的过期时间实现延时队列。<br>
-生产者：</p>
-<pre><code>$channel = $connection-&gt;channel();
-
-$channel-&gt;exchange_declare('delay_exchange', 'direct',false,false,false);
-$channel-&gt;exchange_declare('cache_exchange', 'direct',false,false,false);
-
-$tale = new AMQPTable();
-$tale-&gt;set('x-dead-letter-exchange', 'delay_exchange');
-$tale-&gt;set('x-dead-letter-routing-key','delay_exchange');
-$tale-&gt;set('x-message-ttl',10000);
-
-$channel-&gt;queue_declare('cache_queue',false,true,false,false,false,$tale);
-$channel-&gt;queue_bind('cache_queue', 'cache_exchange','cache_exchange');
-
-$channel-&gt;queue_declare('delay_queue',false,true,false,false,false);
-$channel-&gt;queue_bind('delay_queue', 'delay_exchange','delay_exchange');
-$msg = new AMQPMessage('Hello World'.$argv[1],array(
-    'expiration' =&gt; intval($argv[1]),
-    'delivery_mode' =&gt; AMQPMessage::DELIVERY_MODE_PERSISTENT
-));
-$channel-&gt;basic_publish($msg,'cache_exchange','cache_exchange');
-echo date('Y-m-d H:i:s').&quot; [x] Sent 'Hello World!' &quot;.PHP_EOL;
-$channel-&gt;close();
-$connection-&gt;close();
-</code></pre>
-<p>消费者:</p>
-<pre><code>$channel = $connection-&gt;channel();
-$channel-&gt;exchange_declare('delay_exchange', 'direct',false,false,false);
-$channel-&gt;exchange_declare('cache_exchange', 'direct',false,false,false);
-$channel-&gt;queue_declare('delay_queue',false,true,false,false,false);
-$channel-&gt;queue_bind('delay_queue', 'delay_exchange','delay_exchange');
-
-echo ' [*] Waiting for message. To exit press CTRL+C '.PHP_EOL;
-
-$callback = function ($msg){
-    echo date('Y-m-d H:i:s').&quot; [x] Received&quot;,$msg-&gt;body,PHP_EOL;
-
-     $msg-&gt;delivery_info['channel']-&gt;basic_ack($msg-&gt;delivery_info['delivery_tag']);
-
-};
-
-//只有consumer已经处理并确认了上一条message时queue才分派新的message给它
-$channel-&gt;basic_qos(null, 1, null);
-$channel-&gt;basic_consume('delay_queue','',false,false,false,false,$callback);
-
-
-while (count($channel-&gt;callbacks)) {
-    $channel-&gt;wait();
-}
-$channel-&gt;close();
-$connection-&gt;close();
-</code></pre>
-<h3 id="死信队列">死信队列</h3>
-<p>一个消息在满足如下条件下，会进死信交换机，记住这里是交换机而不是队列，一个交换机可以对应很多队列。<br>
-2.1 消息被Consumer拒收了，并且reject方法的参数里requeue是false。也就是说不会被再次放在队列里，被其他消费者使用。<br>
-2.2 上面的消息的TTL到了，消息过期了。<br>
-2.3 队列的长度限制满了。排在前面的消息会被丢弃或者扔到死信路由上。<br>
-死信交换机就是普通的交换机，只是因为我们把过期的消息扔进去，所以叫死信交换机，并不是说死信交换机是某种特定的交换机</p>
-<h3 id="优先级队列">优先级队列</h3>
-<p>发布消息时可以设置优先级。</p>
-<pre><code>$msg = new AMQPMessage(&quot;Hello World!&quot;, array(
- 'delivery_mode' =&gt; 2,         // 设置消息持久化
- 'priority' =&gt; 1,                   // 设置优先级
-));
-</code></pre>
-<h3 id="使用插件的延时队列">使用插件的延时队列</h3>
-<p>生产者：</p>
-<pre><code>$conn = new AMQPConnection($connectConfig);
-    $conn-&gt;connect();
-    $channel = new AMQPChannel($conn);
-    $exchange = new AMQPExchange($channel);
-    $exchange-&gt;setName($params['exchangeName']);
-    $exchange-&gt;setType('x-delayed-message');    //x-delayed-message类型
-    /*RabbitMQ常用的Exchange Type有三种：fanout、direct、topic。
-
-      fanout:把所有发送到该Exchange的消息投递到所有与它绑定的队列中。
-
-      direct:把消息投递到那些binding key与routing key完全匹配的队列中。
-
-      topic:将消息路由到binding key与routing key模式匹配的队列中。*/
-    $exchange-&gt;setArgument('x-delayed-type','direct');
-    $exchange-&gt;declareExchange();
-
-    $channel-&gt;startTransaction();
-    //RabbitMQ不容许声明2个相同名称、配置不同的Queue,否则报错
-    $queue = new AMQPQueue($channel);
-    $queue-&gt;setName($params['queueName']);
-    $queue-&gt;setFlags(AMQP_DURABLE);
-    $queue-&gt;declareQueue();
-
-    //绑定队列和交换机
-    $queue-&gt;bind($params['exchangeName'], $params['routeKey']);
-    $channel-&gt;commitTransaction();
-
-    for($i=1;$i &lt;= 5;$i++){
-        //生成消息
-        echo '发送时间：'.date(&quot;Y-m-d H:i:s&quot;, time()).PHP_EOL;
-        echo 'i='.$i.'，延迟'.$i.'秒'.PHP_EOL;
-        $message = json_encode(['order_id'=&gt;time(),'i'=&gt;$i]);
-        $exchange-&gt;publish($message, $params['routeKey'], AMQP_NOPARAM, ['headers'=&gt;['x-delay'=&gt; 2000*$i]]);
-        sleep(2);
-    }
-    $conn-&gt;disconnect();
-</code></pre>
-<p>消费者:</p>
-<pre><code> $channel = $connection-&gt;channel();
-    $queueName = 'delayed_queue_test';
-    $callback = function ($msg) {
-        echo ' [x] Received ', $msg-&gt;body, &quot;\n&quot;;
-    };
-    $channel-&gt;basic_consume($queueName, '', false, true, false, false, $callback);
-    while ($channel-&gt;is_consuming()) {
-        $channel-&gt;wait();
-    }
-</code></pre>
-<h3 id="思维脑图">思维脑图</h3>
-<p><a href="https://naotu.baidu.com/file/407c820a7e2f189bfc7b55150ca55ffb?token=29cc096245c90973">脑图</a></p>
 ]]></content>
     </entry>
 </feed>

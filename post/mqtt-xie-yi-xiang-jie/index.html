@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>MQTT协议详解 | Great Wei</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1590395748543">
+<link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="MQTT是什么？
+MQTT（Message Queuing Telemetry Transport，消息队列遥测传输协议），是一种基于发布/订阅（Publish/Subscribe）模式的轻量级通讯协议，该协议构建于TCP/IP协议上，由I..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://miexxx.github.io">
+        <img src="https://miexxx.github.io/images/avatar.png?v=1590395748543" class="site-logo">
+        <h1 class="site-title">Great Wei</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      awsl
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://miexxx.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">MQTT协议详解</h2>
+            <div class="post-date">2020-05-25</div>
+            
+            <div class="post-content" v-pre>
+              <h1 id="mqtt是什么">MQTT是什么？</h1>
+<p>MQTT（Message Queuing Telemetry Transport，消息队列遥测传输协议），是一种基于发布/订阅（Publish/Subscribe）模式的轻量级通讯协议，该协议构建于TCP/IP协议上，由IBM在1999年发布，目前最新版本为v3.1.1。MQTT最大的优点在于可以以极少的代码和有限的带宽，为远程设备提供实时可靠的消息服务。做为一种低开销、低带宽占用的即时通讯协议，MQTT在物联网、小型设备、移动应用等方面有广泛的应用。</p>
+<p>当然，在物联网开发中，MQTT不是唯一的选择，与MQTT互相竞争的协议有XMPP和CoAP协议等，文章末尾会有一个比较和说明。</p>
+<h1 id="mqtt是哪一层协议">MQTT是哪一层协议？</h1>
+<p>众所周知，TCP/IP参考模型可以分为四层：应用层、传输层、网络层、链路层。TCP和UDP位于传输层，应用层常见的协议有HTTP、FTP、SSH等。MQTT协议运行于TCP之上，属于应用层协议，因此只要是支持TCP/IP协议栈的地方，都可以使用MQTT。</p>
+<h1 id="mqtt消息格式">MQTT消息格式</h1>
+<p>每条MQTT命令消息的消息头都包含一个固定的报头，有些消息会携带一个可变报文头和一个负荷。消息格式如下：</p>
+<p>固定报文头 | 可变报文头 | 负荷</p>
+<h2 id="固定报文头fixed-header">固定报文头（Fixed Header）</h2>
+<p>MQTT固定报文头最少有两个字节，第一字节包含消息类型（Message Type）和QoS级别等标志位。第二字节开始是剩余长度字段，该长度是后面的可变报文头加消息负载的总长度，该字段最多允许四个字节。</p>
+<p>剩余长度字段单个字节最大值为二进制0b0111 1111，16进制0x7F。也就是说，单个字节可以描述的最大长度是127字节。为什么不是256字节呢？因为MQTT协议规定，单个字节第八位（最高位）若为1，则表示后续还有字节存在，第八位起“延续位”的作用。</p>
+<p>例如，数字64，编码为一个字节，十进制表示为64，十六进制表示为0×40。数字321（65+2*128）编码为两个字节，重要性最低的放在前面，第一个字节为65+128=193（0xC1），第二个字节是2（0x02），表示2×128。</p>
+<p>由于MQTT协议最多只允许使用四个字节表示剩余长度（如表1），并且最后一字节最大值只能是0x7F不能是0xFF，所以能发送的最大消息长度是256MB，而不是512MB。</p>
+<h2 id="可变报文头variable-header">可变报文头（Variable Header）</h2>
+<p>可变报文头主要包含协议名、协议版本、连接标志（Connect Flags）、心跳间隔时间（Keep Alive timer）、连接返回码（Connect Return Code）、主题名（Topic Name）等，后面会针对主要部分进行讲解。</p>
+<h2 id="有效负荷payload">有效负荷（Payload）</h2>
+<p>Payload直译为负荷，可能让人摸不着头脑，实际上可以理解为消息主体（body）。</p>
+<p>当MQTT发送的消息类型是CONNECT（连接）、PUBLISH（发布）、SUBSCRIBE（订阅）、SUBACK（订阅确认）、UNSUBSCRIBE（取消订阅）时，则会带有负荷。</p>
+<h1 id="mqtt的主要特性">MQTT的主要特性</h1>
+<p>固定报文头中的第一个字节包含连接标志（Connect Flags），连接标志用来区分MQTT的消息类型。MQTT协议拥有14种不同的消息类型（如表2），可简单分为连接及终止、发布和订阅、QoS 2消息的机制以及各种确认ACK。至于每一个消息类型会携带什么内容，这里不多阐述。<br>
+<img src="https://img-blog.csdn.net/20170725100930389" alt="" loading="lazy"></p>
+<h1 id="消息质量qos">消息质量（Qos）</h1>
+<p>MQTT消息质量有三个等级，QoS 0，QoS 1和 QoS 2。</p>
+<p>QoS 0：最多分发一次。消息的传递完全依赖底层的TCP/IP网络，协议里没有定义应答和重试，消息要么只会到达服务端一次，要么根本没有到达。<br>
+QoS 1：至少分发一次。服务器的消息接收由PUBACK消息进行确认，如果通信链路或发送设备异常，或者指定时间内没有收到确认消息，发送端会重发这条在消息头中设置了DUP位的消息。<br>
+QoS 2：只分发一次。这是最高级别的消息传递，消息丢失和重复都是不可接受的，使用这个服务质量等级会有额外的开销。 <br>
+通过下面的例子可以更深刻的理解上面三个传输质量等级。<br>
+比如目前流行的共享单车智能锁，智能锁可以定时使用QoS level 0质量消息请求服务器，发送单车的当前位置，如果服务器没收到也没关系，反正过一段时间又会再发送一次。之后用户可以通过App查询周围单车位置，找到单车后需要进行解锁，这时候可以使用QoS level 1质量消息，手机App不断的发送解锁消息给单车锁，确保有一次消息能达到以解锁单车。最后用户用完单车后，需要提交付款表单，可以使用QoS level 2质量消息，这样确保只传递一次数据，否则用户就会多付钱了。</p>
+<h1 id="遗愿标志-will-flag">遗愿标志 （Will Flag）</h1>
+<p>在可变报文头的连接标志位字段（Connect Flags）里有三个Will标志位：Will Flag、Will QoS和Will Retain Flag，这些Will字段用于监控客户端与服务器之间的连接状况。如果设置了Will Flag，就必须设置Will QoS和Will Retain标志位，消息主体中也必须有Will Topic和Will Message字段。</p>
+<p>那遗愿消息是怎么回事呢？服务器与客户端通信时，当遇到异常或客户端心跳超时的情况，MQTT服务器会替客户端发布一个Will消息。当然如果服务器收到来自客户端的DISCONNECT消息，则不会触发Will消息的发送。 <br>
+因此，Will字段可以应用于设备掉线后需要通知用户的场景。</p>
+<h1 id="连接保活心跳机制keep-alive-timer">连接保活心跳机制（Keep Alive Timer）</h1>
+<p>MQTT客户端可以设置一个心跳间隔时间（Keep Alive Timer），表示在每个心跳间隔时间内发送一条消息。如果在这个时间周期内，没有业务数据相关的消息，客户端会发一个PINGREQ消息，相应的，服务器会返回一个PINGRESP消息进行确认。如果服务器在一个半（1.5）心跳间隔时间周期内没有收到来自客户端的消息，就会断开与客户端的连接。心跳间隔时间最大值大约可以设置为18个小时，0值意味着客户端不断开。</p>
+<h1 id="mqtt其他特点">MQTT其他特点</h1>
+<h2 id="异步发布-订阅实现">异步发布、订阅实现</h2>
+<p>发布/订阅模式解耦了发布消息的客户（发布者）与订阅消息的客户（订阅者）之间的关系，这意味着发布者和订阅者之间并不需要直接建立联系。<br>
+这个模式有以下好处：</p>
+<p>发布者与订阅者只需要知道同一个消息代理即可；<br>
+发布者和订阅者不需要直接交互；<br>
+发布者和订阅者不需要同时在线。<br>
+由于采用了发布/订阅实现，MQTT可以双向通信。也就是说MQTT支持服务端反向控制设备，设备可以订阅某个主题，然后发布者对该主题发布消息，设备收到消息后即可进行一系列操作。</p>
+<h2 id="二进制格式实现">二进制格式实现</h2>
+<p>MQTT基于二进制实现而不是字符串，比如HTTP和XMPP都是基于字符串实现。由于HTTP和XMPP拥有冗长的协议头部，而MQTT固定报文头仅有两字节，所以相比其他协议，发送一条消息最省流量。</p>
+<h2 id="mqtt的安全">MQTT的安全</h2>
+<p>由于MQTT运行于TCP层之上并以明文方式传输，这就相当于HTTP的明文传输，使用Wireshark可以完全看到MQTT发送的所有消息，消息指令一览无遗<br>
+!()[https://img-blog.csdn.net/20170725101215295]</p>
+<p>这样可能会产生以下风险：</p>
+<p>设备可能会被盗用；<br>
+客户端和服务端的静态数据可能是可访问的（可能会被修改）；<br>
+协议行为可能有副作用（如计时器攻击）；<br>
+拒绝服务攻击；<br>
+通信可能会被拦截、修改、重定向或者泄露；<br>
+虚假控制报文注入。<br>
+作为传输协议，MQTT仅关注消息传输，提供合适的安全功能是开发者的责任。安全功能可以从三个层次来考虑——应用层、传输层、网络层。</p>
+<p>应用层：在应用层上，MQTT提供了客户标识（Client Identifier）以及用户名和密码，可以在应用层验证设备。<br>
+传输层：类似于HTTPS，MQTT基于TCP连接，也可以加上一层TLS，传输层使用TLS加密是确保安全的一个好手段，可以防止中间人攻击。客户端证书不但可以作为设备的身份凭证，还可以用来验证设备。<br>
+网络层：如果有条件的话，可以通过拉专线或者使用VPN来连接设备与MQTT代理，以提高网络传输的安全性。</p>
+<h1 id="总结">总结</h1>
+<p>MQTT基于异步发布/订阅的实现解耦了消息发布者和订阅者，基于二进制的实现节省了存储空间及流量，同时MQTT拥有更好的消息处理机制，可以替代TCP Socket一部分应用场景。相对于HTTP和XMPP，MQTT可以选择用户数据格式，解析复杂度低，同时MQTT也可用于手机推送等领域。手机作为与人连接的入口，正好建立了人与物的连接，可谓一箭双雕。当然，其他协议也可以作为一个辅助的存在，HTTP可以为只需定时上传数据的设备服务，CoAP则更适用于非常受限的移动通信网络。</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://miexxx.github.io/post/mei-tu-chang-lian-jie-ping-tai/">
+                  <h3 class="post-title">
+                    美图长连接平台
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>
