@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>Zookeeper集群 + canal服务 搭建 | Great Wei</title>
+<title>Go实现IM | Great Wei</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,10 +18,16 @@
 
 
 
-    <meta name="description" content="
-zookeeper简介
-顾名思义 zookeeper 就是动物园管理员，他是用来管 hadoop（大象）、Hive(蜜蜂)、pig(小 猪)的管理员， Apache Hbase 和 Apache Solr 的分布式集群都用到了 zo..." />
-    <meta name="keywords" content="zookeeper" />
+    <meta name="description" content="
+Go实现IM
+长连接平台：
+分为四个部分，rev,sender,registor,online（接受者，发送者，注册中心，在线列表）
+im：负责处理业务逻辑
+
+rev负责数据的接收发送
+架构设计
+主进程负责接收消息（epoll）将消..." />
+    <meta name="keywords" content="go" />
   </head>
   <body>
     <div id="app" class="main">
@@ -92,52 +98,44 @@ zookeeper简介
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">Zookeeper集群 + canal服务 搭建</h2>
-            <div class="post-date">2020-04-28</div>
+            <h2 class="post-title">Go实现IM</h2>
+            <div class="post-date">2020-05-25</div>
             
             <div class="post-content" v-pre>
-              <p></p>
-<h1 id="zookeeper简介">zookeeper简介</h1>
-<p>顾名思义 zookeeper 就是动物园管理员，他是用来管 hadoop（大象）、Hive(蜜蜂)、pig(小 猪)的管理员， Apache Hbase 和 Apache Solr 的分布式集群都用到了 zookeeper；Zookeeper: 是一个分布式的、开源的程序协调服务，是 hadoop 项目下的一个子项目。他提供的主要功 能包括：配置管理、名字服务、分布式锁、集群管理</p>
-<h1 id="zookeeper作用">zookeeper作用</h1>
-<h2 id="公共配置管理">公共配置管理</h2>
-<h2 id="服务器共用hosts名字服务">服务器共用hosts，名字服务</h2>
-<h2 id="分布式锁">分布式锁</h2>
-<h2 id="集群管理竞选策略">集群管理，竞选策略</h2>
-<p>本文章，主要讲解搭建内容，理论方面不再阐述。</p>
-<h1 id="单机多节点搭建要点">单机多节点搭建要点</h1>
-<p>需要修改每个节点存储日志目录（/usr/local/var/run/zookeeper/data/zoo-1/），每个节点需要创建myid。</p>
-<p>创建多个节点copy多分zoo.cfg文件，修改配置内容，主要配置其他节点的地址，与客户端端口。</p>
-<pre><code>clientPort=2182
-server.1=127.0.0.1:2666:3666
-server.2=127.0.0.1:2667:3667
-server.3=127.0.0.1:2668:3668
-</code></pre>
-<p>每个节点依次启动<br>
-服务端：zkServer  start zoo-1.cfg</p>
-<p>客户端可连接任意端口：zkCli -server ip:port(客户端端口)</p>
-<h1 id="canal简介">canal简介</h1>
-<p>canal是阿里巴巴开源的mysql数据库binlog的增量订阅&amp;消费组件。</p>
+              <!-- more -->
+<h1 id="go实现im">Go实现IM</h1>
+<p>长连接平台：<br>
+分为四个部分，rev,sender,registor,online（接受者，发送者，注册中心，在线列表）<br>
+im：负责处理业务逻辑<br>
+<img src="http://blog.hytech.com/wp-content/uploads/2020/05/2AB94DDF-906C-430E-ACA5-B26B42DFDA1B.jpg" alt="" loading="lazy"></p>
+<h2 id="rev负责数据的接收发送">rev负责数据的接收发送</h2>
+<h3 id="架构设计">架构设计</h3>
+<p>主进程负责接收消息（epoll）将消息放入阻塞队列，主进程开启多个消费者（work协程）读取阻塞队列消息处理，向用户中心获取产品注册的队列（队列1，队列2），将处理后的消息发送到对应队列（消费队列，异常队列）。</p>
+<h2 id="im负责消息业务处理">im负责消息业务处理</h2>
+<h3 id="功能">功能</h3>
+<p>将消息从队列（队列1，队列2）获取后进行业务处理，将需要返回的消息内容发送到接收队列（sender接收队列）。</p>
+<h2 id="sender负责数据转发">sender负责数据转发</h2>
+<h3 id="架构设计-2">架构设计</h3>
+<p>主进程开启多个（消费者work协程）消费task（任务消息），消息内容包含要发送的目的rev信息，调用rpc方法将消息发送到指定rev，开启多个（生产者work协程）订阅接收队列（sender接收队列）中将消息封装成task供（消费者work协程）进行消费。</p>
+<h2 id="registor负责注册各种服务">registor负责注册各种服务</h2>
+<h3 id="功能-2">功能</h3>
+<p>注册中心负责记录长连平台各个服务的信息，以便各个服务相互之间能找到对方。<br>
+各个服务的注册信息存放在redis中。<br>
+各个服务使用redis的发布订阅模式获取注册中心的所有信息 。</p>
+<h2 id="online-在线列表">online 在线列表</h2>
+<h3 id="功能-3">功能</h3>
+<p>online模块负责记录成功登陆长连平台的用户信息。主要是用户是再哪个recv登陆的。</p>
 
             </div>
             
               <div class="tag-container">
                 
-                  <a href="https://miexxx.github.io/tag/p4Aog4zJ1/" class="tag">
-                    zookeeper
+                  <a href="https://miexxx.github.io/tag/7VPFU2b1dg/" class="tag">
+                    go
                   </a>
                 
               </div>
             
-            
-              <div class="next-post">
-                <div class="next">下一篇</div>
-                <a href="https://miexxx.github.io/post/http/">
-                  <h3 class="post-title">
-                    Http
-                  </h3>
-                </a>
-              </div>
             
 
             
