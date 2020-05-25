@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://miexxx.github.io</id>
     <title>Great Wei</title>
-    <updated>2020-05-25T08:35:53.338Z</updated>
+    <updated>2020-05-25T09:11:08.524Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://miexxx.github.io"/>
     <link rel="self" href="https://miexxx.github.io/atom.xml"/>
@@ -99,6 +99,33 @@ QoS 2：只分发一次。这是最高级别的消息传递，消息丢失和重
 <p>pubsub ：发布订阅模块，按照 Topic 维度保存 session 并发布 Topic 通知给 session。</p>
 <p>packet：协议解析模块，负责 MQTT 协议包解析。</p>
 <p>util ：工具包，目前集成监控、日志、grpc 客户端、调度上报四个子模块。</p>
+<h1 id="go的内存管理">Go的内存管理</h1>
+<p>...</p>
+<h1 id="业务优化">业务优化</h1>
+<p>session模块主要用户处理消息的收发，在实现时考虑到在通常场景中业务的消息生产大于客户端的消费速度的情况，为了缓解这种状况，设计时引入消息的缓冲队列，这种做法同样也有助于做客户端消息的流控。</p>
+<p>缓冲消息队列借助chan 实现 ，chan 大小根据经验将初始化默认配置为 128 。但在目前线上推送的场景中，我们发现，消息的生产一般小于消费的速度，128 缓冲大小明显偏大，因此我们把长度调整为 16 ，减少内存的分配。</p>
+<p>在设计中按照topic 对客户端进行分组管理的算法中，采用空间换时间的方式，组合 map 和 list 两种数据结构对于客户端集合操作提供O（1）的删除、O（1）的添加、O（n）的遍历。数据的删除采用标记删除方式，使用辅助 slice 结构进行记录，只有到达预设阈值才会进行真正的删除。虽然标记删除提高了遍历和添加的性能，但也同样带来了内存损耗问题。</p>
+<p>大家一定好奇什么样的场景需要提供这样的复杂度，在实际中其场景有以下两种情况：</p>
+<p>在实际的网络场景中，客户端随时都可能由于网络的不稳定断开或者重新建联，因此集合的增加和删除需要在常数范围内。</p>
+<p>在消息发布的流程中，采用遍历集合逐一发布通知方式，但随着单个topic 上的用户量的增加，经常会出现单个 topic 用户集合消息过热的问题，耗时太久导致消息挤压，因此针对集合的遍历当然也要求尽量快。</p>
+<p>通过benchamrk 数据分析，在标记回收 slice 长度在 1000 时，可以提供最佳的性能，因此默认配置阈值为 1000。在线上服务中，无特殊情况都是采用默认配置。但在当前推送服务的使用中，发现标记删除和延迟回收机制好处甚微，主要是因为 topic 和客户端为 1 : 1 方式，也就是不存在客户端集合，因此调整回收阈值大小为 2，减少无效内存占用。</p>
+<p>上述所有优化，只要简单调整配置后服务灰度上线即可，在设计实现时通过conf 模块动态配置，降低了服务的开发和维护成本。通过监控对比优化效果如下表，在优化后在线连接数比优化的在线连接更多的情况下， heap 使用内存使用数量由原来的 4.16G 下降到了 3.5G ，降低了约 0.66 G。<br>
+<img src="https://mlog.club/api/img/proxy?url=https%3A%2F%2Fmmbiz.qpic.cn%2Fmmbiz_png%2F8XkvNnTiapON5Uia1wzpCd7y4KId7K77ElfUasn5axY8xkhabmqwefAa8onSBfkVGHNHJc9DbBo26n0zxibFCk7LA%2F640%3Fwx_fmt%3Dpng" alt="" loading="lazy"></p>
+<h1 id="golang-代码优化">golang 代码优化</h1>
+<p>在实现上面展示的架构的时候发现在session 模块 和 mqttsrv 模块之间存在很多共享变量，目前实现方式都是采用指针或者值拷贝的，由于 session的数量和客户端数据量成正比也就导致消耗大量内存用于共享数据，这不仅仅增加 GC 压力，同样对于内存的消耗也是巨大的。就此问题思考再三，参考系统的库 context 的设计在架构中也抽象 context 包负责模块之间交互信息传递，统一分配内存。此外还参考他人减少临时变量的分配的优化方式，提高系统运行效率。主要优化角度参考如下：</p>
+<p>在频繁申请内存的地方，使用pool 方式进行内存管理</p>
+<p>小对象合并成结构体一次分配，减少内存分配次数</p>
+<p>缓存区内容一次分配足够大小空间，并适当复用</p>
+<p>slice 和 map 采 make 创建时，预估大小指定容量</p>
+<p>调用栈避免申请较多的临时对象</p>
+<p>减少[]byte 与 string 之间转换，尽量采用 []byte 来字符串处理</p>
+<p>目前系统具被完备的单元测试、集成测试，因此经过一周的快速的开发重构后灰度上线监控数据对比如下表：在基本相同的连接数上，heap 使用内存约占用降低 0.27G，stack 申请内存占用降低 3.81G。为什么 stack 会大幅度降低呢？</p>
+<p>通过设置stackDebug 重新编译程序追查程序运行过程，优化前 goroutine 栈的大多数在内存为 16K，通过减少临时变量的分配，拆分大函数处理逻辑，有效的减少触发栈的内存扩容（详细分析见参考文章），优化后 goroutine 栈内存降低到 8 K。一个连接需要启动两个 goroutine 负责数据的读和写，粗略计算一个连接减少约 16 K 的内存，23 w 连接约降低 3.68 G 内存。<br>
+<img src="https://mlog.club/api/img/proxy?url=https%3A%2F%2Fmmbiz.qpic.cn%2Fmmbiz_png%2F8XkvNnTiapON5Uia1wzpCd7y4KId7K77ElCJia4XkicRiclW1ChszUFWUu2Lzf8LrMUuDb6iajILtLuMD6JfS5wzUiaNA%2F640%3Fwx_fmt%3Dpng" alt="" loading="lazy"></p>
+<h1 id="网络模型优化">网络模型优化</h1>
+<p>在Go 语言的网络编程中经典的实现都是采用同步处理方式，启动两个 goroutine 分别处理读和写请求，goroutine 也不像 thread ，它是轻量级的。但对于一百万连接的情况，这种设计模式至少要启动两百万的 goroutine，其中一个 goroutine 使用栈的大小在 2 KB 到 8KB， 对于资源的消耗也是极大的。在大多数场景中，只有少数连接是有数据处理，大部分 goroutine 阻塞 IO 处理中。在因此可以借鉴 C 语言的设计，在程序中使用 epoll 模型做事件分发，只有活跃连接才会启动 goroutine 处理业务，基于这种思想修改网络处理流程。</p>
+<p>网络模型修改测试完成后开始灰度上线，通过监控数据对比如下表：在优化后比优化前的连接数多10 K的情况下，heap 使用内存降低 0.33 G，stack 申请内存降低 2.34 G，优化效果显著。</p>
+<figure data-type="image" tabindex="1"><img src="https://mlog.club/api/img/proxy?url=https%3A%2F%2Fmmbiz.qpic.cn%2Fmmbiz_png%2F8XkvNnTiapON5Uia1wzpCd7y4KId7K77ElIzPXia18GePGJpqGOH21piaHDYhvb9vYPwiaSrW9MQCvdkxAKL0UvC7fQ%2F640%3Fwx_fmt%3Dpng" alt="" loading="lazy"></figure>
 ]]></content>
     </entry>
     <entry>
