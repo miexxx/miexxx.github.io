@@ -1,101 +1,99 @@
-<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" >
-
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>MQTT协议详解 | Great Wei</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1592488033649">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1595590796541">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
-
-
-
-<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<link rel="alternate" type="application/atom+xml" title="MQTT协议详解 | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
     <meta name="description" content="MQTT是什么？
 MQTT（Message Queuing Telemetry Transport，消息队列遥测传输协议），是一种基于发布/订阅（Publish/Subscribe）模式的轻量级通讯协议，该协议构建于TCP/IP协议上，由I..." />
     <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
   </head>
   <body>
-    <div id="app" class="main">
-
-      <div class="sidebar" :class="{ 'full-height': menuVisible }">
-  <div class="top-container" data-aos="fade-right">
-    <div class="top-header-container">
-      <a class="site-title-container" href="https://miexxx.github.io">
-        <img src="https://miexxx.github.io/images/avatar.png?v=1592488033649" class="site-logo">
-        <h1 class="site-title">Great Wei</h1>
-      </a>
-      <div class="menu-btn" @click="menuVisible = !menuVisible">
-        <div class="line"></div>
-      </div>
-    </div>
-    <div>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://miexxx.github.io">
+  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1595590796541" alt="">
+  </a>
+  <h1 class="site-title">
+    Great Wei
+  </h1>
+  <p class="site-description">
+    awsl
+  </p>
+  <div class="menu-container">
+    
       
-        
-          <a href="/" class="site-nav">
-            首页
-          </a>
-        
+        <a href="/" class="menu">
+          首页
+        </a>
       
-        
-          <a href="/archives" class="site-nav">
-            归档
-          </a>
-        
+    
       
-        
-          <a href="/tags" class="site-nav">
-            标签
-          </a>
-        
+        <a href="/archives" class="menu">
+          归档
+        </a>
       
-        
-          <a href="/post/about" class="site-nav">
-            关于
-          </a>
-        
+    
       
-    </div>
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
   </div>
-  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
-    <div class="social-container">
+  <div class="social-container">
+    
       
-        
+        <a href="https://github.com/miexxx" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
       
-        
+    
       
-        
+    
       
-        
+    
       
-        
+    
       
-    </div>
-    <div class="site-description">
-      awsl
-    </div>
-    <div class="site-footer">
-      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://miexxx.github.io/atom.xml" target="_blank">RSS</a>
-    </div>
+    
   </div>
 </div>
 
-
-      <div class="main-container">
-        <div class="content-container" data-aos="fade-up">
-          <div class="post-detail">
-            <h2 class="post-title">MQTT协议详解</h2>
-            <div class="post-date">2020-05-25</div>
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              MQTT协议详解
+            </h2>
+            <div class="post-info">
+              <span>
+                2020-05-25
+              </span>
+              <span>
+                9 min read
+              </span>
+              
+            </div>
             
-            <div class="post-content" v-pre>
-              <h1 id="mqtt是什么">MQTT是什么？</h1>
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h1 id="mqtt是什么">MQTT是什么？</h1>
 <p>MQTT（Message Queuing Telemetry Transport，消息队列遥测传输协议），是一种基于发布/订阅（Publish/Subscribe）模式的轻量级通讯协议，该协议构建于TCP/IP协议上，由IBM在1999年发布，目前最新版本为v3.1.1。MQTT最大的优点在于可以以极少的代码和有限的带宽，为远程设备提供实时可靠的消息服务。做为一种低开销、低带宽占用的即时通讯协议，MQTT在物联网、小型设备、移动应用等方面有广泛的应用。</p>
 <p>当然，在物联网开发中，MQTT不是唯一的选择，与MQTT互相竞争的协议有XMPP和CoAP协议等，文章末尾会有一个比较和说明。</p>
 <h1 id="mqtt是哪一层协议">MQTT是哪一层协议？</h1>
@@ -156,50 +154,99 @@ QoS 2：只分发一次。这是最高级别的消息传递，消息丢失和重
 <h1 id="总结">总结</h1>
 <p>MQTT基于异步发布/订阅的实现解耦了消息发布者和订阅者，基于二进制的实现节省了存储空间及流量，同时MQTT拥有更好的消息处理机制，可以替代TCP Socket一部分应用场景。相对于HTTP和XMPP，MQTT可以选择用户数据格式，解析复杂度低，同时MQTT也可用于手机推送等领域。手机作为与人连接的入口，正好建立了人与物的连接，可谓一箭双雕。当然，其他协议也可以作为一个辅助的存在，HTTP可以为只需定时上传数据的设备服务，CoAP则更适用于非常受限的移动通信网络。</p>
 
-            </div>
-            
-            
-              <div class="next-post">
-                <div class="next">下一篇</div>
-                <a href="https://miexxx.github.io/post/mei-tu-chang-lian-jie-ping-tai/">
-                  <h3 class="post-title">
-                    美图长连接平台
-                  </h3>
-                </a>
               </div>
-            
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#mqtt%E6%98%AF%E4%BB%80%E4%B9%88">MQTT是什么？</a></li>
+<li><a href="#mqtt%E6%98%AF%E5%93%AA%E4%B8%80%E5%B1%82%E5%8D%8F%E8%AE%AE">MQTT是哪一层协议？</a></li>
+<li><a href="#mqtt%E6%B6%88%E6%81%AF%E6%A0%BC%E5%BC%8F">MQTT消息格式</a>
+<ul>
+<li><a href="#%E5%9B%BA%E5%AE%9A%E6%8A%A5%E6%96%87%E5%A4%B4fixed-header">固定报文头（Fixed Header）</a></li>
+<li><a href="#%E5%8F%AF%E5%8F%98%E6%8A%A5%E6%96%87%E5%A4%B4variable-header">可变报文头（Variable Header）</a></li>
+<li><a href="#%E6%9C%89%E6%95%88%E8%B4%9F%E8%8D%B7payload">有效负荷（Payload）</a></li>
+</ul>
+</li>
+<li><a href="#mqtt%E7%9A%84%E4%B8%BB%E8%A6%81%E7%89%B9%E6%80%A7">MQTT的主要特性</a></li>
+<li><a href="#%E6%B6%88%E6%81%AF%E8%B4%A8%E9%87%8Fqos">消息质量（Qos）</a></li>
+<li><a href="#%E9%81%97%E6%84%BF%E6%A0%87%E5%BF%97-will-flag">遗愿标志 （Will Flag）</a></li>
+<li><a href="#%E8%BF%9E%E6%8E%A5%E4%BF%9D%E6%B4%BB%E5%BF%83%E8%B7%B3%E6%9C%BA%E5%88%B6keep-alive-timer">连接保活心跳机制（Keep Alive Timer）</a></li>
+<li><a href="#mqtt%E5%85%B6%E4%BB%96%E7%89%B9%E7%82%B9">MQTT其他特点</a>
+<ul>
+<li><a href="#%E5%BC%82%E6%AD%A5%E5%8F%91%E5%B8%83-%E8%AE%A2%E9%98%85%E5%AE%9E%E7%8E%B0">异步发布、订阅实现</a></li>
+<li><a href="#%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%A0%BC%E5%BC%8F%E5%AE%9E%E7%8E%B0">二进制格式实现</a></li>
+<li><a href="#mqtt%E7%9A%84%E5%AE%89%E5%85%A8">MQTT的安全</a></li>
+</ul>
+</li>
+<li><a href="#%E6%80%BB%E7%BB%93">总结</a></li>
+</ul>
 
-            
-
-          </div>
-
+              </div>
+            </div>
+          </article>
         </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://miexxx.github.io/post/mei-tu-chang-lian-jie-ping-tai/">
+              <h3 class="post-title">
+                美图长连接平台
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://miexxx.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
       </div>
     </div>
 
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-<script type="application/javascript">
+    <script>
+      hljs.initHighlightingOnLoad()
 
-AOS.init();
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
 
-var app = new Vue({
-  el: '#app',
-  data: {
-    menuVisible: false,
-  },
-})
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
 
-</script>
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
 
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
 
-  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
-  <script>
-    hljs.initHighlightingOnLoad()
-  </script>
-
-
-
-
-
+    </script>
   </body>
 </html>

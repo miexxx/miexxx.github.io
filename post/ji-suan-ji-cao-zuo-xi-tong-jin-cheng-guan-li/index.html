@@ -1,20 +1,13 @@
-<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" >
-
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>计算机操作系统-进程管理 | Great Wei</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1592488033649">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1595590796541">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
-
-
-
-<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<link rel="alternate" type="application/atom+xml" title="计算机操作系统-进程管理 | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
@@ -28,81 +21,90 @@
 线程是独立调度的基本单位。
 一个进程里可以有多个线程，他们共享资..." />
     <meta name="keywords" content="计算机操作系统" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
   </head>
   <body>
-    <div id="app" class="main">
-
-      <div class="sidebar" :class="{ 'full-height': menuVisible }">
-  <div class="top-container" data-aos="fade-right">
-    <div class="top-header-container">
-      <a class="site-title-container" href="https://miexxx.github.io">
-        <img src="https://miexxx.github.io/images/avatar.png?v=1592488033649" class="site-logo">
-        <h1 class="site-title">Great Wei</h1>
-      </a>
-      <div class="menu-btn" @click="menuVisible = !menuVisible">
-        <div class="line"></div>
-      </div>
-    </div>
-    <div>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://miexxx.github.io">
+  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1595590796541" alt="">
+  </a>
+  <h1 class="site-title">
+    Great Wei
+  </h1>
+  <p class="site-description">
+    awsl
+  </p>
+  <div class="menu-container">
+    
       
-        
-          <a href="/" class="site-nav">
-            首页
-          </a>
-        
+        <a href="/" class="menu">
+          首页
+        </a>
       
-        
-          <a href="/archives" class="site-nav">
-            归档
-          </a>
-        
+    
       
-        
-          <a href="/tags" class="site-nav">
-            标签
-          </a>
-        
+        <a href="/archives" class="menu">
+          归档
+        </a>
       
-        
-          <a href="/post/about" class="site-nav">
-            关于
-          </a>
-        
+    
       
-    </div>
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
   </div>
-  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
-    <div class="social-container">
+  <div class="social-container">
+    
       
-        
+        <a href="https://github.com/miexxx" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
       
-        
+    
       
-        
+    
       
-        
+    
       
-        
+    
       
-    </div>
-    <div class="site-description">
-      awsl
-    </div>
-    <div class="site-footer">
-      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://miexxx.github.io/atom.xml" target="_blank">RSS</a>
-    </div>
+    
   </div>
 </div>
 
-
-      <div class="main-container">
-        <div class="content-container" data-aos="fade-up">
-          <div class="post-detail">
-            <h2 class="post-title">计算机操作系统-进程管理</h2>
-            <div class="post-date">2020-03-16</div>
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              计算机操作系统-进程管理
+            </h2>
+            <div class="post-info">
+              <span>
+                2020-03-16
+              </span>
+              <span>
+                7 min read
+              </span>
+              
+                <a href="https://miexxx.github.io/tag/g-GLbkF4h/" class="post-tag">
+                  # 计算机操作系统
+                </a>
+              
+            </div>
             
-            <div class="post-content" v-pre>
-              <!-- more -->
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <!-- more -->
 <hr>
 <h1 id="进程与线程">进程与线程</h1>
 <h2 id="进程是资源分配的基本单位">进程是资源分配的基本单位。</h2>
@@ -186,58 +188,122 @@ FIFO 常用于客户-服务器应用程序中，FIFO 用作汇聚点，在客户
 <h2 id="套接字">套接字</h2>
 <p>与其它通信机制不同的是，它可用于不同机器间的进程通信。</p>
 
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B">进程与线程</a>
+<ul>
+<li><a href="#%E8%BF%9B%E7%A8%8B%E6%98%AF%E8%B5%84%E6%BA%90%E5%88%86%E9%85%8D%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8D%95%E4%BD%8D">进程是资源分配的基本单位。</a></li>
+<li><a href="#%E7%BA%BF%E7%A8%8B%E6%98%AF%E7%8B%AC%E7%AB%8B%E8%B0%83%E5%BA%A6%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8D%95%E4%BD%8D">线程是独立调度的基本单位。</a></li>
+<li><a href="#%E5%8C%BA%E5%88%AB">区别</a></li>
+</ul>
+</li>
+<li><a href="#%E8%BF%9B%E7%A8%8B%E7%8A%B6%E6%80%81%E7%9A%84%E5%88%87%E6%8D%A2">进程状态的切换</a></li>
+<li><a href="#%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95">进程调度算法</a>
+<ul>
+<li><a href="#%E6%89%B9%E5%A4%84%E7%90%86%E7%B3%BB%E7%BB%9F">批处理系统</a>
+<ul>
+<li><a href="#%E5%85%88%E6%9D%A5%E5%85%88%E6%9C%8D%E5%8A%A1fcfs">先来先服务(FCFS)</a></li>
+<li><a href="#%E7%9F%AD%E4%BD%9C%E4%B8%9A%E4%BC%98%E5%85%88sjf">短作业优先(SJF)</a></li>
+<li><a href="#%E6%9C%80%E7%9F%AD%E5%89%A9%E4%BD%99%E6%97%B6%E9%97%B4%E4%BC%98%E5%85%88srtn">最短剩余时间优先(SRTN)</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BA%A4%E4%BA%92%E5%BC%8F%E7%B3%BB%E7%BB%9F">交互式系统</a>
+<ul>
+<li><a href="#%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC">时间片轮转</a></li>
+<li><a href="#%E4%BC%98%E5%85%88%E7%BA%A7%E8%B0%83%E5%BA%A6">优先级调度</a></li>
+<li><a href="#%E5%A4%9A%E7%BA%A7%E5%8F%8D%E9%A6%88%E9%98%9F%E5%88%97">多级反馈队列</a></li>
+</ul>
+</li>
+<li><a href="#%E5%AE%9E%E6%97%B6%E7%B3%BB%E7%BB%9F">实时系统</a></li>
+</ul>
+</li>
+<li><a href="#%E8%BF%9B%E7%A8%8B%E5%90%8C%E6%AD%A5">进程同步</a>
+<ul>
+<li><a href="#%E4%B8%B4%E7%95%8C%E5%8C%BA">临界区</a></li>
+<li><a href="#%E5%90%8C%E6%AD%A5%E4%B8%8E%E4%BA%92%E6%96%A5">同步与互斥</a></li>
+<li><a href="#%E4%BF%A1%E5%8F%B7%E9%87%8F">信号量</a></li>
+</ul>
+</li>
+<li><a href="#%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1">进程通信</a>
+<ul>
+<li><a href="#%E7%AE%A1%E9%81%93">管道</a></li>
+<li><a href="#fifo">FIFO</a></li>
+<li><a href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97">消息队列</a></li>
+<li><a href="#%E4%BF%A1%E5%8F%B7%E9%87%8F-2">信号量</a></li>
+<li><a href="#%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8">共享存储</a></li>
+<li><a href="#%E5%A5%97%E6%8E%A5%E5%AD%97">套接字</a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
             </div>
-            
-              <div class="tag-container">
-                
-                  <a href="https://miexxx.github.io/tag/g-GLbkF4h/" class="tag">
-                    计算机操作系统
-                  </a>
-                
-              </div>
-            
-            
-              <div class="next-post">
-                <div class="next">下一篇</div>
-                <a href="https://miexxx.github.io/post/qian-tan-mysql-suo-yin/">
-                  <h3 class="post-title">
-                    浅谈Mysql索引
-                  </h3>
-                </a>
-              </div>
-            
-
-            
-
-          </div>
-
+          </article>
         </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://miexxx.github.io/post/qian-tan-mysql-suo-yin/">
+              <h3 class="post-title">
+                浅谈Mysql索引
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://miexxx.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
       </div>
     </div>
 
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-<script type="application/javascript">
+    <script>
+      hljs.initHighlightingOnLoad()
 
-AOS.init();
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
 
-var app = new Vue({
-  el: '#app',
-  data: {
-    menuVisible: false,
-  },
-})
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
 
-</script>
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
 
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
 
-  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
-  <script>
-    hljs.initHighlightingOnLoad()
-  </script>
-
-
-
-
-
+    </script>
   </body>
 </html>

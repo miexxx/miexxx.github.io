@@ -1,20 +1,13 @@
-<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" >
-
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Swoole：Master/Reactor/Manager/Worker/TaskWorker(Task) | Great Wei</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1592488033649">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1595590796541">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
-
-
-
-<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<link rel="alternate" type="application/atom+xml" title="Swoole：Master/Reactor/Manager/Worker/TaskWorker(Task) | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
@@ -24,81 +17,90 @@ Master进程
 master进程为主进程,该进程会创建Manager进程和Reactor线程等工作进/线程
 swoole的主进程..." />
     <meta name="keywords" content="swoole" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
   </head>
   <body>
-    <div id="app" class="main">
-
-      <div class="sidebar" :class="{ 'full-height': menuVisible }">
-  <div class="top-container" data-aos="fade-right">
-    <div class="top-header-container">
-      <a class="site-title-container" href="https://miexxx.github.io">
-        <img src="https://miexxx.github.io/images/avatar.png?v=1592488033649" class="site-logo">
-        <h1 class="site-title">Great Wei</h1>
-      </a>
-      <div class="menu-btn" @click="menuVisible = !menuVisible">
-        <div class="line"></div>
-      </div>
-    </div>
-    <div>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://miexxx.github.io">
+  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1595590796541" alt="">
+  </a>
+  <h1 class="site-title">
+    Great Wei
+  </h1>
+  <p class="site-description">
+    awsl
+  </p>
+  <div class="menu-container">
+    
       
-        
-          <a href="/" class="site-nav">
-            首页
-          </a>
-        
+        <a href="/" class="menu">
+          首页
+        </a>
       
-        
-          <a href="/archives" class="site-nav">
-            归档
-          </a>
-        
+    
       
-        
-          <a href="/tags" class="site-nav">
-            标签
-          </a>
-        
+        <a href="/archives" class="menu">
+          归档
+        </a>
       
-        
-          <a href="/post/about" class="site-nav">
-            关于
-          </a>
-        
+    
       
-    </div>
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
   </div>
-  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
-    <div class="social-container">
+  <div class="social-container">
+    
       
-        
+        <a href="https://github.com/miexxx" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
       
-        
+    
       
-        
+    
       
-        
+    
       
-        
+    
       
-    </div>
-    <div class="site-description">
-      awsl
-    </div>
-    <div class="site-footer">
-      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://miexxx.github.io/atom.xml" target="_blank">RSS</a>
-    </div>
+    
   </div>
 </div>
 
-
-      <div class="main-container">
-        <div class="content-container" data-aos="fade-up">
-          <div class="post-detail">
-            <h2 class="post-title">Swoole：Master/Reactor/Manager/Worker/TaskWorker(Task)</h2>
-            <div class="post-date">2020-05-22</div>
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              Swoole：Master/Reactor/Manager/Worker/TaskWorker(Task)
+            </h2>
+            <div class="post-info">
+              <span>
+                2020-05-22
+              </span>
+              <span>
+                5 min read
+              </span>
+              
+                <a href="https://miexxx.github.io/tag/OTgO2zB7x/" class="post-tag">
+                  # swoole
+                </a>
+              
+            </div>
             
-            <div class="post-content" v-pre>
-              <h1 id="swoolemasterreactormanagerworkertaskworkertask">Swoole：Master/Reactor/Manager/Worker/TaskWorker(Task)</h1>
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h1 id="swoolemasterreactormanagerworkertaskworkertask">Swoole：Master/Reactor/Manager/Worker/TaskWorker(Task)</h1>
 <figure data-type="image" tabindex="1"><img src="https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=4118852065,2174358700&amp;fm=173&amp;app=49&amp;f=JPEG?w=640&amp;h=329&amp;s=78E1B544CFBA0409589B83650300F053" alt="" loading="lazy"></figure>
 <h2 id="master进程">Master进程</h2>
 <p>master进程为主进程,该进程会创建Manager进程和Reactor线程等工作进/线程<br>
@@ -159,58 +161,111 @@ TaskWorker以多进程的方式运行</p>
 <p>可以理解为Reactor就是nginx，Worker就是php-fpm。Reactor线程异步并行地处理网络请求，然后再转发给Worker进程中去处理。Reactor和Worker间通过UnixSocket进行通信。在php-fpm的应用中，经常会将一个任务异步投递到Redis等队列中，并在后台启动一些php进程异步地处理这些任务。Swoole提供的TaskWorker是一套更完整的方案，将任务的投递、队列、php任务处理进程管理合为一体。通过底层提供的API可以非常简单地实现异步任务的处理。另外TaskWorker还可以在任务执行完成后，再返回一个结果反馈到Worker。Swoole的Reactor、Worker、TaskWorker之间可以紧密的结合起来，提供更高级的使用方式。一个更通俗的比喻，假设Server就是一个工厂，那Reactor就是销售，接受客户订单。而Worker就是工人，当销售接到订单后，Worker去工作生产出客户要的东西。而TaskWorker可以理解为行政人员，可以帮助Worker干些杂事，让Worker专心工作。</p>
 <p>底层会为Worker进程、TaskWorker进程分配一个唯一的ID不同的Worker和TaskWorker进程之间可以通过sendMessage接口进行通信</p>
 
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#swoolemasterreactormanagerworkertaskworkertask">Swoole：Master/Reactor/Manager/Worker/TaskWorker(Task)</a>
+<ul>
+<li><a href="#master%E8%BF%9B%E7%A8%8B">Master进程</a>
+<ul>
+<li><a href="#%E4%B8%BB%E8%BF%9B%E7%A8%8B%E5%86%85%E7%9A%84%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0">主进程内的回调函数：</a></li>
+</ul>
+</li>
+<li><a href="#reactor%E7%BA%BF%E7%A8%8B">Reactor线程</a></li>
+<li><a href="#manager%E8%BF%9B%E7%A8%8B">Manager进程</a>
+<ul>
+<li><a href="#%E7%AE%A1%E7%90%86%E8%BF%9B%E7%A8%8B%E5%86%85%E7%9A%84%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0">管理进程内的回调函数</a></li>
+</ul>
+</li>
+<li><a href="#worker%E8%BF%9B%E7%A8%8B">Worker进程</a>
+<ul>
+<li><a href="#worker%E8%BF%9B%E7%A8%8B%E5%86%85%E7%9A%84%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0">Worker进程内的回调函数</a></li>
+</ul>
+</li>
+<li><a href="#taskworker%E8%BF%9B%E7%A8%8B">TaskWorker进程</a>
+<ul>
+<li><a href="#taskworker%E8%BF%9B%E7%A8%8B%E5%86%85%E7%9A%84%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0">TaskWorker进程内的回调函数</a></li>
+</ul>
+</li>
+<li><a href="#%E8%81%8C%E8%B4%A3%E5%8A%9F%E8%83%BD">职责功能</a>
+<ul>
+<li><a href="#reactor%E7%BA%BF%E7%A8%8B-2">Reactor线程</a></li>
+<li><a href="#worker%E8%BF%9B%E7%A8%8B-2">Worker进程</a></li>
+<li><a href="#taskworker%E8%BF%9B%E7%A8%8B-2">TaskWorker进程</a></li>
+<li><a href="#%E5%85%B3%E7%B3%BB">关系</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
             </div>
-            
-              <div class="tag-container">
-                
-                  <a href="https://miexxx.github.io/tag/OTgO2zB7x/" class="tag">
-                    swoole
-                  </a>
-                
-              </div>
-            
-            
-              <div class="next-post">
-                <div class="next">下一篇</div>
-                <a href="https://miexxx.github.io/post/zookeeper-ji-qun-da-jian/">
-                  <h3 class="post-title">
-                    Zookeeper集群 + canal服务 搭建
-                  </h3>
-                </a>
-              </div>
-            
-
-            
-
-          </div>
-
+          </article>
         </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://miexxx.github.io/post/zookeeper-ji-qun-da-jian/">
+              <h3 class="post-title">
+                Zookeeper集群 + canal服务 搭建
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://miexxx.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
       </div>
     </div>
 
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-<script type="application/javascript">
+    <script>
+      hljs.initHighlightingOnLoad()
 
-AOS.init();
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
 
-var app = new Vue({
-  el: '#app',
-  data: {
-    menuVisible: false,
-  },
-})
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
 
-</script>
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
 
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
 
-  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
-  <script>
-    hljs.initHighlightingOnLoad()
-  </script>
-
-
-
-
-
+    </script>
   </body>
 </html>

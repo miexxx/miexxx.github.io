@@ -1,20 +1,13 @@
-<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" >
-
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>RabbitMQ | Great Wei</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1592488033649">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1595590796541">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
-
-
-
-<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<link rel="alternate" type="application/atom+xml" title="RabbitMQ | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
@@ -25,81 +18,90 @@ Beanstalkd
 任务优先级 (priority):
 任务 (..." />
     <meta name="keywords" content="消息队列" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
   </head>
   <body>
-    <div id="app" class="main">
-
-      <div class="sidebar" :class="{ 'full-height': menuVisible }">
-  <div class="top-container" data-aos="fade-right">
-    <div class="top-header-container">
-      <a class="site-title-container" href="https://miexxx.github.io">
-        <img src="https://miexxx.github.io/images/avatar.png?v=1592488033649" class="site-logo">
-        <h1 class="site-title">Great Wei</h1>
-      </a>
-      <div class="menu-btn" @click="menuVisible = !menuVisible">
-        <div class="line"></div>
-      </div>
-    </div>
-    <div>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://miexxx.github.io">
+  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1595590796541" alt="">
+  </a>
+  <h1 class="site-title">
+    Great Wei
+  </h1>
+  <p class="site-description">
+    awsl
+  </p>
+  <div class="menu-container">
+    
       
-        
-          <a href="/" class="site-nav">
-            首页
-          </a>
-        
+        <a href="/" class="menu">
+          首页
+        </a>
       
-        
-          <a href="/archives" class="site-nav">
-            归档
-          </a>
-        
+    
       
-        
-          <a href="/tags" class="site-nav">
-            标签
-          </a>
-        
+        <a href="/archives" class="menu">
+          归档
+        </a>
       
-        
-          <a href="/post/about" class="site-nav">
-            关于
-          </a>
-        
+    
       
-    </div>
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
   </div>
-  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
-    <div class="social-container">
+  <div class="social-container">
+    
       
-        
+        <a href="https://github.com/miexxx" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
       
-        
+    
       
-        
+    
       
-        
+    
       
-        
+    
       
-    </div>
-    <div class="site-description">
-      awsl
-    </div>
-    <div class="site-footer">
-      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://miexxx.github.io/atom.xml" target="_blank">RSS</a>
-    </div>
+    
   </div>
 </div>
 
-
-      <div class="main-container">
-        <div class="content-container" data-aos="fade-up">
-          <div class="post-detail">
-            <h2 class="post-title">RabbitMQ</h2>
-            <div class="post-date">2020-03-16</div>
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              RabbitMQ
+            </h2>
+            <div class="post-info">
+              <span>
+                2020-03-16
+              </span>
+              <span>
+                24 min read
+              </span>
+              
+                <a href="https://miexxx.github.io/tag/aK1-G3OHz/" class="post-tag">
+                  # 消息队列
+                </a>
+              
+            </div>
             
-            <div class="post-content" v-pre>
-              <!-- more -->
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <!-- more -->
 <h2 id="beanstalkd">Beanstalkd</h2>
 <p>Beantalkd 一个轻量级消息中间件，他的最大特点是将自己定位为基于管道  (tube) 和任务 (job) 的工作队列 (work-queue)<br>
 有以下特点：</p>
@@ -540,58 +542,129 @@ $connection-&gt;close();
 <h3 id="思维脑图">思维脑图</h3>
 <p><a href="https://naotu.baidu.com/file/407c820a7e2f189bfc7b55150ca55ffb?token=29cc096245c90973">脑图</a></p>
 
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#beanstalkd">Beanstalkd</a>
+<ul>
+<li><a href="#%E4%BB%BB%E5%8A%A1%E4%BC%98%E5%85%88%E7%BA%A7-priority">任务优先级 (priority):</a>
+<ul>
+<li><a href="#%E6%9C%80%E5%A4%A7%E5%A0%86%E4%B8%8E%E6%9C%80%E5%B0%8F%E5%A0%86">最大堆与最小堆</a></li>
+</ul>
+</li>
+<li><a href="#%E5%BB%B6%E6%97%B6%E4%BB%BB%E5%8A%A1-delay">延时任务 (delay):</a></li>
+<li><a href="#%E4%BB%BB%E5%8A%A1%E8%B6%85%E6%97%B6%E9%87%8D%E5%8F%91-time-to-run">任务超时重发 (time-to-run):</a></li>
+<li><a href="#%E4%BB%BB%E5%8A%A1%E9%A2%84%E7%95%99-buried">任务预留 (buried):</a></li>
+<li><a href="#%E6%B6%88%E6%81%AF%E6%8C%81%E4%B9%85%E5%8C%96">消息持久化</a></li>
+<li><a href="#%E9%80%9F%E5%BA%A6%E4%BC%98%E5%8A%BF">速度优势</a></li>
+<li><a href="#%E5%9C%BA%E6%99%AF%E4%BC%98%E5%8A%BF">场景优势</a></li>
+<li><a href="#%E7%BC%BA%E9%99%B7">缺陷</a></li>
+</ul>
+</li>
+<li><a href="#rabbitmq">RabbitMQ</a>
+<ul>
+<li><a href="#rabbitmq%E7%89%B9%E6%80%A7">Rabbitmq特性</a></li>
+<li><a href="#amqp%E9%AB%98%E7%BA%A7%E6%B6%88%E6%81%AF%E5%8D%8F%E8%AE%AE">AMQP高级消息协议</a></li>
+<li><a href="#hello-world">hello world</a></li>
+<li><a href="#%E5%B7%A5%E4%BD%9C%E9%98%9F%E5%88%97">工作队列</a>
+<ul>
+<li><a href="#%E6%B6%88%E6%81%AF%E7%A1%AE%E8%AE%A4">消息确认</a></li>
+<li><a href="#%E6%B6%88%E6%81%AF%E6%8C%81%E4%B9%85%E6%80%A7">消息持久性</a></li>
+<li><a href="#%E5%85%AC%E5%B9%B3%E6%B4%BE%E9%81%A3">公平派遣</a></li>
+</ul>
+</li>
+<li><a href="#%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85">发布订阅</a></li>
+<li><a href="#%E8%B7%AF%E7%94%B1">路由</a></li>
+<li><a href="#%E4%B8%BB%E9%A2%98">主题</a></li>
+<li><a href="#rpc">RPC</a></li>
+<li><a href="#%E9%9B%86%E7%BE%A4">集群</a>
+<ul>
+<li><a href="#%E5%8D%95%E6%9C%BA%E5%A4%9A%E8%8A%82%E7%82%B9%E9%83%A8%E7%BD%B2">单机多节点部署</a></li>
+<li><a href="#%E5%86%85%E5%AD%98%E8%8A%82%E7%82%B9%E4%B8%8E%E7%A3%81%E7%9B%98%E8%8A%82%E7%82%B9%E7%9A%84%E5%8C%BA%E5%88%AB">内存节点与磁盘节点的区别</a></li>
+<li><a href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1">负载均衡</a></li>
+</ul>
+</li>
+<li><a href="#%E9%95%9C%E5%83%8F%E9%98%9F%E5%88%97">镜像队列</a></li>
+<li><a href="#%E5%BB%B6%E8%BF%9F%E9%98%9F%E5%88%97">延迟队列</a></li>
+<li><a href="#%E6%AD%BB%E4%BF%A1%E9%98%9F%E5%88%97">死信队列</a></li>
+<li><a href="#%E4%BC%98%E5%85%88%E7%BA%A7%E9%98%9F%E5%88%97">优先级队列</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8%E6%8F%92%E4%BB%B6%E7%9A%84%E5%BB%B6%E6%97%B6%E9%98%9F%E5%88%97">使用插件的延时队列</a></li>
+<li><a href="#%E6%80%9D%E7%BB%B4%E8%84%91%E5%9B%BE">思维脑图</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
             </div>
-            
-              <div class="tag-container">
-                
-                  <a href="https://miexxx.github.io/tag/aK1-G3OHz/" class="tag">
-                    消息队列
-                  </a>
-                
-              </div>
-            
-            
-              <div class="next-post">
-                <div class="next">下一篇</div>
-                <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-jin-cheng-guan-li/">
-                  <h3 class="post-title">
-                    计算机操作系统-进程管理
-                  </h3>
-                </a>
-              </div>
-            
-
-            
-
-          </div>
-
+          </article>
         </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-jin-cheng-guan-li/">
+              <h3 class="post-title">
+                计算机操作系统-进程管理
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://miexxx.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
       </div>
     </div>
 
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-<script type="application/javascript">
+    <script>
+      hljs.initHighlightingOnLoad()
 
-AOS.init();
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
 
-var app = new Vue({
-  el: '#app',
-  data: {
-    menuVisible: false,
-  },
-})
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
 
-</script>
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
 
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
 
-  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
-  <script>
-    hljs.initHighlightingOnLoad()
-  </script>
-
-
-
-
-
+    </script>
   </body>
 </html>
