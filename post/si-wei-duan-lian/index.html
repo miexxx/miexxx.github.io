@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>思维锻炼 | Great Wei</title>
-<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1595590796541">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1602593370030">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="思维锻炼 | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
@@ -27,7 +27,7 @@ Input:
       <div class="main-content">
         <div class="site-header">
   <a href="https://miexxx.github.io">
-  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1595590796541" alt="">
+  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1602593370030" alt="">
   </a>
   <h1 class="site-title">
     Great Wei
@@ -91,7 +91,7 @@ Input:
                 2020-01-13
               </span>
               <span>
-                5 min read
+                6 min read
               </span>
               
                 <a href="https://miexxx.github.io/tag/LWmdmK1pz3/" class="post-tag">
@@ -181,6 +181,18 @@ arr[2] == 2 =&gt; cnt++,  这时候不清楚arr[2] 左右两端与2之间的关�
 <h2 id="思路一-11">思路一</h2>
 <p>新数据插入使用头插法在链表首部插入数据，更新数据将旧节点移动到首部，当链表满了淘汰链表末尾数据，保留头部与尾部指针。</p>
 <hr>
+<h1 id="寻找字符串最大不重复子串">寻找字符串最大不重复子串</h1>
+<h2 id="思路一-12">思路一</h2>
+<p>使用滑动窗口，不断的向字符串右侧移动，当出现重复字符，将字符从左侧移除，边移动边记录。</p>
+<hr>
+<h1 id="寻找字符串最大回文子串">寻找字符串最大回文子串</h1>
+<h2 id="思路一-13">思路一</h2>
+<p>暴力枚举每一个字符作为回文串中心向两侧判断。</p>
+<h2 id="思路二-3">思路二</h2>
+<p>动态规划，最大回文串状态转换公式f[i][j] = f[i + 1][j - 1] ^ (s[i] == s[j])</p>
+<h2 id="思路三">思路三</h2>
+<p>Manacher 算法，这里不多介绍。</p>
+<hr>
 
               </div>
               <div class="toc-container">
@@ -245,6 +257,18 @@ arr[2] == 2 =&gt; cnt++,  这时候不清楚arr[2] 左右两端与2之间的关�
 <li><a href="#%E8%AE%BE%E8%AE%A1%E4%B8%80%E4%B8%AAlru-%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6">设计一个LRU 缓存机制</a>
 <ul>
 <li><a href="#%E6%80%9D%E8%B7%AF%E4%B8%80-11">思路一</a></li>
+</ul>
+</li>
+<li><a href="#%E5%AF%BB%E6%89%BE%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%9C%80%E5%A4%A7%E4%B8%8D%E9%87%8D%E5%A4%8D%E5%AD%90%E4%B8%B2">寻找字符串最大不重复子串</a>
+<ul>
+<li><a href="#%E6%80%9D%E8%B7%AF%E4%B8%80-12">思路一</a></li>
+</ul>
+</li>
+<li><a href="#%E5%AF%BB%E6%89%BE%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%9C%80%E5%A4%A7%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2">寻找字符串最大回文子串</a>
+<ul>
+<li><a href="#%E6%80%9D%E8%B7%AF%E4%B8%80-13">思路一</a></li>
+<li><a href="#%E6%80%9D%E8%B7%AF%E4%BA%8C-3">思路二</a></li>
+<li><a href="#%E6%80%9D%E8%B7%AF%E4%B8%89">思路三</a></li>
 </ul>
 </li>
 </ul>

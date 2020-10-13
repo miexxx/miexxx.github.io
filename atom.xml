@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://miexxx.github.io</id>
     <title>Great Wei</title>
-    <updated>2020-07-24T11:43:35.139Z</updated>
+    <updated>2020-10-13T12:49:34.573Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://miexxx.github.io"/>
     <link rel="self" href="https://miexxx.github.io/atom.xml"/>
@@ -10,6 +10,308 @@
     <logo>https://miexxx.github.io/images/avatar.png</logo>
     <icon>https://miexxx.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Great Wei</rights>
+    <entry>
+        <title type="html"><![CDATA[Prometheus监控告警系统]]></title>
+        <id>https://miexxx.github.io/post/prometheus-jian-kong-gao-jing-xi-tong/</id>
+        <link href="https://miexxx.github.io/post/prometheus-jian-kong-gao-jing-xi-tong/">
+        </link>
+        <updated>2020-10-12T08:18:46.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="什么是prometheus">什么是prometheus</h1>
+<p>Prometheus是由SoundCloud开发的开源监控报警系统和时序列数据库(TSDB)。Prometheus使用Go语言开发，是Google BorgMon监控系统的开源版本。<br>
+2016年由Google发起Linux基金会旗下的原生云基金会(Cloud Native Computing Foundation), 将Prometheus纳入其下第二大开源项目。<br>
+Prometheus目前在开源社区相当活跃。<br>
+Prometheus和Heapster(Heapster是K8S的一个子项目，用于获取集群的性能数据。)相比功能更完善、更全面。Prometheus性能也足够支撑上万台规模的集群。</p>
+<h1 id="prometheus的特点">prometheus的特点</h1>
+<p>多维度数据模型。<br>
+灵活的查询语言。<br>
+不依赖分布式存储，单个服务器节点是自主的。<br>
+通过基于HTTP的pull方式采集时序数据。<br>
+可以通过中间网关进行时序列数据推送。<br>
+通过服务发现或者静态配置来发现目标服务对象。<br>
+支持多种多样的图表和界面展示，比如Grafana等。</p>
+<h1 id="基本原理">基本原理</h1>
+<p>Prometheus的基本原理是通过HTTP协议周期性抓取被监控组件的状态，任意组件只要提供对应的HTTP接口就可以接入监控。不需要任何SDK或者其他的集成过程。这样做非常适合做虚拟化环境监控系统，比如VM、Docker、Kubernetes等。输出被监控组件信息的HTTP接口被叫做exporter 。目前互联网公司常用的组件大部分都有exporter可以直接使用，比如Varnish、Haproxy、Nginx、MySQL、Linux系统信息(包括磁盘、内存、CPU、网络等等)。</p>
+<h1 id="服务过程">服务过程</h1>
+<p>Prometheus Daemon负责定时去目标上抓取metrics(指标)数据，每个抓取目标需要暴露一个http服务的接口给它定时抓取。Prometheus支持通过配置文件、文本文件、Zookeeper、Consul、DNS SRV Lookup等方式指定抓取目标。Prometheus采用PULL的方式进行监控，即服务器可以直接通过目标PULL数据或者间接地通过中间网关来Push数据。<br>
+Prometheus在本地存储抓取的所有数据，并通过一定规则进行清理和整理数据，并把得到的结果存储到新的时间序列中。<br>
+Prometheus通过PromQL和其他API可视化地展示收集的数据。Prometheus支持很多方式的图表可视化，例如Grafana、自带的Promdash以及自身提供的模版引擎等等。Prometheus还提供HTTP API的查询方式，自定义所需要的输出。<br>
+PushGateway支持Client主动推送metrics到PushGateway，而Prometheus只是定时去Gateway上抓取数据。<br>
+Alertmanager是独立于Prometheus的一个组件，可以支持Prometheus的查询语句，提供十分灵活的报警方式。</p>
+<h1 id="docker-stack-配置服务">docker-stack 配置服务</h1>
+<pre><code>version: '3.7'
+
+volumes:
+    prometheus_data: {}
+    grafana_data: {}
+
+networks:
+  monitor-net:
+
+services:
+  webhook-dingding:
+    image: timonwong/prometheus-webhook-dingtalk
+    command: 
+      - '--web.enable-ui'
+      - '--config.file=/etc/prometheus-webhook-dingtalk/config.yml'
+    volumes:
+      - ./webhook/config.yml:/etc/prometheus-webhook-dingtalk/config.yml
+    ports:
+      - 8060:8060
+    networks:
+      - monitor-net
+    restart: always
+    deploy:
+      mode: global
+      restart_policy:
+          condition: any
+
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus/:/etc/prometheus/
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    ports:
+      - 9090:9090
+    depends_on:
+      - cadvisor
+    networks:
+      - monitor-net
+    deploy:
+      placement:
+        constraints:
+          - node.role==manager
+      restart_policy:
+        condition: any
+
+  node-exporter:
+    image: prom/node-exporter
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command: 
+      - '--path.procfs=/host/proc' 
+      - '--path.sysfs=/host/sys'
+      - --collector.filesystem.ignored-mount-points
+      - &quot;^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)&quot;
+    ports:
+      - 9100:9100
+    networks:
+      - monitor-net
+    deploy:
+      mode: global
+      restart_policy:
+          condition: any
+
+  kafka-exporter:
+    image: danielqsj/kafka-exporter
+    command: 
+      - '--kafka.server=172.31.0.117:9092'
+      - '--kafka.server=172.31.0.117:9093'
+    ports:
+      - 9308:9308
+    networks:
+      - monitor-net
+    restart: always
+    deploy:
+      mode: global
+      restart_policy:
+          condition: any
+
+  alertmanager:
+    image: prom/alertmanager
+    ports:
+      - 9093:9093
+    volumes:
+      - &quot;./alertmanager/:/etc/alertmanager/&quot;
+    networks:
+      - monitor-net
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/alertmanager'
+    deploy:
+      placement:
+        constraints:
+           - node.role==manager
+      restart_policy:
+        condition: any  
+
+  cadvisor:
+    image: google/cadvisor
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    ports:
+      - 8080:8080
+    networks:
+      - monitor-net
+    deploy:
+      mode: global
+      restart_policy:
+          condition: any
+
+  grafana:
+    image: grafana/grafana
+    depends_on:
+      - prometheus
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
+      - ./grafana/:/etc/grafana/
+    env_file:
+      - ./grafana/config.monitoring
+    networks:
+      - monitor-net
+    user: &quot;472&quot;
+    deploy:
+      placement:
+        constraints:
+          - node.role==manager
+      restart_policy:
+        condition: any
+</code></pre>
+<p>其中kafka_exporter与webhook-dingding 是可选服务，这里主要是用于kafka集群的监控与告警使用。</p>
+<h1 id="配置">配置</h1>
+<h2 id="prometheus-配置文件prometheusyml">prometheus 配置文件（prometheus.yml）</h2>
+<pre><code># my global config
+global:
+  scrape_interval:     15s # By default, scrape targets every 15 seconds.
+  evaluation_interval: 15s # By default, scrape targets every 15 seconds.
+  # scrape_timeout is set to the global default (10s).
+
+  # Attach these labels to any time series or alerts when communicating with
+  # external systems (federation, remote storage, Alertmanager).
+  external_labels:
+      monitor: '监控系统'
+
+# Load and evaluate rules in this file every 'evaluation_interval' seconds.
+rule_files:
+  - 'alert.rules'
+  # - &quot;first.rules&quot;
+  # - &quot;second.rules&quot;
+
+# alert
+alerting:
+  alertmanagers:
+  - scheme: http
+    static_configs:
+    - targets:
+      - &quot;alertmanager:9093&quot;
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label `job=&lt;job_name&gt;` to any timeseries scraped from this config.
+
+  - job_name: 'prometheus'
+
+    # Override the global default and scrape targets from this job every 5 seconds.
+    scrape_interval: 5s
+
+    static_configs:
+         - targets: ['172.31.0.144:9090']
+
+  - job_name: 'kafka-exporter'
+
+    # Override the global default and scrape targets from this job every 5 seconds.
+    scrape_interval: 5s
+    static_configs:
+         - targets: ['172.31.0.144:9308']
+
+  - job_name: 'cadvisor'
+
+    # Override the global default and scrape targets from this job every 5 seconds.
+    scrape_interval: 5s
+
+    dns_sd_configs:
+    - names:
+      - 'tasks.cadvisor'
+      type: 'A'
+      port: 8080
+
+#     static_configs:
+#          - targets: ['cadvisor:8080']
+
+  - job_name: 'node-exporter'
+
+    # Override the global default and scrape targets from this job every 5 seconds.
+    scrape_interval: 5s
+    static_configs:
+         - targets: ['172.31.0.144:9100','172.31.0.136:9099','172.31.0.117:9099','172.31.0.118:9099']
+</code></pre>
+<p>这里主要配置一些exporter服务，主要用来提供数据，用于分析监控。</p>
+<h2 id="prometheus-配置文件alterrules">prometheus 配置文件（alter.rules）</h2>
+<pre><code>groups:
+- name: 服务告警
+  rules:
+
+  - alert: 服务异常关闭
+    expr: up == 0
+    for: 1m
+    labels:
+      severity: prometheus
+    annotations:
+      summary: &quot;prometheus实例关闭&quot;
+      description: &quot;{{ $labels.instance }} of job {{ $labels.job }} 已经关闭了!!!!&quot;
+
+  - alert: 消息积压
+    expr: kafka_consumergroup_lag &gt; 30
+    for: 1m
+    labels:
+      severity: kafka
+    annotations:
+      summary: &quot;kafka消息积压&quot;
+      description: &quot;kafka 消费组 {{ $labels.consumergroup }} \n\r topic: {{ $labels.topic }} \n\r 消息积压数: {{ $value }}&quot;
+
+  - alert: CPU告警
+    expr: (1 - avg(irate(node_cpu_seconds_total{mode=&quot;idle&quot;}[5m])) by (instance)) * 100 &gt; 90
+    for: 1m
+    labels:
+      team: node
+    annotations:
+      summary: &quot;CPU告警&quot;
+      description: &quot;机器(ip = {{$labels.instance}}) \n\r CPU使用量超过90%，目前剩余量为：{{ $value }}&quot;
+
+  - alert: 磁盘告警
+    expr: 100.0 - 100 * ((node_filesystem_avail_bytes{mountpoint=~&quot;/&quot;, device!=&quot;rootfs&quot;} / 1000 / 1000 ) / (node_filesystem_size_bytes{mountpoint=~&quot;/&quot;, device!=&quot;rootfs&quot;} / 1024 / 1024)) &gt; 85
+    for: 1m
+    labels:
+      team: node
+    annotations:
+      summary: &quot;磁盘告警&quot;
+      description: &quot;机器(ip = {{$labels.instance}}) \n\r 磁盘使用量超过85%，目前剩余量为：{{ $value }}G &quot;
+
+  - alert: 内存告警
+    expr: (node_memory_MemTotal_bytes - (node_memory_MemFree_bytes+node_memory_Buffers_bytes+node_memory_Cached_bytes)) / node_memory_MemTotal_bytes * 100 &gt; 90
+    for: 1m
+    labels:
+      team: node
+    annotations:
+      summary: &quot;内存告警&quot;
+      description: &quot;机器(ip = {{$labels.instance}}) \n\r 内存使用量超过90%，目前剩余量为：{{ $value }}M &quot;
+
+</code></pre>
+<p>以上是自定义的各种告警指标。</p>
+<h2 id="alertmanager配置文件configyml">alertmanager配置文件(config.yml)</h2>
+<pre><code> route:
+     receiver: 'web.hook'
+ receivers:
+  - name: 'web.hook'
+    webhook_configs:
+      - url: http://172.31.0.144:8060/dingtalk/webhook1/send
+</code></pre>
+<p>这里将会将告警信息发送到指定告警api，可自定义webhook服务，处理告警消息内容。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[MQTT协议详解]]></title>
         <id>https://miexxx.github.io/post/mqtt-xie-yi-xiang-jie/</id>
@@ -673,71 +975,6 @@ int main()
 电梯算法（扫描算法）和电梯的运行过程类似，总是按一个方向来进行磁盘调度，直到该方向上没有未完成的磁盘请求，然后改变方向。<br>
 因为考虑了移动方向，因此所有的磁盘请求都会被满足，解决了 SSTF 的饥饿问题。<br>
 <img src="https://camo.githubusercontent.com/8187903788bbfb90978169f20fa4fd41e094bf22/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f32373163653038662d633132342d343735662d623439302d6265343466656463366432652e706e67" alt="" loading="lazy"></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[计算机操作系统-内存管理]]></title>
-        <id>https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-nei-cun-guan-li/</id>
-        <link href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-nei-cun-guan-li/">
-        </link>
-        <updated>2020-03-25T12:02:56.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="虚拟内存">虚拟内存</h1>
-<p>虚拟内存的目的是为了让物理内存扩充成更大的逻辑内存，从而让程序获得更多的可用内存。<br>
-为了更好的管理内存，操作系统将内存抽象成地址空间，每一个程序拥有自己的地址空间，这个地址空间被分割成多个块。每一块称为一页，这些页被映射到物理内存，但不需要所有页都必须在物理内存中。当程序引用到不再物理内存的页时，由硬件执行必要的映射，将缺失的部分装入物理内存并重新执行失败的指令。</p>
-<p>从上面描述中可以看出，虚拟内存运行程序不用将地址空间的每一页都映射到物理内存，也就是说一个程序不需要全部调入内存就可以运行，这使得有限的内存运行大程序称为可能。例如有一台计算机可以产生16位地址，那么一个程序的地址空间范围是0~64k，该计算机只有32KB的物理内存，虚拟内存技术允许该计算机运行一个64k大小的程序。<br>
-<img src="https://camo.githubusercontent.com/a11aa3279eb780cafdcb9abdeb41047960ea7518/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f37623238316231652d303539352d343032622d616533352d3863393130383463333363312e706e67" alt="" loading="lazy"></p>
-<h1 id="分页系统地址映射">分页系统地址映射</h1>
-<p>内存管理单元（MMU）管理着地址空间和物理内存的转换，其中的页表（Page table）存储着页（程序地址空间）和页框（物理内存空间）的映射表。<br>
-一个虚拟地址分为两部分，一部分存储页面号，一部分存储偏移量。</p>
-<h1 id="页面置换算法">页面置换算法</h1>
-<p>在程序运行过程中，如果要访问的页面不存在内存中，就发生缺页中断从而将该页调入内存中，此时如果内存已无空闲空间，系统必须从内存调出一个页面到磁盘对换区中腾出空间。<br>
-页面置换算法和淘汰策略类似，可以将内存看成磁盘的缓存。在缓存系统中，缓存的大小有限，当有新的缓存到达时，需要淘汰一部分已经存在的缓存，这样才有空间存放新的缓存数据。</p>
-<p>页面置换算法的主要目的是使置换频率最低，也可以说缺页率最低。</p>
-<h2 id="最佳">最佳</h2>
-<p>所选择的被换出的页面将是最长时间内不再被访问，通常可以保证获得最低的缺页率。<br>
-是一种理论上的算法，因为无法知道一个页面多长时间不再被访问。<br>
-举例：</p>
-<pre><code>7，0，1，2，0，3，0，4，2，3，0，3，2，1，2，0，1，7，0，1
-</code></pre>
-<p>开始运行时，先将7，0，1三个页面装入内存。当程序要访问页面2时，产生缺页中断，会将页面7换出，应为页面7再次被访问的时间最长。</p>
-<h2 id="最近最久未使用">最近最久未使用</h2>
-<p>虽然无法知道将来要使用的页面情况，但是可以知道过去使用页面的情况。LRU 将最近最久未使用的页面换出。<br>
-为了实现 LRU，需要在内存中维护一个所有页面的链表。当一个页面被访问时，将这个页面移到链表表头。这样就能保证链表表尾的页面是最近最久未访问的。<br>
-因为每次访问都需要更新链表，因此这种方式实现的 LRU 代价很高。</p>
-<pre><code>4，7，0，7，1，0，1，2，1，2，6
-</code></pre>
-<figure data-type="image" tabindex="1"><img src="https://camo.githubusercontent.com/88a3ea6558a8b9326f6fd95d74b2ff07625427b5/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f65623835393232382d633066322d346263652d393130642d6439663736393239333532622e706e67" alt="" loading="lazy"></figure>
-<h2 id="最近未使用">最近未使用</h2>
-<p>每个页面都有两个状态位：R 与 M，当页面被访问时设置页面的 R=1，当页面被修改时设置 M=1。其中 R 位会定时被清零。可以将页面分成以下四类：<br>
-R=0，M=0<br>
-R=0，M=1<br>
-R=1，M=0<br>
-R=1，M=1<br>
-当发生缺页中断时，NRU 算法随机地从类编号最小的非空类中挑选一个页面将它换出。<br>
-NRU 优先换出已经被修改的脏页面（R=0，M=1），而不是被频繁使用的干净页面（R=1，M=0）。</p>
-<h2 id="先进先出">先进先出</h2>
-<p>选择换出的页面是最先进入的页面。<br>
-该算法会将那些经常被访问的页面也被换出，从而使缺页率升高。</p>
-<h2 id="第二次机会算法">第二次机会算法</h2>
-<p>FIFO 算法可能会把经常使用的页面置换出去，为了避免这一问题，对该算法做一个简单的修改：</p>
-<p>当页面被访问 (读或写) 时设置该页面的 R 位为 1。需要替换的时候，检查最老页面的 R 位。如果 R 位是 0，那么这个页面既老又没有被使用，可以立刻置换掉；如果是 1，就将 R 位清 0，并把该页面放到链表的尾端，修改它的装入时间使它就像刚装入的一样，然后继续从链表的头部开始搜索。<br>
-<img src="https://camo.githubusercontent.com/033a579c02954e1414f31564e9c14f872e3c6daf/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f65636638616435642d353430332d343862392d623665372d6632653230666665386663612e706e67" alt="" loading="lazy"></p>
-<h2 id="时钟">时钟</h2>
-<p>第二次机会算法需要在链表中移动页面，降低了效率。时钟算法使用环形链表将页面连接起来，再使用一个指针指向最老的页面。<br>
-<img src="https://camo.githubusercontent.com/be6880af7be4c35175b739114a78d6bf151c740f/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f35663565663062362d393865612d343937632d613030372d6636633535323838656162312e706e67" alt="" loading="lazy"></p>
-<h1 id="分段">分段</h1>
-<p>虚拟内存采用的是分页技术，也就是将地址空间划分成固定大小的页，每一页再与内存进行映射。<br>
-下图为一个编译器在编译过程中建立的多个表，有 4 个表是动态增长的，如果使用分页系统的一维地址空间，动态增长的特点会导致覆盖问题的出现。<br>
-<img src="https://camo.githubusercontent.com/4ec196194b9ad1ae598a14f1b07399364cff4ee2/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f32326465303533382d376336652d343336352d626433622d3863653363353930303231362e706e67" alt="" loading="lazy"><br>
-分段的做法是把每个表分成段，一个段构成一个独立的地址空间。每个段的长度可以不同，并且可以动态增长。<br>
-<img src="https://camo.githubusercontent.com/c336d65110524ae289477dc2a0636edf6aef9a3c/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f65303930306262322d323230612d343362372d396161392d3164356364353566663536652e706e67" alt="" loading="lazy"></p>
-<h1 id="段页式">段页式</h1>
-<p>程序的地址空间划分成多个拥有独立地址空间的段，每个段上的地址空间划分成大小相同的页。这样既拥有分段系统的共享和保护，又拥有分页系统的虚拟内存功能。</p>
-<h1 id="分页与分段的比较">分页与分段的比较</h1>
-<p>对程序员的透明性：分页透明，但是分段需要程序员显式划分每个段。<br>
-地址空间的维度：分页是一维地址空间，分段是二维的。<br>
-大小是否可以改变：页的大小不可变，段的大小可以动态改变。<br>
-出现的原因：分页主要用于实现虚拟内存，从而获得更大的地址空间；分段主要是为了使程序和数据可以被划分为逻辑上独立的地址空间并且有助于共享和保护。</p>
 ]]></content>
     </entry>
 </feed>
