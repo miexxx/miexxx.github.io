@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://miexxx.github.io</id>
     <title>Great Wei</title>
-    <updated>2020-10-22T03:54:00.354Z</updated>
+    <updated>2020-10-22T03:54:42.379Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://miexxx.github.io"/>
     <link rel="self" href="https://miexxx.github.io/atom.xml"/>
@@ -11,7 +11,7 @@
     <icon>https://miexxx.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Great Wei</rights>
     <entry>
-        <title type="html"><![CDATA[Prometheus监控告警系统]]></title>
+        <title type="html"><![CDATA[Prometheus监控告警系统 简介]]></title>
         <id>https://miexxx.github.io/post/prometheus-jian-kong-gao-jing-xi-tong/</id>
         <link href="https://miexxx.github.io/post/prometheus-jian-kong-gao-jing-xi-tong/">
         </link>
@@ -315,7 +315,7 @@ scrape_configs:
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[MQTT协议详解]]></title>
+        <title type="html"><![CDATA[MQTT协议 简介]]></title>
         <id>https://miexxx.github.io/post/mqtt-xie-yi-xiang-jie/</id>
         <link href="https://miexxx.github.io/post/mqtt-xie-yi-xiang-jie/">
         </link>
@@ -383,7 +383,7 @@ QoS 2：只分发一次。这是最高级别的消息传递，消息丢失和重
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[美图长连接平台]]></title>
+        <title type="html"><![CDATA[美图长连接平台 简介]]></title>
         <id>https://miexxx.github.io/post/mei-tu-chang-lian-jie-ping-tai/</id>
         <link href="https://miexxx.github.io/post/mei-tu-chang-lian-jie-ping-tai/">
         </link>
