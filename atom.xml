@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://miexxx.github.io</id>
     <title>Great Wei</title>
-    <updated>2020-10-22T03:50:11.447Z</updated>
+    <updated>2020-10-22T03:54:00.354Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://miexxx.github.io"/>
     <link rel="self" href="https://miexxx.github.io/atom.xml"/>
@@ -433,6 +433,187 @@ QoS 2：只分发一次。这是最高级别的消息传递，消息丢失和重
 ]]></content>
     </entry>
     <entry>
+        <title type="html"><![CDATA[Go实现IM]]></title>
+        <id>https://miexxx.github.io/post/go-shi-xian-im/</id>
+        <link href="https://miexxx.github.io/post/go-shi-xian-im/">
+        </link>
+        <updated>2020-05-25T02:39:25.000Z</updated>
+        <content type="html"><![CDATA[<!-- more -->
+<h1 id="go实现im">Go实现IM</h1>
+<p>长连接平台：<br>
+分为四个部分，rev,sender,registor,online（接受者，发送者，注册中心，在线列表）<br>
+im：负责处理业务逻辑<br>
+<img src="http://blog.hytech.com/wp-content/uploads/2020/05/2AB94DDF-906C-430E-ACA5-B26B42DFDA1B.jpg" alt="" loading="lazy"></p>
+<h2 id="rev负责数据的接收发送">rev负责数据的接收发送</h2>
+<h3 id="架构设计">架构设计</h3>
+<p>主进程负责接收消息（epoll）将消息放入阻塞队列，主进程开启多个消费者（work协程）读取阻塞队列消息处理，向用户中心获取产品注册的队列（队列1，队列2），将处理后的消息发送到对应队列（消费队列，异常队列）。</p>
+<h2 id="im负责消息业务处理">im负责消息业务处理</h2>
+<h3 id="功能">功能</h3>
+<p>将消息从队列（队列1，队列2）获取后进行业务处理，将需要返回的消息内容发送到接收队列（sender接收队列）。</p>
+<h2 id="sender负责数据转发">sender负责数据转发</h2>
+<h3 id="架构设计-2">架构设计</h3>
+<p>主进程开启多个（消费者work协程）消费task（任务消息），消息内容包含要发送的目的rev信息，调用rpc方法将消息发送到指定rev，开启多个（生产者work协程）订阅接收队列（sender接收队列）中将消息封装成task供（消费者work协程）进行消费。</p>
+<h2 id="registor负责注册各种服务">registor负责注册各种服务</h2>
+<h3 id="功能-2">功能</h3>
+<p>注册中心负责记录长连平台各个服务的信息，以便各个服务相互之间能找到对方。<br>
+各个服务的注册信息存放在redis中。<br>
+各个服务使用redis的发布订阅模式获取注册中心的所有信息 。</p>
+<h2 id="online-在线列表">online 在线列表</h2>
+<h3 id="功能-3">功能</h3>
+<p>online模块负责记录成功登陆长连平台的用户信息。主要是用户是再哪个recv登陆的。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Swoole实现IM]]></title>
+        <id>https://miexxx.github.io/post/swoole-shi-xian-im/</id>
+        <link href="https://miexxx.github.io/post/swoole-shi-xian-im/">
+        </link>
+        <updated>2020-05-22T06:24:10.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="0x01">0X01</h1>
+<h2 id="swoole_table-共享内存表">swoole_table 共享内存表</h2>
+<p>在swoole_server-&gt;start()之前创建swoole_table对象。并存入全局变量或者类静态变量/对象属性中。<br>
+在worker/task进程中获取table对象，并使用</p>
+<p>注意点：只有在swoole_server-&gt;start()之前创建的table对象才能在子进程中使用<br>
+swoole_table构造方法中指定了最大容量，一旦超过此数据容量将无法分配内存导致set操作失败。所以使用swoole_table之前一定要规划好数据容量，实现进程之间的数据共享。</p>
+<pre><code>$table = new swoole_table(1024);
+$table-&gt;column('fd', swoole_table::TYPE_INT);
+$table-&gt;column('from_id', swoole_table::TYPE_INT);
+$table-&gt;column('data', swoole_table::TYPE_STRING, 64);
+$table-&gt;create();
+
+$serv = new swoole_server('127.0.0.1', 9501);
+//将table保存在serv对象上
+$serv-&gt;table = $table;
+
+$serv-&gt;on('receive', function ($serv, $fd, $from_id, $data) {
+    $ret = $serv-&gt;table-&gt;set($fd, array('from_id' =&gt; $data, 'fd' =&gt; $fd, 'data' =&gt; $data));
+});
+
+$serv-&gt;start();
+</code></pre>
+<h1 id="0x02">0X02</h1>
+<h2 id="swoole_websocket_server">swoole_websocket_server</h2>
+<p>WebSocket服务器是建立在Http服务器之上的长连接服务器，客户端首先会发送一个Http的请求与服务器进行握手。握手成功后会触发onOpen事件，表示连接已就绪，onOpen函数中可以得到$request对象，包含了Http握手的相关信息，如GET参数、Cookie、Http头信息等。</p>
+<p>建立连接后客户端与服务器端就可以双向通信了。</p>
+<pre><code>//创建websocket服务器对象，监听0.0.0.0:9502端口
+$ws = new swoole_websocket_server(&quot;0.0.0.0&quot;, 9502);
+
+//监听WebSocket连接打开事件
+$ws-&gt;on('open', function ($ws, $request) {
+    var_dump($request-&gt;fd, $request-&gt;get, $request-&gt;server);
+    $ws-&gt;push($request-&gt;fd, &quot;hello, welcome\n&quot;);
+});
+
+//监听WebSocket消息事件
+$ws-&gt;on('message', function ($ws, $frame) {
+    echo &quot;Message: {$frame-&gt;data}\n&quot;;
+    $ws-&gt;push($frame-&gt;fd, &quot;server: {$frame-&gt;data}&quot;);
+});
+
+//监听WebSocket连接关闭事件
+$ws-&gt;on('close', function ($ws, $fd) {
+    echo &quot;client-{$fd} is closed\n&quot;;
+});
+
+$ws-&gt;start();
+</code></pre>
+<h1 id="0x02-2">0X02</h1>
+<h2 id="swoole_process">swoole_process</h2>
+<p>swoole增加了多进程管理模块来替代PHP的pcntl，它相比pcntl的不同点是：</p>
+<p>swoole_process提供了pcntl没有的进程间通信<br>
+swoole_process支持重定向标准输入和输出，在子进程内echo或者读键盘输入可以被重定向为从管道中取数据<br>
+子进程可以异步化</p>
+<pre><code>$worker_num = 8;
+
+for($i = 0; $i &lt; $worker_num; $i++)
+{
+    $process = new swoole_process('callback_function', $redirect_stdout);
+    $pid = $process-&gt;start();
+    $workers[$pid] = $process;
+}
+
+function callback_function(swoole_process $worker)
+{
+    //echo &quot;Worker: start. PID=&quot;.$worker-&gt;pid.&quot;\n&quot;;
+    //recv data from master
+    $recv = $worker-&gt;read();
+    echo &quot;From Master: $recv\n&quot;;
+
+    //send data to master
+    $worker-&gt;write(&quot;hello master\n&quot;);
+
+    sleep(2);
+    $worker-&gt;exit(0);
+}
+// read/write 2个方法就是向管道内读写数据。主进程内可以通过write/read 向子进程写入，读取数据。
+
+// swoole_process支持了标准输入输出的重定向，子进程内echo时，会自动写入管道，而不是打印到屏幕。
+
+// 子进程异步
+function callback_function_async(swoole_process $worker)
+{
+    //echo &quot;Worker: start. PID=&quot;.$worker-&gt;pid.&quot;\n&quot;;
+    //recv data from master
+    $GLOBALS['worker'] = $worker;
+    swoole_event_add($worker-&gt;pipe, function($pipe) {
+        $worker = $GLOBALS['worker'];
+        $recv = $worker-&gt;read();
+
+        echo &quot;From Master: $recv\n&quot;;
+
+        //send data to master
+        $worker-&gt;write(&quot;hello master\n&quot;);
+
+        sleep(2);
+
+        $worker-&gt;exit(0);
+    });
+}
+
+//可以将管道加入到swoole_event中即可实现异步的进程间通信，另外子进程内可以使用swoole_timer/swoole_client/swoole_async这些异步的API。或者使用swoole_event_add直接操作swoole的EventLoop。
+</code></pre>
+<h1 id="0x03-实现im">0X03 实现IM</h1>
+<h2 id="创建一个swoole_table共享内存表用于记录连接的客户端信息">创建一个swoole_table共享内存表，用于记录连接的客户端信息</h2>
+<p>记录：<br>
+用户id, 设备id, 设备型号， 登录状态，数据接收池，客户端ip，客户端端口，上一次在线时间。</p>
+<h2 id="创建一个websocket_service">创建一个websocket_service</h2>
+<p>启动之前编写一个协议类IM，负责处理业务逻辑。</p>
+<p>swoole_process 创建一个进程专门用于处理定时器，websocket_service.addprocess()<br>
+加载配置文件<br>
+回调函数内需要编写的内容</p>
+<h3 id="connect">connect：</h3>
+<p>客户端连接时触发，将用户信息记录到swoole_table中，并且调用IM协议类中的方法，创建一个定时器，等待用户进行登录操作，swoole_timer_after 指定时间后自动关闭当前用户连接（主动关闭用户连接会触发回调函数close），如果用户在指定时间内登录，清除定时器。</p>
+<h3 id="handshake">handShake：</h3>
+<p>服务端握手时触发，有需要可以自己进行处理（可选项）。</p>
+<h3 id="message">message：</h3>
+<p>服务端接收到数据时触发，判断当前接收到是的数据是否完整（数据传输过程发生了拆包，swoole_frame-&gt;finish判断是否完整），如果数据不完整将数据存储到内存表中的当前用户的数据接收池，请求结束。否则将当前用户数据接收池数据获取出来与当前数据进行组和，情况数据接收池，获得到完整数据进行业务逻辑处理。调用IM协议类的方法进行相应处理。</p>
+<h3 id="close">close</h3>
+<p>主动断开客户端连接时触发，清除swoole_table用户相关数据。</p>
+<h3 id="start">start</h3>
+<p>websocket服务启动触发，有需要可以自行修改</p>
+<h3 id="managerstart">managerStart</h3>
+<p>manager进程启动时触发，有需要可以自行修改</p>
+<h3 id="workerstart">workerStart</h3>
+<p>worker进程启动时触发</p>
+<h3 id="shutdown">shutdown</h3>
+<p>服务关闭时触发，清除远端用户在线列表信息（redis）。</p>
+<h3 id="workererror">workerError</h3>
+<p>work异常触发，释放work资源，调用使用类的析构函数。</p>
+<h3 id="workerstop">workerStop</h3>
+<p>work停止触发，释放work资源，调用使用类的析构函数。</p>
+<h3 id="task">task</h3>
+<p>task启动时触发</p>
+<h2 id="im协议类">IM协议类</h2>
+<h3 id="接收消息">接收消息</h3>
+<p>解析接收的消息，判断当前消息是否正常，检查内存表中用户是否存在信息。<br>
+每次接收到消息重置心跳定时器。<br>
+检查用户是否有在线信息，如果有更新在线时间。<br>
+客户端需要定时发送ping包</p>
+<h3 id="用户登录">用户登录</h3>
+<p>用户登录后清除登录定时器，更新本地在线信息，远端在线信息。</p>
+]]></content>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[Swoole：Master/Reactor/Manager/Worker/TaskWorker(Task)]]></title>
         <id>https://miexxx.github.io/post/swoolemasterreactormanagerworkertaskworkertask/</id>
         <link href="https://miexxx.github.io/post/swoolemasterreactormanagerworkertaskworkertask/">
@@ -501,7 +682,7 @@ TaskWorker以多进程的方式运行</p>
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[Zookeeper集群 + canal服务 搭建]]></title>
+        <title type="html"><![CDATA[Zookeeper集群 + canal服务简介]]></title>
         <id>https://miexxx.github.io/post/zookeeper-ji-qun-da-jian/</id>
         <link href="https://miexxx.github.io/post/zookeeper-ji-qun-da-jian/">
         </link>
@@ -531,7 +712,7 @@ server.3=127.0.0.1:2668:3668
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[Http]]></title>
+        <title type="html"><![CDATA[Http 简介]]></title>
         <id>https://miexxx.github.io/post/http/</id>
         <link href="https://miexxx.github.io/post/http/">
         </link>
@@ -707,7 +888,7 @@ If-Modified-Since: Wed, 21 Oct 2015 07:28:00 GMT</p>
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[Crontab]]></title>
+        <title type="html"><![CDATA[Crontab 常见问题]]></title>
         <id>https://miexxx.github.io/post/cr/</id>
         <link href="https://miexxx.github.io/post/cr/">
         </link>
@@ -718,7 +899,7 @@ If-Modified-Since: Wed, 21 Oct 2015 07:28:00 GMT</p>
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[Linux]]></title>
+        <title type="html"><![CDATA[Linux 简介]]></title>
         <id>https://miexxx.github.io/post/linux/</id>
         <link href="https://miexxx.github.io/post/linux/">
         </link>
@@ -902,81 +1083,6 @@ bo 块设备写入数据的总量(写磁盘)（每秒kb）<br>
 <p>查看磁盘使用空间</p>
 <h3 id="ps">ps</h3>
 <p>查看进程</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[计算机操作系统-链接]]></title>
-        <id>https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-lian-jie/</id>
-        <link href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-lian-jie/">
-        </link>
-        <updated>2020-03-31T13:44:40.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="编译系统">编译系统</h1>
-<p>以下是一个hello.c程序</p>
-<pre><code>#include &lt;stdio.h&gt;
-
-int main()
-{
-    printf(&quot;hello, world\n&quot;);
-    return 0;
-}
-
-</code></pre>
-<p>在Unix系统上，由于编译器把源文件转换为目标文件。</p>
-<pre><code>gcc -o hello hello.c
-</code></pre>
-<p>这个过程大致如下：<br>
-<img src="https://camo.githubusercontent.com/e1da518d4b62181167c2b1fea745c9bcc6b44c35/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f62333936643732362d623735662d346133322d383961322d3033613762366531396636662e6a7067" alt="" loading="lazy"></p>
-<p>预处理阶段：处理以 # 开头的预处理命令；<br>
-编译阶段：翻译成汇编文件；<br>
-汇编阶段：将汇编文件翻译成可重定位目标文件；<br>
-链接阶段：将可重定位目标文件和 printf.o 等单独预编译好的目标文件进行合并，得到最终的可执行目标文件。</p>
-<h1 id="静态链接">静态链接</h1>
-<p>静态链接器以一组可重定位目标文件为输入，生成一个完全链接的可执行目标文件作为输出。链接器主要完成以下两个任务：</p>
-<p>符号解析：每个符号对应于一个函数、一个全局变量或一个静态变量，符号解析的目的是将每个符号引用与一个符号定义关联起来。<br>
-重定位：链接器通过把每个符号定义与一个内存位置关联起来，然后修改所有对这些符号的引用，使得它们指向这个内存位置。<br>
-<img src="https://camo.githubusercontent.com/33c7b278162d2fde0df39a36dc9943ff03f9aa05/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f34376439383538332d386262302d343563632d383132642d3437656566613061346134302e6a7067" alt="" loading="lazy"></p>
-<h1 id="动态链接">动态链接</h1>
-<p>静态库有以下两个问题：</p>
-<p>当静态库更新时那么整个程序都要重新进行链接；<br>
-对于 printf 这种标准函数库，如果每个程序都要有代码，这会极大浪费资源。<br>
-共享库是为了解决静态库的这两个问题而设计的，在 Linux 系统中通常用 .so 后缀来表示，Windows 系统上它们被称为 DLL。它具有以下特点：</p>
-<p>在给定的文件系统中一个库只有一个文件，所有引用该库的可执行目标文件都共享这个文件，它不会被复制到引用它的可执行文件中；<br>
-在内存中，一个共享库的 .text 节（已编译程序的机器代码）的一个副本可以被不同的正在运行的进程共享。<br>
-<img src="https://camo.githubusercontent.com/f684ca99d53f8992733f530d09165309e6f72e87/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f37366463373736392d316161632d343838382d396265612d3036346631636161386537372e6a7067" alt="" loading="lazy"></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[计算机操作系统-设备管理]]></title>
-        <id>https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-she-bei-guan-li/</id>
-        <link href="https://miexxx.github.io/post/ji-suan-ji-cao-zuo-xi-tong-she-bei-guan-li/">
-        </link>
-        <updated>2020-03-31T13:38:39.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="磁盘结构">磁盘结构</h1>
-<p>盘面（Platter）：一个磁盘有多个盘面；<br>
-磁道（Track）：盘面上的圆形带状区域，一个盘面可以有多个磁道；<br>
-扇区（Track Sector）：磁道上的一个弧段，一个磁道可以有多个扇区，它是最小的物理储存单位，目前主要有 512 bytes 与 4 K 两种大小；<br>
-磁头（Head）：与盘面非常接近，能够将盘面上的磁场转换为电信号（读），或者将电信号转换为盘面的磁场（写）；<br>
-制动手臂（Actuator arm）：用于在磁道之间移动磁头；<br>
-主轴（Spindle）：使整个盘面转动。</p>
-<figure data-type="image" tabindex="1"><img src="https://camo.githubusercontent.com/42c8be3472d81b72762c2a88b29fa61b4bdf2409/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f30313466626334642d643837332d346131322d623136302d3836376464616564393830372e6a7067" alt="" loading="lazy"></figure>
-<h1 id="磁盘调度算法">磁盘调度算法</h1>
-<p>读写一个磁盘块的时间的影响因素有：</p>
-<p>旋转时间（主轴转动盘面，使得磁头移动到适当的扇区上）<br>
-寻道时间（制动手臂移动，使得磁头移动到适当的磁道上）<br>
-实际的数据传输时间<br>
-其中，寻道时间最长，因此磁盘调度的主要目标是使磁盘的平均寻道时间最短。</p>
-<h2 id="先来先服务">先来先服务</h2>
-<p>按照磁盘请求的顺序进行调度。<br>
-优点是公平和简单。缺点也很明显，因为未对寻道做任何优化，使平均寻道时间可能较长。</p>
-<h2 id="最短寻道时间优先">最短寻道时间优先</h2>
-<p>优先调度与当前磁头所在磁道距离最近的磁道。</p>
-<p>虽然平均寻道时间比较低，但是不够公平。如果新到达的磁道请求总是比一个在等待的磁道请求近，那么在等待的磁道请求会一直等待下去，也就是出现饥饿现象。具体来说，两端的磁道请求更容易出现饥饿现象。<br>
-<img src="https://camo.githubusercontent.com/513755459b87116ae3a03bb9c4c6a0b161e7d0ed/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f34653234383565342d333462642d343936372d396630322d3063303933623739376161612e706e67" alt="" loading="lazy"></p>
-<h2 id="电梯算法">电梯算法</h2>
-<p>电梯总是保持一个方向运行，直到该方向没有请求为止，然后改变运行方向。<br>
-电梯算法（扫描算法）和电梯的运行过程类似，总是按一个方向来进行磁盘调度，直到该方向上没有未完成的磁盘请求，然后改变方向。<br>
-因为考虑了移动方向，因此所有的磁盘请求都会被满足，解决了 SSTF 的饥饿问题。<br>
-<img src="https://camo.githubusercontent.com/8187903788bbfb90978169f20fa4fd41e094bf22/68747470733a2f2f63732d6e6f7465732d313235363130393739362e636f732e61702d6775616e677a686f752e6d7971636c6f75642e636f6d2f32373163653038662d633132342d343735662d623439302d6265343466656463366432652e706e67" alt="" loading="lazy"></p>
 ]]></content>
     </entry>
 </feed>
