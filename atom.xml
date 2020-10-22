@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://miexxx.github.io</id>
     <title>Great Wei</title>
-    <updated>2020-10-22T03:47:29.561Z</updated>
+    <updated>2020-10-22T03:49:07.372Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://miexxx.github.io"/>
     <link rel="self" href="https://miexxx.github.io/atom.xml"/>
@@ -179,7 +179,7 @@ services:
       restart_policy:
         condition: any
 </code></pre>
-<p>其中kafka_exporter与webhook-dingding 是可选服务，这里主要是用于kafka集群的监控与告警使用。</p>
+<p>其中kafka_exporter与webhook-dingding 是可选服务，这里主要是用于kafka集群的监控与告警使用。启动命令： docker stack --composer-file=docker-stack.yml</p>
 <h1 id="配置">配置</h1>
 <h2 id="prometheus-配置文件prometheusyml">prometheus 配置文件（prometheus.yml）</h2>
 <pre><code># my global config
