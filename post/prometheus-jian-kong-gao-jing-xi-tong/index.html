@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Prometheus监控告警系统 简介 | Great Wei</title>
-<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1603338961510">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1603347313388">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="Prometheus监控告警系统 简介 | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
@@ -23,7 +23,7 @@ Prometheus是由SoundCloud开发的开源监控报警系统和时序列数据库
       <div class="main-content">
         <div class="site-header">
   <a href="https://miexxx.github.io">
-  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1603338961510" alt="">
+  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1603347313388" alt="">
   </a>
   <h1 class="site-title">
     Great Wei
@@ -257,7 +257,7 @@ services:
       restart_policy:
         condition: any
 </code></pre>
-<p>其中kafka_exporter与webhook-dingding 是可选服务，这里主要是用于kafka集群的监控与告警使用。启动命令： docker stack --composer-file=docker-stack.yml</p>
+<p>其中kafka_exporter与webhook-dingding 是可选服务，这里主要是用于kafka集群的监控与告警使用。启动命令： docker stack deploy prom --compose-file=docker-stack.yml</p>
 <h1 id="配置">配置</h1>
 <h2 id="prometheus-配置文件prometheusyml">prometheus 配置文件（prometheus.yml）</h2>
 <pre><code># my global config
