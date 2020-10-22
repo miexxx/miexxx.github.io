@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://miexxx.github.io</id>
     <title>Great Wei</title>
-    <updated>2020-10-22T03:36:20.483Z</updated>
+    <updated>2020-10-22T03:46:39.620Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://miexxx.github.io"/>
     <link rel="self" href="https://miexxx.github.io/atom.xml"/>
@@ -310,6 +310,8 @@ scrape_configs:
       - url: http://172.31.0.144:8060/dingtalk/webhook1/send
 </code></pre>
 <p>这里将会将告警信息发送到指定告警api，可自定义webhook服务，处理告警消息内容。</p>
+<h1 id="效果图">效果图</h1>
+<figure data-type="image" tabindex="1"><img src="https://miexxx.github.io/post-images/1603338375571.jpg" alt="" loading="lazy"></figure>
 ]]></content>
     </entry>
     <entry>
