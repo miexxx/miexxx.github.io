@@ -2,18 +2,22 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Phabricator作为Code Review工具 | Great Wei</title>
+<title>Go日志转发服务设计 | Great Wei</title>
 <link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1609926371905">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="Phabricator作为Code Review工具 | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="Go日志转发服务设计 | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="概述
-Phabricator是一套基于Web的软件开发协作工具，包括代码审查工具Differential，资源库浏览器Diffusion，变更监测工具Herald，Bug跟踪工具Maniphest和维基工具Phriction。Phabric..." />
-    <meta name="keywords" content="tool" />
+    <meta name="description" content="服务描述
+日志转发服务主要是通过读取filebeat发送到redis的数据内容进行加工处理后，写入数据库的服务。
+服务需求
+(1) 能够快速读取redis数据，快速写入指定数据库。
+(2) 空闲时，不能够长时间占用cpu资源。
+(3)  保..." />
+    <meta name="keywords" content="go" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
   </head>
@@ -73,38 +77,56 @@ Phabricator是一套基于Web的软件开发协作工具，包括代码审查工
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              Phabricator作为Code Review工具
+              Go日志转发服务设计
             </h2>
             <div class="post-info">
               <span>
-                2019-10-01
+                2021-01-06
               </span>
               <span>
-                1 min read
+                2 min read
               </span>
               
-                <a href="https://miexxx.github.io/tag/_5EQAs6GBC/" class="post-tag">
-                  # tool
+                <a href="https://miexxx.github.io/tag/7VPFU2b1dg/" class="post-tag">
+                  # go
                 </a>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <h2 id="概述">概述</h2>
-<p>Phabricator是一套基于Web的软件开发协作工具，包括代码审查工具Differential，资源库浏览器Diffusion，变更监测工具Herald，Bug跟踪工具Maniphest和维基工具Phriction。Phabricator可与Git、Mercurial、Subversion集成使用。 Phabricator是开源软件，可在Apache许可证第2版下作为自由软件分发。 Phabricator最初是Facebook的一个内部工具，主要开发者为Evan Priestley。Evan Priestley离开Facebook后，在名为Phacility的新公司继续Phabricator的开发。</p>
-<h2 id="搭建">搭建</h2>
-<p>暂未实践</p>
+                <h1 id="服务描述">服务描述</h1>
+<p>日志转发服务主要是通过读取filebeat发送到redis的数据内容进行加工处理后，写入数据库的服务。</p>
+<h1 id="服务需求">服务需求</h1>
+<p>(1) 能够快速读取redis数据，快速写入指定数据库。<br>
+(2) 空闲时，不能够长时间占用cpu资源。<br>
+(3)  保证数据完整性。</p>
+<h1 id="服务设计">服务设计</h1>
+<h2 id="数据库">数据库</h2>
+<p>由于这个服务处理的只要是日志数据，写多读少，所以需要寻找一个写性能优秀的数据，本服务使用的是cassandra数据库，单机写入性能能达到3w TPS,  redis操作list的单机速度也差不多是5w TPS, 刚好适合，生产速度和消费速度接近。</p>
+<h2 id="逻辑设计">逻辑设计</h2>
+<p>由于redis读取的速度大于cs数据库写入速度，如果是边读编写，容易导致cs数据库处理不过来，所以我们可使用channel，将读取出来的数据放入channel，如果channel满了，生产者就阻塞住了，这样就可以控制生产速度，接下来需要开启多个work读取channel将数据写入cs数据库。<br>
+注意点：<br>
+(1) 读取redis采用批量读取，当数据为空的时候，需要改成阻塞获取。<br>
+(2) 写入cs采用批量写入。</p>
+<h2 id="开发过程遇到的坑">开发过程遇到的坑</h2>
+<p>(1) 由于go的协程非常优秀，于是做了一件蠢事，在读取channel一定数据后，开启一个协程进行写入，但是数据量实在太多了，导致产生了很多协程，内存占用很高，为了解决这个问题，又采用了go的协程池防止无限增长的协程数，但是当协程池满后，出现了阻塞，由于没有新的协程使用，导致channel数据消费不过来，之后选择启用多个work，每个work都轮休读取channel解决了以上问题。</p>
+<h1 id="服务性能">服务性能</h1>
+<p>2w TPS写入能力，cpu 内存使用情况正常。</p>
 
               </div>
               <div class="toc-container">
                 <ul class="markdownIt-TOC">
-<li>
+<li><a href="#%E6%9C%8D%E5%8A%A1%E6%8F%8F%E8%BF%B0">服务描述</a></li>
+<li><a href="#%E6%9C%8D%E5%8A%A1%E9%9C%80%E6%B1%82">服务需求</a></li>
+<li><a href="#%E6%9C%8D%E5%8A%A1%E8%AE%BE%E8%AE%A1">服务设计</a>
 <ul>
-<li><a href="#%E6%A6%82%E8%BF%B0">概述</a></li>
-<li><a href="#%E6%90%AD%E5%BB%BA">搭建</a></li>
+<li><a href="#%E6%95%B0%E6%8D%AE%E5%BA%93">数据库</a></li>
+<li><a href="#%E9%80%BB%E8%BE%91%E8%AE%BE%E8%AE%A1">逻辑设计</a></li>
+<li><a href="#%E5%BC%80%E5%8F%91%E8%BF%87%E7%A8%8B%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91">开发过程遇到的坑</a></li>
 </ul>
 </li>
+<li><a href="#%E6%9C%8D%E5%8A%A1%E6%80%A7%E8%83%BD">服务性能</a></li>
 </ul>
 
               </div>
@@ -115,9 +137,9 @@ Phabricator是一套基于Web的软件开发协作工具，包括代码审查工
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://miexxx.github.io/post/gong-ju-hui-zong/">
+            <a href="https://miexxx.github.io/post/kafka-ci-pan-kuo-rong/">
               <h3 class="post-title">
-                工具
+                Kafka磁盘扩容
               </h3>
             </a>
           </div>
