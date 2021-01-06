@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://miexxx.github.io</id>
     <title>Great Wei</title>
-    <updated>2021-01-06T09:46:49.083Z</updated>
+    <updated>2021-01-06T09:49:15.076Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://miexxx.github.io"/>
     <link rel="self" href="https://miexxx.github.io/atom.xml"/>
@@ -31,7 +31,7 @@
 (1) 读取redis采用批量读取，当数据为空的时候，需要改成阻塞获取。<br>
 (2) 写入cs采用批量写入。</p>
 <h2 id="开发过程遇到的坑">开发过程遇到的坑</h2>
-<p>(1) 由于go的协程非常优秀，于是做了一件蠢事，在读取channel一定数据后，开启一个协程进行写入，但是数据量实在太多了，导致产生了很多协程，内存占用很高，为了解决这个问题，又采用了go的协程池防止无限增长的协程数，但是当协程池满后，出现了阻塞，由于没有新的协程使用，导致channel数据消费不过来，之后选择启用多个work，每个work都轮休读取channel解决了以上问题。</p>
+<p>(1) 由于go的协程非常优秀，于是做了一件蠢事，在读取channel一定数据后，开启一个协程进行写入，但是数据量实在太多了，导致产生了很多协程，内存占用很高，为了解决这个问题，又采用了go的协程池防止无限增长的协程数，但是当协程池满后，出现了阻塞，由于没有新的协程使用，导致channel数据消费不过来，之后选择启用多个work，每个work都轮询读取channel解决了以上问题。</p>
 <h1 id="服务性能">服务性能</h1>
 <p>2w TPS写入能力，cpu 内存使用情况正常。</p>
 ]]></content>

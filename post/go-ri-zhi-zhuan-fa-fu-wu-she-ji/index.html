@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Go日志转发服务设计 | Great Wei</title>
-<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1609926371905">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1609926552671">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="Go日志转发服务设计 | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
@@ -26,7 +26,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://miexxx.github.io">
-  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1609926371905" alt="">
+  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1609926552671" alt="">
   </a>
   <h1 class="site-title">
     Great Wei
@@ -110,7 +110,7 @@
 (1) 读取redis采用批量读取，当数据为空的时候，需要改成阻塞获取。<br>
 (2) 写入cs采用批量写入。</p>
 <h2 id="开发过程遇到的坑">开发过程遇到的坑</h2>
-<p>(1) 由于go的协程非常优秀，于是做了一件蠢事，在读取channel一定数据后，开启一个协程进行写入，但是数据量实在太多了，导致产生了很多协程，内存占用很高，为了解决这个问题，又采用了go的协程池防止无限增长的协程数，但是当协程池满后，出现了阻塞，由于没有新的协程使用，导致channel数据消费不过来，之后选择启用多个work，每个work都轮休读取channel解决了以上问题。</p>
+<p>(1) 由于go的协程非常优秀，于是做了一件蠢事，在读取channel一定数据后，开启一个协程进行写入，但是数据量实在太多了，导致产生了很多协程，内存占用很高，为了解决这个问题，又采用了go的协程池防止无限增长的协程数，但是当协程池满后，出现了阻塞，由于没有新的协程使用，导致channel数据消费不过来，之后选择启用多个work，每个work都轮询读取channel解决了以上问题。</p>
 <h1 id="服务性能">服务性能</h1>
 <p>2w TPS写入能力，cpu 内存使用情况正常。</p>
 
