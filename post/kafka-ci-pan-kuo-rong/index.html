@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Kafka磁盘扩容 | Great Wei</title>
-<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1609920847666">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1609921034856">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="Kafka磁盘扩容 | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
@@ -25,7 +25,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://miexxx.github.io">
-  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1609920847666" alt="">
+  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1609921034856" alt="">
   </a>
   <h1 class="site-title">
     Great Wei
@@ -98,18 +98,18 @@
 <h1 id="扩容步骤">扩容步骤</h1>
 <p>(1)  迁移zookeeper(如果zk和kafka不再同一机器，无需考虑)。<br>
 (2) 选择扩容kafka集群中非controller节点，将历史数据拷贝到新磁盘中(使用rsync进行同步，考虑到历史数据过大，应该先进行拷贝，最后停止kafka节点，进行增加数据拷贝)。<br>
-(3) 重新扩容后的节点需要等到数据的同步成功后（可使用kafkaDrop观察），继续操作下一台机器节点。</p>
+(3) 重新扩容后的节点需要等到数据的同步成功后（可使用kafka_drop观察），继续操作下一台机器节点。</p>
 <h2 id="zookeeper迁移步骤">zookeeper迁移步骤：</h2>
 <p>(1) 关闭zk， ps -ef|grep zk|awk '{[print $2}'|xargs kill<br>
 (2) zk数据迁移到新磁盘(使用rsync进行同步)<br>
 (3) 重启zk<br>
 (4) 检查zookeeper是否正常,  ./zkServer.sh status</p>
 <h2 id="kafka迁移步骤">kafka迁移步骤：</h2>
-<p>(1) 进行数据拷贝到新磁盘 rsync -avPh /data/q /kafka_data/。<br>
-(2) 关闭kafka 172.31.0.12 节点（pm2 stop kafka-server, pm2 delete kafka-server）。<br>
-(3) 继续进行数据拷贝到新磁盘rsync -avPh kafka_2.13-2.6.0 /kafka_data/q/opt/  只需要copy kafka数据。<br>
+<p>(1) 进行数据拷贝到新磁盘 rsync -avPh /data/kafka /kafka_data/kafka。<br>
+(2) 关闭kafka 非controller 节点。<br>
+(3) 继续进行数据拷贝到新磁盘rsync -avPh /data/kafka /kafka_data/kafka  只需要copy kafka数据。<br>
 (4) 重启kafka节点（restart-server.sh）。<br>
-(5) 观察数据同步是否达到100%(可使用kafkaDrop观察）。<br>
+(5) 观察数据同步是否达到100%(可使用kafka_drop观察）。<br>
 (6) 继续下一台机器。</p>
 <h1 id="总结">总结</h1>
 <p>迁移过程还算顺利，客户端无感知迁移。</p>
