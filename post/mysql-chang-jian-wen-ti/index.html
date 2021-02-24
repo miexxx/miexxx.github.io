@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Mysql：点点滴滴(持续更新) | Great Wei</title>
-<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1614167614862">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1614169591352">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="Mysql：点点滴滴(持续更新) | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
@@ -25,7 +25,7 @@ mysql -uroot -ppassword -h172.xxx.xxx.xx 连接数据..." />
       <div class="main-content">
         <div class="site-header">
   <a href="https://miexxx.github.io">
-  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1614167614862" alt="">
+  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1614169591352" alt="">
   </a>
   <h1 class="site-title">
     Great Wei
@@ -83,7 +83,7 @@ mysql -uroot -ppassword -h172.xxx.xxx.xx 连接数据..." />
                 2019-04-01
               </span>
               <span>
-                4 min read
+                5 min read
               </span>
               
                 <a href="https://miexxx.github.io/tag/70yj136M-/" class="post-tag">
@@ -163,6 +163,16 @@ select * from
 <li>NDB 存储引擎：主要用于Mysql Cluster分布式集群；</li>
 <li>Archive 存储引擎：有很好的压缩机制，用于文件归档，写入时会进行压缩；</li>
 </ol>
+<h3 id="事务">事务</h3>
+<p>事务是应用程序中一系列严密的操作，所有操作必须成功完成，否则在每个操作中所作的所有更改都会被撤消。也就是事务具有原子性，一个事务中的一系列的操作要么全部成功，要么一个都不做。<br>
+ACID：原子性，一致性，隔离性，持续性</p>
+<h3 id="四种隔离级别">四种隔离级别</h3>
+<ol>
+<li>可重复读(可以查看其他事务已提交的插入数据，会导致幻读)</li>
+<li>可串行化(最高隔离级别当事务读取相同数据需要按照事务执行顺序执行)</li>
+<li>读未提交(可以查看到其他事务未提交的数据内容，导致脏读)</li>
+<li>读已提交(可以查看到其他事务提交的数据内容，导致不可重复读)</li>
+</ol>
 
               </div>
               <div class="toc-container">
@@ -182,6 +192,8 @@ select * from
 <li><a href="#%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5%E5%AE%9A%E4%B9%89">基础概念定义</a></li>
 <li><a href="#mysql%E6%9E%B6%E6%9E%84%E7%BB%84%E6%88%90">Mysql架构组成</a></li>
 <li><a href="#%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E">存储引擎</a></li>
+<li><a href="#%E4%BA%8B%E5%8A%A1">事务</a></li>
+<li><a href="#%E5%9B%9B%E7%A7%8D%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB">四种隔离级别</a></li>
 </ul>
 </li>
 </ul>
