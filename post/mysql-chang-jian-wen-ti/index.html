@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Mysql：点点滴滴(持续更新) | Great Wei</title>
-<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1609926840203">
+<link rel="shortcut icon" href="https://miexxx.github.io/favicon.ico?v=1614167614862">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://miexxx.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="Mysql：点点滴滴(持续更新) | Great Wei - Atom Feed" href="https://miexxx.github.io/atom.xml">
@@ -12,10 +12,10 @@
 
 
     <meta name="description" content="
-0x01：数据库迁移命令
+数据库迁移命令
 mysqldump -uroot -ppassword -h172.xxx.xxx.xx  &gt; xxx.sql 数据库导出
 
-mysql -uroot -ppassword -h172.xxx.xxx.xx..." />
+mysql -uroot -ppassword -h172.xxx.xxx.xx 连接数据..." />
     <meta name="keywords" content="mysql" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -25,7 +25,7 @@ mysql -uroot -ppassword -h172.xxx.xxx.xx..." />
       <div class="main-content">
         <div class="site-header">
   <a href="https://miexxx.github.io">
-  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1609926840203" alt="">
+  <img class="avatar" src="https://miexxx.github.io/images/avatar.png?v=1614167614862" alt="">
   </a>
   <h1 class="site-title">
     Great Wei
@@ -83,7 +83,7 @@ mysql -uroot -ppassword -h172.xxx.xxx.xx..." />
                 2019-04-01
               </span>
               <span>
-                3 min read
+                4 min read
               </span>
               
                 <a href="https://miexxx.github.io/tag/70yj136M-/" class="post-tag">
@@ -95,7 +95,7 @@ mysql -uroot -ppassword -h172.xxx.xxx.xx..." />
             <div class="post-content-wrapper">
               <div class="post-content">
                 <hr>
-<h2 id="0x01数据库迁移命令">0x01：数据库迁移命令</h2>
+<h2 id="数据库迁移命令">数据库迁移命令</h2>
 <pre><code class="language-mysql">mysqldump -uroot -ppassword -h172.xxx.xxx.xx  &gt; xxx.sql 数据库导出
 
 mysql -uroot -ppassword -h172.xxx.xxx.xx 连接数据库
@@ -133,18 +133,55 @@ select * from
 <p>上线代码过程中，发现日志一直对一段正常的逻辑代码报错，排查后发现填充的字段数据有问题，于是去数据库查询后发现数据并没有问题，逻辑也是正常的，不断的排查过程中，发现是sql查询的结果有问题，copy sql执行后，发现查询出来的数据的确有问题，其中有一个字段的数据与其它字段数据进行了交换，之后排查发现两张分表的表字段顺序是不相同的，导致发生了这样的一个bug。</p>
 <h3 id="处理方法">处理方法</h3>
 <p>desc tableName  md5处理后分表之间进行表结构对比，发现出现问题的表结构及时处理。</p>
+<h2 id="数据库基础">数据库基础</h2>
+<h3 id="基础概念定义">基础概念定义</h3>
+<p>SQL语言划分4个部分:</p>
+<ol>
+<li>DDL(Data Definition Language) ，用来定义数据库对象，数据库表</li>
+<li>DML(Data Manipulation Language), 数据库操作语言，操作数据库的相关数据，比如增删改</li>
+<li>DCL(Data Control Language), 数据库控制语言，用来定义访问权限和安全等级 if grande等</li>
+<li>DQL(Data Control Language), 数据查询语言, 用来查询数据select</li>
+</ol>
+<p>SQL查询过程(Mysql8.0以下，如果设置了查询缓存，可能出现权限不足依然查询到数据情况)<br>
+<img src="https://segmentfault.com/img/bVbxfBu?w=466&amp;h=598" alt="" loading="lazy"></p>
+<h3 id="mysql架构组成">Mysql架构组成</h3>
+<ol>
+<li>连接池组件(Connection Poll)</li>
+<li>管理服务和工具组件(Enterprise Management Services &amp; Utilities)</li>
+<li>SQL接口组件(SQL Interface)</li>
+<li>查询优化器(Parser)</li>
+<li>优化组件(Optimizer)</li>
+<li>缓存组件(Cache &amp; Buffer)</li>
+<li>插件式存储引擎(Pluggable Storage Engines)</li>
+<li>物理文件(File System, Files &amp; Logs)</li>
+</ol>
+<h3 id="存储引擎">存储引擎</h3>
+<ol>
+<li>InnoDB 存储引擎：Mysql 5.5版本后默认的存储引擎，优点是支持事务，行级锁(只作用在索引)，外键约束，支持崩溃后的安全恢复；</li>
+<li>MyISAM 存储引擎：不支持事务和外键，支持全文索引（但只对英文有效），特点是查询速度快；</li>
+<li>Memory 存储引擎：数据放在内存当中（类似memcache）以便得到更快的响应速度，但是崩掉的话数据会丢失；</li>
+<li>NDB 存储引擎：主要用于Mysql Cluster分布式集群；</li>
+<li>Archive 存储引擎：有很好的压缩机制，用于文件归档，写入时会进行压缩；</li>
+</ol>
 
               </div>
               <div class="toc-container">
                 <ul class="markdownIt-TOC">
 <li>
 <ul>
-<li><a href="#0x01%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%81%E7%A7%BB%E5%91%BD%E4%BB%A4">0x01：数据库迁移命令</a></li>
+<li><a href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%81%E7%A7%BB%E5%91%BD%E4%BB%A4">数据库迁移命令</a></li>
 <li><a href="#mysql%E7%89%88%E6%9C%AC%E5%AF%BC%E8%87%B4%E7%9A%84sql%E6%9F%A5%E8%AF%A2%E5%BC%82%E5%B8%B8">Mysql版本导致的sql查询异常</a></li>
 <li><a href="#sql-%E6%9F%A5%E8%AF%A2%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88">sql 查询索引失效</a></li>
 <li><a href="#%E5%A4%9A%E5%BC%A0%E5%88%86%E8%A1%A8%E8%81%94%E5%90%88%E6%9F%A5%E8%AF%A2%E5%87%BA%E7%8E%B0bug">多张分表联合查询出现bug</a>
 <ul>
 <li><a href="#%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95">处理方法</a></li>
+</ul>
+</li>
+<li><a href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E7%A1%80">数据库基础</a>
+<ul>
+<li><a href="#%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5%E5%AE%9A%E4%B9%89">基础概念定义</a></li>
+<li><a href="#mysql%E6%9E%B6%E6%9E%84%E7%BB%84%E6%88%90">Mysql架构组成</a></li>
+<li><a href="#%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E">存储引擎</a></li>
 </ul>
 </li>
 </ul>
